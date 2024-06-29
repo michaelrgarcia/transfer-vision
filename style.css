@@ -3,7 +3,6 @@
   padding: 0;
 
   line-height: 1.5;
-  font-family: "helvetica_neuelight", "Open Sans", sans-serif;
 }
 
 :root {
@@ -24,10 +23,12 @@ header {
 
   color: silver;
   font-size: 2.5em;
+  font-family: "helvetica_neuelight", Verdana, sans-serif;
 }
 
 main {
   color: white;
+  font-family: "Segoe UI", sans-serif;
 }
 
 @font-face {
@@ -35,15 +36,6 @@ main {
   src:
     url("./fonts/helveticaneuelight-webfont..woff2") format("woff2"),
     url("./fonts/helveticaneuelight-webfont..woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "helvetica_neueblack";
-  src:
-    url("./fonts/helveticaneueblack-webfont..woff2") format("woff2"),
-    url("./fonts/helveticaneueblack-webfont..woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }

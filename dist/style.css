@@ -3,11 +3,20 @@
   padding: 0;
 
   line-height: 1.5;
-  font-family: "Arial";
+  font-family: "helvetica_neuelight";
 }
 
 :root {
   --bg-color: #010409;
+}
+
+@font-face {
+  font-family: "helvetica_neuelight";
+  src:
+    url("./fonts/helveticaneuelight-webfont..woff2") format("woff2"),
+    url("./fonts/helveticaneuelight-webfont..woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
 html,
@@ -28,5 +37,4 @@ header {
 
   color: silver;
   font-size: 2.5em;
-  font-weight: 100;
 }

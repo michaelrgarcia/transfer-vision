@@ -13,6 +13,11 @@
 
 body {
   background-color: var(--bg-color);
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -20,7 +25,6 @@ header {
   justify-content: center;
 
   height: 20%;
-  border-bottom: ridge 2px silver;
   padding: 10px;
 
   color: silver;
@@ -31,7 +35,9 @@ header {
 main {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  flex: 1;
+
+  padding: 30px;
 
   color: var(--main-text);
   font-family: "Segoe UI", Verdana, sans-serif;
@@ -44,6 +50,10 @@ form {
   align-items: center;
 
   width: 90%;
+  max-width: 600px;
+
+  border: 2px ridge silver;
+  padding: 20px;
 }
 
 .form-row {

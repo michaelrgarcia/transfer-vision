@@ -37,7 +37,7 @@ main {
   justify-content: center;
   flex: 1;
 
-  padding: 30px;
+  padding: 20px;
 
   color: var(--main-text);
   font-family: "Segoe UI", Verdana, sans-serif;

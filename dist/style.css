@@ -10,6 +10,7 @@
   --input-color: #0d1117;
   --main-text: #555;
   --second-bg-color: #0d1117;
+  --dark-text: #e6edf3;
 }
 
 body {
@@ -49,12 +50,14 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 25px;
 
   width: 90%;
-  max-width: 500px;
+  max-width: 400px;
 
   border: 1px ridge silver;
   padding: 20px;
+  margin-top: -10px;
 
   background-color: var(--second-bg-color);
 }
@@ -74,6 +77,8 @@ label {
   display: flex;
   justify-content: space-between;
   padding-right: 2%;
+
+  font-size: 0.9em;
 }
 
 img.svg {
@@ -96,6 +101,19 @@ select {
   appearance: none;
   background: url("./fonts/arrow-204-16..png") no-repeat right;
   background-position-x: calc(100% - 5px);
+}
+
+#submit {
+  justify-content: center;
+
+  margin-top: 15px;
+  padding: 5px;
+  border: 1px ridge silver;
+
+  font-size: 0.9em;
+
+  background-color: var(--main-text);
+  color: var(--bg-color);
 }
 
 @font-face {

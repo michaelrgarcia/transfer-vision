@@ -85,6 +85,8 @@ img.svg {
   width: 25px;
   filter: invert(22%) sepia(17%) saturate(30%) hue-rotate(314deg)
     brightness(97%) contrast(84%);
+
+  cursor: pointer;
 }
 
 input,
@@ -114,6 +116,8 @@ select {
 
   background-color: var(--main-text);
   color: var(--bg-color);
+
+  cursor: pointer;
 }
 
 @font-face {

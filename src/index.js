@@ -10,4 +10,4 @@ const schoolList = document.getElementById("four-year");
 const majorList = document.getElementById("major");
 const classList = document.getElementById("class");
 
-const hey = await getFourYears();
+getFourYears(schoolList);

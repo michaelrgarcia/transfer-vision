@@ -73,6 +73,10 @@ form {
   font-size: 1.4em;
 }
 
+:not(.form-row > .loading) {
+  transition: opacity 1s;
+}
+
 label {
   display: flex;
   justify-content: space-between;
@@ -99,10 +103,21 @@ select {
   background-color: var(--input-color);
 }
 
+input:focus,
+select:focus {
+  outline: none;
+}
+
 select {
   appearance: none;
   background: url("./fonts/arrow-204-16..png") no-repeat right;
   background-position-x: calc(100% - 5px);
+
+  color: silver;
+}
+
+select > option {
+  background-color: #010409;
 }
 
 #submit {
@@ -118,6 +133,24 @@ select {
   color: var(--bg-color);
 
   cursor: pointer;
+}
+
+.loading {
+  align-self: center;
+
+  position: absolute;
+
+  margin-top: 1vh;
+
+  opacity: 0;
+  color: silver;
+
+  font-size: 2em;
+  font-family: "helvetica_neuelight", Verdana, sans-serif;
+
+  transition: opacity 3s;
+
+  display: none;
 }
 
 @font-face {

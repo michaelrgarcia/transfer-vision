@@ -4,7 +4,6 @@ import helveticaNeueLightWoff from "./fonts/helveticaneuelight-webfont.woff";
 import helveticaNeueLightWoff2 from "./fonts/helveticaneuelight-webfont.woff2";
 import selectArrow from "./imgs/arrow-204-16.png";
 import helpBox from "./svgs/help-box.svg";
-import loadingFinished from "./sounds/level-up-191997.mp3";
 
 import getFourYears from "./public/assistDataImport";
 

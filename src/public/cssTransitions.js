@@ -1,9 +1,10 @@
 import loadingFinished from "../sounds/level-up-191997.mp3";
 
-const siteHeader = document.querySelector("header > p");
+const dialog = document.querySelector("dialog");
 
 export function loadingState(nodeList) {
-  siteHeader.textContent = "A sound will play when ready.";
+  dialog.showModal();
+  dialog.style.opacity = 1;
 
   nodeList.forEach((element) => {
     const node = element;
@@ -19,7 +20,8 @@ export function loadingState(nodeList) {
 }
 
 export function reverseLoadingState(nodeList) {
-  siteHeader.textContent = "TransferVision";
+  dialog.close();
+  dialog.style.opacity = 1;
 
   nodeList.forEach((element) => {
     const node = element;
@@ -50,3 +52,5 @@ export function hideLoadingText(loadingText) {
   loading.style.display = "none";
   finishedSound.play();
 }
+
+// make articulation button translucent til all fields are fulled

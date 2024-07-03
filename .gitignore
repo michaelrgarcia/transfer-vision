@@ -1,4 +1,5 @@
 node_modules/
 src/fonts/
 src/imgs/
-src/svgs
+src/svgs/
+src/sounds/

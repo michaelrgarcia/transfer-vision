@@ -1,6 +1,3 @@
-import { Howl } from "howler";
-import loadingFinished from "../sounds/level-up-191997.mp3";
-
 const dialog = document.querySelector("dialog");
 
 export function loadingState(nodeList) {
@@ -45,16 +42,9 @@ export function showLoadingText(loadingText) {
 
 export function hideLoadingText(loadingText) {
   const loading = loadingText;
-  const finishedSound = new Howl({
-    src: [loadingFinished],
-    html5: true,
-  });
-
-  finishedSound.volume = 0.5;
 
   loading.style.opacity = 0;
   loading.style.display = "none";
-  finishedSound.play();
 }
 
 // make articulation button translucent til all fields are fulled

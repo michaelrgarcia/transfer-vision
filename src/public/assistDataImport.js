@@ -12,13 +12,14 @@ export default async function getFourYears(schoolList) {
   const loadingText = formRow.querySelector(".loading");
   const everythingElse = formRow.querySelectorAll(":not(.loading)");
 
-  loadingState(loadingText, everythingElse);
-  showLoadingText(loadingText);
-
   try {
     const endpoint = "https://classglance.onrender.com/schools/four-years";
+    loadingState(everythingElse);
+    showLoadingText(loadingText);
     const response = await fetch(endpoint);
     const data = await response.json();
+    hideLoadingText(loadingText);
+    reverseLoadingState(everythingElse);
     const dataArray = Object.values(data);
 
     const select = schoolList;
@@ -36,7 +37,4 @@ export default async function getFourYears(schoolList) {
   } catch (error) {
     console.error("Error fetching schools:", error);
   }
-
-  hideLoadingText(loadingText);
-  reverseLoadingState(loadingText, everythingElse);
 }

@@ -116,7 +116,8 @@ select {
 }
 
 input:focus,
-select:focus {
+select:focus,
+dialog:focus {
   outline: none;
 }
 

@@ -12,5 +12,12 @@ const schoolList = document.getElementById("four-year");
 const majorList = document.getElementById("major");
 const classList = document.getElementById("class");
 
-// renderFourYears(schoolList);
+const dialog = document.querySelector("dialog");
+const closeDialog = document.querySelector(".close-dialog");
+
+renderFourYears(schoolList);
 // renderMajorData(majorList, 79);
+
+closeDialog.addEventListener("click", () => {
+  dialog.close();
+});

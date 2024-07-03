@@ -203,6 +203,7 @@ dialog::backdrop {
 
 img.close-dialog {
   width: 30px;
+  margin-top: 3px;
 
   cursor: pointer;
 

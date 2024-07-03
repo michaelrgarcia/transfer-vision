@@ -47,6 +47,7 @@ export function hideLoadingText(loadingText) {
   const loading = loadingText;
   const finishedSound = new Howl({
     src: [loadingFinished],
+    html5: true,
   });
 
   finishedSound.volume = 0.5;

@@ -10,6 +10,7 @@ module.exports = {
     // eslint-disable-next-line no-dupe-keys
     assetModuleFilename: "svgs/[name].[ext]",
     assetModuleFilename: "fonts/[name].[ext]",
+    assetModuleFilename: "sounds/[name].[ext]",
   },
   module: {
     rules: [
@@ -19,6 +20,10 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(mp3)$/i,
         type: "asset/resource",
       },
     ],

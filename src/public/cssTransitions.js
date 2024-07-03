@@ -1,5 +1,10 @@
-export function loadingState(loadingText, nodeList) {
-  const loading = loadingText;
+import loadingFinished from "../sounds/level-up-191997.mp3";
+
+const siteHeader = document.querySelector("header > p");
+
+export function loadingState(nodeList) {
+  siteHeader.textContent = "A sound will play when ready.";
+
   nodeList.forEach((element) => {
     const node = element;
 
@@ -11,12 +16,11 @@ export function loadingState(loadingText, nodeList) {
       node.style.cursor = "not-allowed";
     }
   });
-
-  loading.style.opacity = 1;
-  loading.style.display = "block";
 }
 
-export function reverseLoadingState(loadingText, nodeList) {
+export function reverseLoadingState(nodeList) {
+  siteHeader.textContent = "TransferVision";
+
   nodeList.forEach((element) => {
     const node = element;
 
@@ -38,6 +42,11 @@ export function showLoadingText(loadingText) {
 
 export function hideLoadingText(loadingText) {
   const loading = loadingText;
+  const finishedSound = new Audio(loadingFinished);
+
+  finishedSound.volume = 0.5;
+
   loading.style.opacity = 0;
   loading.style.display = "none";
+  finishedSound.play();
 }

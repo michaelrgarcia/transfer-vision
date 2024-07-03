@@ -7,7 +7,7 @@ import {
   hideLoadingText,
 } from "./cssTransitions";
 
-import { getFourYears, getMajorData } from "./assistDataImport";
+import { getFourYears, getMajorData } from "./assistDataFetch";
 
 export async function renderFourYears(schoolList) {
   const formRow = schoolList.parentElement;

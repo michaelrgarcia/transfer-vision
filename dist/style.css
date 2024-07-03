@@ -80,7 +80,9 @@ form {
 label {
   display: flex;
   justify-content: space-between;
+
   padding-right: 2%;
+  margin-bottom: 1%;
 
   font-size: 0.9em;
 }

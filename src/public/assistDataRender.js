@@ -7,14 +7,14 @@ import {
   stopLoading,
 } from "./cssTransitions";
 
-import { getFourYears, getMajorData } from "./assistDataFetch";
+import { getFourYears, getLowerDivs, getMajorData } from "./assistDataFetch";
 
 export async function renderFourYears(schoolList) {
-  const formRow = schoolList.parentElement;
+  const formRow = schoolList.parentNode;
   const loadingText = formRow.querySelector(".loading");
 
   showDialog();
-  startLoading(schoolList.parentNode, loadingText);
+  startLoading(formRow, loadingText);
 
   const fourYears = await getFourYears();
 
@@ -32,14 +32,14 @@ export async function renderFourYears(schoolList) {
   });
 
   closeDialog();
-  stopLoading(schoolList.parentNode, loadingText);
+  stopLoading(formRow, loadingText);
 }
 
 export async function renderMajorData(majorList, receivingId) {
   const formRow = majorList.parentElement;
   const loadingText = formRow.querySelector(".loading");
 
-  startLoading(majorList.parentNode, loadingText);
+  startLoading(formRow, loadingText);
 
   const majorData = await getMajorData(receivingId);
 
@@ -55,5 +55,32 @@ export async function renderMajorData(majorList, receivingId) {
     select.appendChild(option);
   });
 
-  stopLoading(majorList.parentNode, loadingText);
+  stopLoading(formRow, loadingText);
+}
+
+export async function renderLowerDivs(classList, receivingId, key) {
+  const formRow = classList.parentNode;
+  const loadingText = formRow.querySelector(".loading");
+
+  startLoading(formRow, loadingText);
+
+  const lowerDivs = await getLowerDivs(receivingId, key);
+  // will send this data to backend through the form
+
+  // comparisons will go down there
+
+  const select = classList;
+  const placeholder = defaultOption("class");
+
+  select.replaceChildren();
+  select.appendChild(placeholder);
+
+  lowerDivs.forEach((obj) => {
+    const className = `${obj.prefix} ${obj.courseNumber} - ${obj.courseTitle}`;
+    const option = selectOption(className, null, null);
+
+    select.appendChild(option);
+  });
+
+  stopLoading(formRow, loadingText);
 }

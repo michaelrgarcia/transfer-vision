@@ -7,10 +7,7 @@ import helpBox from "./svgs/help-box.svg";
 import closeBox from "./svgs/close-box.svg";
 
 import { renderFourYears, renderMajorData } from "./public/assistDataRender";
-import {
-  applyDisabledState,
-  removeDisabledState,
-} from "./public/cssTransitions";
+import { applyDisabledState } from "./public/cssTransitions";
 
 const selects = [
   document.getElementById("four-year"),

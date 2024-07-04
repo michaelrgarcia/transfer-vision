@@ -3,7 +3,10 @@ export function selectOption(value, id, keyword) {
 
   option.textContent = value;
   option.value = value;
-  option.setAttribute(`data-${keyword}`, id);
+
+  if (id && keyword) {
+    option.setAttribute(`data-${keyword}`, id);
+  }
 
   return option;
 }

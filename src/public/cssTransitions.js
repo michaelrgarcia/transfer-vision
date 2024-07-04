@@ -7,7 +7,7 @@ export function loadingState(nodeList) {
   nodeList.forEach((element) => {
     const node = element;
 
-    node.style.opacity = 0.3;
+    node.style.opacity = 0.15;
     node.disabled = true;
     node.style.userSelect = "none";
 
@@ -36,8 +36,8 @@ export function reverseLoadingState(nodeList) {
 
 export function showLoadingText(loadingText) {
   const loading = loadingText;
-  loading.style.opacity = 1;
   loading.style.display = "block";
+  loading.style.opacity = 1;
 }
 
 export function hideLoadingText(loadingText) {
@@ -47,4 +47,35 @@ export function hideLoadingText(loadingText) {
   loading.style.display = "none";
 }
 
-// make articulation button translucent til all fields are fulled
+export function applyDisabledState(formRow) {
+  const row = formRow;
+  const imgBtn = row.querySelector("label > img");
+  const select = row.querySelector("select");
+
+  row.id = "disabled";
+
+  if (imgBtn && select) {
+    imgBtn.id = "disabled";
+    select.classList.add("disabled-input");
+  } else {
+    const submit = row.querySelector(".submit");
+
+    submit.id = "disabled";
+  }
+}
+
+export function removeDisabledState(formRow) {
+  const row = formRow;
+
+  if (row.id === "disabled") {
+    row.removeAttribute("id");
+  }
+
+  row.forEach((node) => {
+    if (node.id === "disabled") {
+      node.removeAttribute("id");
+    } else if (node.classList.contains("disabled-input")) {
+      node.classList.remove("disabled-input");
+    }
+  });
+}

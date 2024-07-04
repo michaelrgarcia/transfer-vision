@@ -18,8 +18,8 @@ export function loadingState(nodeList) {
 }
 
 export function reverseLoadingState(nodeList) {
+  dialog.style.opacity = 0;
   dialog.close();
-  dialog.style.opacity = 1;
 
   nodeList.forEach((element) => {
     const node = element;

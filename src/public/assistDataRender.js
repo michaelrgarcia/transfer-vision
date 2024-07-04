@@ -7,6 +7,8 @@ import {
   hideLoadingText,
   showDialog,
   closeDialog,
+  applyDisabledState,
+  removeDisabledState,
 } from "./cssTransitions";
 
 import { getFourYears, getMajorData } from "./assistDataFetch";
@@ -17,7 +19,7 @@ export async function renderFourYears(schoolList) {
   const everythingElse = formRow.querySelectorAll(":not(.loading)");
 
   showDialog();
-  loadingState(everythingElse);
+  applyDisabledState(schoolList.parentNode);
   showLoadingText(loadingText);
 
   const fourYears = await getFourYears();
@@ -37,15 +39,14 @@ export async function renderFourYears(schoolList) {
 
   closeDialog();
   hideLoadingText(loadingText);
-  reverseLoadingState(everythingElse);
+  removeDisabledState(schoolList.parentNode);
 }
 
 export async function renderMajorData(majorList, receivingId) {
   const formRow = majorList.parentElement;
   const loadingText = formRow.querySelector(".loading");
-  const everythingElse = formRow.querySelectorAll(":not(.loading)");
 
-  loadingState(everythingElse);
+  applyDisabledState(majorList.parentNode);
   showLoadingText(loadingText);
 
   const majorData = await getMajorData(receivingId);
@@ -53,6 +54,7 @@ export async function renderMajorData(majorList, receivingId) {
   const select = majorList;
   const placeholder = defaultOption("major");
 
+  select.replaceChildren();
   select.appendChild(placeholder);
 
   majorData.forEach((obj) => {
@@ -62,5 +64,5 @@ export async function renderMajorData(majorList, receivingId) {
   });
 
   hideLoadingText(loadingText);
-  reverseLoadingState(everythingElse);
+  removeDisabledState(majorList.parentNode);
 }

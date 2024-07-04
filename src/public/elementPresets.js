@@ -1,9 +1,9 @@
-export function selectOption(value, id) {
+export function selectOption(value, id, keyword) {
   const option = document.createElement("option");
 
   option.textContent = value;
   option.value = value;
-  option.setAttribute("data-sending", id);
+  option.setAttribute(`data-${keyword}`, id);
 
   return option;
 }

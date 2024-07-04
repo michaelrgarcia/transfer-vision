@@ -29,3 +29,19 @@ export async function getMajorData(receivingId) {
     return null;
   }
 }
+
+export async function getLowerDivs(receivingId, key) {
+  try {
+    const endpoint = `https://classglance.onrender.com/schools/74/6/${receivingId}/${key}/lower-divs`;
+
+    const response = await fetch(endpoint);
+    const data = await response.json();
+    const dataArray = Object.values(data);
+
+    return dataArray;
+  } catch (error) {
+    console.error(`Error fetching lower divs for ${receivingId}:`, error);
+
+    return null;
+  }
+}

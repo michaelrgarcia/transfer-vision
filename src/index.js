@@ -45,6 +45,9 @@ selects[0].addEventListener("input", () => {
   const receivingId = selectedOption.dataset.sending;
 
   renderMajorData(majorList, receivingId);
+
+  selects[2].replaceChildren();
+  applyDisabledState(selects[2].parentNode);
 });
 
 selects[1].addEventListener("input", () => {

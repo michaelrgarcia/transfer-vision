@@ -5,6 +5,8 @@ import {
   reverseLoadingState,
   showLoadingText,
   hideLoadingText,
+  showDialog,
+  closeDialog,
 } from "./cssTransitions";
 
 import { getFourYears, getMajorData } from "./assistDataFetch";
@@ -14,6 +16,7 @@ export async function renderFourYears(schoolList) {
   const loadingText = formRow.querySelector(".loading");
   const everythingElse = formRow.querySelectorAll(":not(.loading)");
 
+  showDialog();
   loadingState(everythingElse);
   showLoadingText(loadingText);
 
@@ -32,6 +35,7 @@ export async function renderFourYears(schoolList) {
     }
   });
 
+  closeDialog();
   hideLoadingText(loadingText);
   reverseLoadingState(everythingElse);
 }

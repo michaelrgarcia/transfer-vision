@@ -97,7 +97,7 @@ label {
   font-size: 0.9em;
 }
 
-img.svg {
+.help {
   width: 25px;
   filter: invert(22%) sepia(17%) saturate(30%) hue-rotate(314deg)
     brightness(97%) contrast(84%);
@@ -133,7 +133,7 @@ select > option {
   background-color: #010409;
 }
 
-#submit {
+.submit {
   justify-content: center;
 
   margin-top: 15px;
@@ -218,6 +218,18 @@ img.close-dialog {
 
 dialog > p {
   font-size: 1.2em;
+}
+
+#disabled,
+.disabled-input {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+  user-select: none;
+}
+
+button#disabled {
+  opacity: 0.35;
 }
 
 @font-face {

@@ -12,8 +12,8 @@ export function closeDialog() {
 
 export function showLoadingText(loadingText) {
   const loading = loadingText;
-  loading.style.display = "block";
   loading.style.opacity = 1;
+  loading.style.display = "block";
 }
 
 export function hideLoadingText(loadingText) {

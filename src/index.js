@@ -6,7 +6,11 @@ import selectArrow from "./imgs/arrow-204-16.png";
 import helpBox from "./svgs/help-box.svg";
 import closeBox from "./svgs/close-box.svg";
 
-import { renderFourYears, renderMajorData } from "./public/assistDataRender";
+import {
+  renderFourYears,
+  renderLowerDivs,
+  renderMajorData,
+} from "./public/assistDataRender";
 import { applyDisabledState } from "./public/cssTransitions";
 
 const selects = [
@@ -41,6 +45,20 @@ selects[0].addEventListener("input", () => {
   const receivingId = selectedOption.dataset.sending;
 
   renderMajorData(majorList, receivingId);
+});
+
+selects[1].addEventListener("input", () => {
+  const schoolList = selects[0];
+  const majorList = selects[1];
+  const classList = selects[2];
+
+  const selectedSchool = schoolList.options[schoolList.selectedIndex];
+  const receivingId = selectedSchool.dataset.sending;
+
+  const selectedMajor = majorList.options[majorList.selectedIndex];
+  const { key } = selectedMajor.dataset;
+
+  renderLowerDivs(classList, receivingId, key);
 });
 
 closeDialog.addEventListener("click", () => {

@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  applyDisabledState(submit);
+  applyDisabledState(submit.parentNode);
 
   renderFourYears(selects[0]);
 });
@@ -43,11 +43,7 @@ selects[0].addEventListener("input", () => {
   const selectedOption = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedOption.dataset.sending;
 
-  removeDisabledState(schoolList.parentNode);
-
   renderMajorData(majorList, receivingId);
-
-  removeDisabledState(majorList.parentNode);
 });
 
 closeDialog.addEventListener("click", () => {

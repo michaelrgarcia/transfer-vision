@@ -25,7 +25,7 @@ export async function renderFourYears(schoolList) {
 
   fourYears.forEach((school) => {
     if (school.id < 200) {
-      const option = selectOption(school.name, school.id);
+      const option = selectOption(school.name, school.id, "sending");
 
       select.appendChild(option);
     }
@@ -50,7 +50,7 @@ export async function renderMajorData(majorList, receivingId) {
   select.appendChild(placeholder);
 
   majorData.forEach((obj) => {
-    const option = selectOption(obj.major, obj.key);
+    const option = selectOption(obj.major, obj.key, "key");
 
     select.appendChild(option);
   });

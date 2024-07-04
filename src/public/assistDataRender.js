@@ -1,14 +1,10 @@
 import { defaultOption, selectOption } from "./elementPresets";
 
 import {
-  loadingState,
-  reverseLoadingState,
-  showLoadingText,
-  hideLoadingText,
   showDialog,
   closeDialog,
-  applyDisabledState,
-  removeDisabledState,
+  startLoading,
+  stopLoading,
 } from "./cssTransitions";
 
 import { getFourYears, getMajorData } from "./assistDataFetch";
@@ -16,11 +12,9 @@ import { getFourYears, getMajorData } from "./assistDataFetch";
 export async function renderFourYears(schoolList) {
   const formRow = schoolList.parentElement;
   const loadingText = formRow.querySelector(".loading");
-  const everythingElse = formRow.querySelectorAll(":not(.loading)");
 
   showDialog();
-  applyDisabledState(schoolList.parentNode);
-  showLoadingText(loadingText);
+  startLoading(schoolList.parentNode, loadingText);
 
   const fourYears = await getFourYears();
 
@@ -38,16 +32,14 @@ export async function renderFourYears(schoolList) {
   });
 
   closeDialog();
-  hideLoadingText(loadingText);
-  removeDisabledState(schoolList.parentNode);
+  stopLoading(schoolList.parentNode, loadingText);
 }
 
 export async function renderMajorData(majorList, receivingId) {
   const formRow = majorList.parentElement;
   const loadingText = formRow.querySelector(".loading");
 
-  applyDisabledState(majorList.parentNode);
-  showLoadingText(loadingText);
+  startLoading(majorList.parentNode, loadingText);
 
   const majorData = await getMajorData(receivingId);
 
@@ -63,6 +55,5 @@ export async function renderMajorData(majorList, receivingId) {
     select.appendChild(option);
   });
 
-  hideLoadingText(loadingText);
-  removeDisabledState(majorList.parentNode);
+  stopLoading(majorList.parentNode, loadingText);
 }

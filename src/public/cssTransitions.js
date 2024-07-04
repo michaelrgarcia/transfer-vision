@@ -23,71 +23,45 @@ export function hideLoadingText(loadingText) {
   loading.style.display = "none";
 }
 
-export function loadingState(nodeList) {
-  nodeList.forEach((element) => {
-    const node = element;
-
-    node.style.opacity = 0.15;
-    node.disabled = true;
-    node.style.userSelect = "none";
-
-    if (node.style.cursor === "pointer") {
-      node.style.cursor = "not-allowed";
-    }
-  });
-}
-
-export function reverseLoadingState(nodeList) {
-  nodeList.forEach((element) => {
-    const node = element;
-
-    node.style.opacity = 1;
-    node.disabled = false;
-    node.style.userSelect = "auto";
-
-    if (node.style.cursor === "not-allowed") {
-      node.style.cursor = "pointer";
-    }
-  });
-}
-
 export function applyDisabledState(formRow) {
   const row = formRow;
 
-  const imgBtn = row.querySelector("label > img");
   const select = row.querySelector("select");
-  const submit = row.querySelector(".submit");
+  const children = row.querySelectorAll(":not(.loading)");
 
-  row.setAttribute("id", "disabled");
-
-  if (imgBtn && select) {
-    imgBtn.setAttribute("id", "disabled");
-
-    select.classList.add("disabled-input");
+  if (select) {
     select.disabled = true;
-  } else if (submit) {
-    submit.setAttribute("id", "disabled");
-    submit.disabled = true;
   }
+
+  children.forEach((node) => {
+    const element = node;
+
+    element.setAttribute("aria-disabled", "true");
+  });
 }
 
 export function removeDisabledState(formRow) {
   const row = formRow;
 
-  const imgBtn = row.querySelector("label > img");
   const select = row.querySelector("select");
+  const children = row.querySelectorAll(":not(.loading)");
 
-  row.removeAttribute("id");
-
-  if (imgBtn && select) {
-    imgBtn.removeAttribute("id");
-
-    select.classList.remove("disabled-input");
+  if (select) {
     select.disabled = false;
-  } else {
-    const submit = row.querySelector(".submit");
-
-    submit.removeAttribute("id");
-    submit.disabled = false;
   }
+
+  children.forEach((node) => {
+    const element = node;
+    element.setAttribute("aria-disabled", "false");
+  });
+}
+
+export function startLoading(formRow, loadingText) {
+  applyDisabledState(formRow);
+  showLoadingText(loadingText);
+}
+
+export function stopLoading(formRow, loadingText) {
+  removeDisabledState(formRow);
+  hideLoadingText(loadingText);
 }

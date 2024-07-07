@@ -67,7 +67,7 @@ export async function renderLowerDivs(classList, receivingId, key) {
   const lowerDivs = await getLowerDivs(receivingId, key);
   // will send this data to backend through the form
 
-  // comparisons will go down there
+  // comparisons will happen there
 
   const select = classList;
   const placeholder = defaultOption("class");
@@ -76,10 +76,37 @@ export async function renderLowerDivs(classList, receivingId, key) {
   select.appendChild(placeholder);
 
   lowerDivs.forEach((obj) => {
-    const className = `${obj.prefix} ${obj.courseNumber} - ${obj.courseTitle}`;
-    const option = selectOption(className, null, null);
+    // make below statement into a function?
+    if (Array.isArray(obj)) {
+      let connector;
+      let seriesString = "";
 
-    select.appendChild(option);
+      obj.forEach((item, index) => {
+        if (typeof item === "string") {
+          connector = item.toLowerCase();
+
+          if (index < obj.length - 1) {
+            seriesString += ` ${connector} `;
+          }
+        }
+        if (item.prefix && item.courseNumber && item.courseTitle) {
+          const { prefix } = item;
+          const { courseNumber } = item;
+
+          const className = ` ${prefix} ${courseNumber} `;
+
+          seriesString += className;
+        }
+      });
+
+      const option = selectOption(seriesString);
+      select.appendChild(option);
+    } else {
+      const className = `${obj.prefix} ${obj.courseNumber} - ${obj.courseTitle}`;
+      const option = selectOption(className, null, null);
+
+      select.appendChild(option);
+    }
   });
 
   stopLoading(formRow, loadingText);

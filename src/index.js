@@ -40,14 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
 selects[0].addEventListener("input", () => {
   const schoolList = selects[0];
   const majorList = selects[1];
+  const classList = selects[2];
 
   const selectedOption = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedOption.dataset.sending;
 
   renderMajorData(majorList, receivingId);
 
-  selects[2].replaceChildren();
-  applyDisabledState(selects[2].parentNode);
+  majorList.replaceChildren();
+  classList.replaceChildren();
+  applyDisabledState(classList.parentNode);
 });
 
 selects[1].addEventListener("input", () => {

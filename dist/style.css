@@ -223,14 +223,14 @@ dialog > p {
 }
 
 :not(label)[aria-disabled="true"] {
-  opacity: 0.15;
+  opacity: 0.3;
 
   cursor: not-allowed;
   user-select: none;
 }
 
 button[aria-disabled="true"] {
-  opacity: 0.1;
+  opacity: 0.2;
 }
 
 @font-face {

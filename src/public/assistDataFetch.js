@@ -94,15 +94,10 @@ export async function getAllMajorArticulations(receivingId, majorKey) {
   const endpoint =
     "https://classglance.onrender.com/articulations/articulation-params";
 
-  const formData = new FormData();
-  formData.append("parameters", articulationParams);
+  const json = JSON.stringify(articulationParams);
 
   const res = await fetch(endpoint, {
     method: "POST",
-    body: formData,
+    body: json,
   });
-
-  // const json = await res.json();
-
-  // console.log(json);
 }

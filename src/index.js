@@ -11,7 +11,11 @@ import {
   renderLowerDivs,
   renderMajorData,
 } from "./public/assistDataRender";
-import { applyDisabledState } from "./public/cssTransitions";
+import {
+  applyDisabledState,
+  removeDisabledState,
+} from "./public/cssTransitions";
+import { getAllMajorArticulations } from "./public/assistDataFetch";
 
 const selects = [
   document.getElementById("four-year"),
@@ -19,6 +23,7 @@ const selects = [
   document.getElementById("class"),
 ];
 
+const form = document.querySelector("form");
 const submit = document.querySelector(".submit");
 
 const dialog = document.querySelector("dialog");
@@ -50,6 +55,7 @@ selects[0].addEventListener("input", () => {
   majorList.replaceChildren();
   classList.replaceChildren();
   applyDisabledState(classList.parentNode);
+  applyDisabledState(submit.parentNode);
 });
 
 selects[1].addEventListener("input", () => {
@@ -63,11 +69,39 @@ selects[1].addEventListener("input", () => {
   const selectedMajor = majorList.options[majorList.selectedIndex];
   const { key } = selectedMajor.dataset;
 
+  classList.replaceChildren();
   renderLowerDivs(classList, receivingId, key);
+  applyDisabledState(submit.parentNode);
+});
+
+selects[2].addEventListener("input", () => {
+  removeDisabledState(submit.parentNode);
+});
+
+submit.addEventListener("click", (event) => {
+  const schoolList = selects[0];
+  const majorList = selects[1];
+  const classList = selects[2];
+
+  const selectedSchool = schoolList.options[schoolList.selectedIndex];
+  const receivingId = selectedSchool.dataset.sending;
+
+  const selectedMajor = majorList.options[majorList.selectedIndex];
+  const majorKey = selectedMajor.dataset.key;
+
+  if (classList.value) {
+    getAllMajorArticulations(receivingId, majorKey);
+    // "get class from backend" function
+    // can get lower divs through getLowerDivs and compare the title, number, and prefix from the string
+  }
+
+  event.preventDefault();
 });
 
 closeDialog.addEventListener("click", () => {
   dialog.close();
 });
 
-// save school data in sessionStorage? (maybe all data?)
+// save school data in sessionStorage
+
+// (the API needs to start up to load the schools)

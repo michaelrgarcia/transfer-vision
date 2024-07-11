@@ -75,8 +75,9 @@ export async function renderLowerDivs(classList, receivingId, key) {
   select.replaceChildren();
   select.appendChild(placeholder);
 
+  // make below statement into a function?
+
   lowerDivs.forEach((obj) => {
-    // make below statement into a function?
     if (Array.isArray(obj)) {
       let connector;
       let seriesString = "";
@@ -89,6 +90,7 @@ export async function renderLowerDivs(classList, receivingId, key) {
             seriesString += ` ${connector} `;
           }
         }
+
         if (item.prefix && item.courseNumber && item.courseTitle) {
           const { prefix } = item;
           const { courseNumber } = item;

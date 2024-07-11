@@ -102,5 +102,7 @@ export async function getAllMajorArticulations(receivingId, majorKey) {
     body: formData,
   });
 
-  console.log(res.json());
+  // const json = await res.json();
+
+  // console.log(json);
 }

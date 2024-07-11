@@ -96,6 +96,7 @@ export async function getAllMajorArticulations(receivingId, majorKey) {
 
   const json = JSON.stringify(articulationParams);
 
+  // h
   const res = await fetch(endpoint, {
     method: "POST",
     body: json,

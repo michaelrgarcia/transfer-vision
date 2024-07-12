@@ -16,7 +16,6 @@ import {
   removeDisabledState,
 } from "./public/cssTransitions";
 import {
-  getAllMajorArticulations,
   getArticulationData,
   getArticulationParams,
 } from "./public/assistDataFetch";

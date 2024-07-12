@@ -94,7 +94,37 @@ async function sendArticulationRequest(paramsObj) {
 }
 
 export async function getArticulationData(articulationParams) {
-  let results = [];
+  const results = [];
+  const processingQueue = articulationParams.slice();
+  const concurrencyLimit = 5;
+
+  const processNext = async () => {
+    if (processingQueue.length === 0) return;
+
+    const params = processingQueue.shift();
+
+    try {
+      const result = await sendArticulationRequest(params);
+      results.push(result);
+      // render the result as it comes
+      console.log(`processed request for ${params.sending}`);
+    } catch (error) {
+      console.error("error processing request:", error);
+    }
+
+    await processNext();
+  };
+
+  const initialPromises = Array.from({ length: concurrencyLimit }, () =>
+    processNext(),
+  );
+  await Promise.all(initialPromises);
+
+  console.log("all requests processed");
+
+  return results.flat();
+
+  /*
 
   await articulationParams.reduce(async (promise, params) => {
     await promise;
@@ -102,11 +132,13 @@ export async function getArticulationData(articulationParams) {
     try {
       const result = await sendArticulationRequest(params);
       results = results.concat(result);
-      console.log(`processed request for ${params.key}`);
+      console.log(`processed request for ${params.sending}`);
     } catch (error) {
-      console.error("Error processing request:", error);
+      console.error("error processing request:", error);
     }
   }, Promise.resolve());
 
   return results;
+
+  */
 }

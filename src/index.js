@@ -95,6 +95,7 @@ submit.addEventListener("click", async (event) => {
   if (classList.value) {
     const params = await getArticulationParams(receivingId, majorKey);
     await getArticulationData(params);
+    applyDisabledState(submit.parentNode);
     // "get class from backend" function
     // can get lower divs through getLowerDivs and compare the title, number, and prefix from the string
   }

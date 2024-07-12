@@ -1,3 +1,20 @@
+async function getCommunityColleges() {
+  try {
+    const endpoint =
+      "https://classglance.onrender.com/schools/community-colleges";
+
+    const response = await fetch(endpoint);
+    const data = await response.json();
+    const dataArray = Object.values(data);
+
+    return dataArray;
+  } catch (error) {
+    console.error("Error fetching community colleges:", error);
+
+    return null;
+  }
+}
+
 export async function getFourYears() {
   try {
     const endpoint = "https://classglance.onrender.com/schools/four-years";
@@ -8,50 +25,10 @@ export async function getFourYears() {
 
     return dataArray;
   } catch (error) {
-    console.error("Error fetching schools:", error);
+    console.error("Error fetching universities:", error);
 
     return null;
   }
-}
-
-export async function getCCCIds() {
-  try {
-    const endpoint =
-      "https://classglance.onrender.com/schools/community-colleges";
-
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    const dataArray = Object.values(data);
-
-    const idArray = [];
-
-    dataArray.forEach((college) => {
-      if (college.id) {
-        idArray.push(college.id);
-      }
-    });
-
-    return idArray;
-  } catch (error) {
-    console.error("Error fetching schools:", error);
-
-    return null;
-  }
-}
-
-async function getArticulationParams(receivingId, majorKey) {
-  const articulationParams = [];
-  const cccIds = await getCCCIds();
-
-  const year = 74;
-  const receiving = receivingId;
-  const key = majorKey;
-
-  cccIds.forEach((id) => {
-    articulationParams.push({ year, id, receiving, key });
-  });
-
-  return articulationParams;
 }
 
 export async function getMajorData(receivingId) {
@@ -86,19 +63,50 @@ export async function getLowerDivs(receivingId, key) {
   }
 }
 
-export async function getAllMajorArticulations(receivingId, majorKey) {
+export async function getArticulationParams(receivingId, majorKey) {
+  const articulationParams = [];
+  const communityColleges = await getCommunityColleges();
+
+  const year = 74;
   const receiving = receivingId;
   const key = majorKey;
 
-  const articulationParams = await getArticulationParams(receiving, key);
-  const endpoint =
-    "https://classglance.onrender.com/articulations/articulation-params";
-
-  const json = JSON.stringify(articulationParams);
-
-  // h
-  const res = await fetch(endpoint, {
-    method: "POST",
-    body: json,
+  communityColleges.forEach((college) => {
+    if (college.id) {
+      const sending = college.id;
+      articulationParams.push({ year, sending, receiving, key });
+    }
   });
+
+  return articulationParams;
+}
+
+async function sendArticulationRequest(paramsObj) {
+  const { year, sending, receiving, key } = paramsObj;
+
+  const endpoint = `https://classglance.onrender.com/articulations/${year}/${sending}/${receiving}/${key}`;
+  const response = await fetch(endpoint);
+
+  const data = await response.json();
+  const dataArray = Object.values(data);
+
+  return dataArray;
+}
+
+export async function getArticulationData(articulationParams) {
+  let results = [];
+
+  await articulationParams.reduce(async (promise, params) => {
+    await promise;
+
+    try {
+      const result = await sendArticulationRequest(params);
+      results = results.concat(result);
+      console.log(`processed request for ${params.key}`);
+    } catch (error) {
+      console.error("Error processing request:", error);
+    }
+  }, Promise.resolve());
+
+  return results;
 }

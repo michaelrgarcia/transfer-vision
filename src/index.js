@@ -15,7 +15,11 @@ import {
   applyDisabledState,
   removeDisabledState,
 } from "./public/cssTransitions";
-import { getAllMajorArticulations } from "./public/assistDataFetch";
+import {
+  getAllMajorArticulations,
+  getArticulationData,
+  getArticulationParams,
+} from "./public/assistDataFetch";
 
 const selects = [
   document.getElementById("four-year"),
@@ -78,7 +82,7 @@ selects[2].addEventListener("input", () => {
   removeDisabledState(submit.parentNode);
 });
 
-submit.addEventListener("click", (event) => {
+submit.addEventListener("click", async (event) => {
   const schoolList = selects[0];
   const majorList = selects[1];
   const classList = selects[2];
@@ -90,7 +94,8 @@ submit.addEventListener("click", (event) => {
   const majorKey = selectedMajor.dataset.key;
 
   if (classList.value) {
-    getAllMajorArticulations(receivingId, majorKey);
+    const params = await getArticulationParams(receivingId, majorKey);
+    await getArticulationData(params);
     // "get class from backend" function
     // can get lower divs through getLowerDivs and compare the title, number, and prefix from the string
   }

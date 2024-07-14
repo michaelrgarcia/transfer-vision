@@ -70,6 +70,8 @@ form {
   margin-top: -10px;
 
   background-color: var(--second-bg-color);
+
+  transition: opacity 0.3s;
 }
 
 .form-row {

@@ -93,14 +93,8 @@ async function sendArticulationRequest(paramsObj) {
   return dataArray;
 }
 
-export async function getArticulationData(articulationParams) {
-  const results = [];
-  const processingQueue = articulationParams.slice();
-  const concurrencyLimit = 5;
-
-  const processNext = async () => {
-    if (processingQueue.length === 0) return;
-
+async function processNext(processingQueue, results) {
+  if (processingQueue.length !== 0) {
     const params = processingQueue.shift();
 
     try {
@@ -112,33 +106,52 @@ export async function getArticulationData(articulationParams) {
       console.error("error processing request:", error);
     }
 
-    await processNext();
+    await processNext(processingQueue, results);
+  }
+}
+
+async function getArticulationData(articulationParams) {
+  let isProcessing = false;
+
+  if (!isProcessing) {
+    isProcessing = true;
+
+    const results = [];
+    const processingQueue = articulationParams.slice();
+    const concurrencyLimit = 5;
+
+    const initialPromises = Array.from({ length: concurrencyLimit }, () =>
+      processNext(processingQueue, results),
+    );
+    await Promise.all(initialPromises);
+
+    console.log("all requests processed");
+    isProcessing = false;
+
+    return results.flat();
+  }
+
+  return "Please wait until the current process is finished.";
+}
+
+function debounce(func, delay) {
+  let debounceTimeout;
+
+  return (...args) => {
+    clearTimeout(debounceTimeout);
+
+    debounceTimeout = setTimeout(() => {
+      func(...args);
+    }, delay);
   };
+}
 
-  const initialPromises = Array.from({ length: concurrencyLimit }, () =>
-    processNext(),
-  );
-  await Promise.all(initialPromises);
+export async function debouncedGetArticulationData(articulationParams) {
+  const debounceDelay = 1000;
 
-  console.log("all requests processed");
+  const debouncedRequest = debounce(() => {
+    getArticulationData(articulationParams);
+  }, debounceDelay);
 
-  return results.flat();
-
-  /*
-
-  await articulationParams.reduce(async (promise, params) => {
-    await promise;
-
-    try {
-      const result = await sendArticulationRequest(params);
-      results = results.concat(result);
-      console.log(`processed request for ${params.sending}`);
-    } catch (error) {
-      console.error("error processing request:", error);
-    }
-  }, Promise.resolve());
-
-  return results;
-
-  */
+  return debouncedRequest;
 }

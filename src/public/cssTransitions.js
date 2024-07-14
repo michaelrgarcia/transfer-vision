@@ -1,4 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
+import waitForElementTransition from "wait-for-element-transition";
+
 const dialog = document.querySelector("dialog");
+const form = document.querySelector("form");
 
 export function showDialog() {
   dialog.showModal();
@@ -64,4 +69,11 @@ export function startLoading(formRow, loadingText) {
 export function stopLoading(formRow, loadingText) {
   removeDisabledState(formRow);
   hideLoadingText(loadingText);
+}
+
+export function hideSplash() {
+  form.style.opacity = 0;
+  waitForElementTransition(form).then(() => {
+    form.style.display = "none";
+  });
 }

@@ -13,10 +13,11 @@ import {
 } from "./public/assistDataRender";
 import {
   applyDisabledState,
+  hideSplash,
   removeDisabledState,
 } from "./public/cssTransitions";
 import {
-  getArticulationData,
+  debouncedGetArticulationData,
   getArticulationParams,
 } from "./public/assistDataFetch";
 
@@ -93,9 +94,10 @@ submit.addEventListener("click", async (event) => {
   const majorKey = selectedMajor.dataset.key;
 
   if (classList.value) {
-    const params = await getArticulationParams(receivingId, majorKey);
-    await getArticulationData(params);
+    // const params = await getArticulationParams(receivingId, majorKey);
+    // await debouncedGetArticulationData(params);
     applyDisabledState(submit.parentNode);
+    hideSplash();
     // "get class from backend" function
     // can get lower divs through getLowerDivs and compare the title, number, and prefix from the string
   }

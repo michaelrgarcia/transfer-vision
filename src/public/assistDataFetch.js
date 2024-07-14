@@ -111,10 +111,10 @@ async function processNext(processingQueue, results) {
 }
 
 async function getArticulationData(articulationParams) {
-  let isProcessing = false;
+  const requestInProgress = sessionStorage.getItem("requestInProgress");
 
-  if (!isProcessing) {
-    isProcessing = true;
+  if (requestInProgress === false) {
+    sessionStorage.setItem("requestInProgress", "true");
 
     const results = [];
     const processingQueue = articulationParams.slice();
@@ -126,12 +126,12 @@ async function getArticulationData(articulationParams) {
     await Promise.all(initialPromises);
 
     console.log("all requests processed");
-    isProcessing = false;
+    sessionStorage.setItem("requestInProgress", "false");
 
     return results.flat();
   }
 
-  return "Please wait until the current process is finished.";
+  return "Please wait until the current request is finished.";
 }
 
 function debounce(func, delay) {

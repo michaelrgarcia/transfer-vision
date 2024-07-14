@@ -147,7 +147,7 @@ function debounce(func, delay) {
 }
 
 export async function debouncedGetArticulationData(articulationParams) {
-  const debounceDelay = 1000;
+  const debounceDelay = 100000;
 
   const debouncedRequest = debounce(() => {
     getArticulationData(articulationParams);

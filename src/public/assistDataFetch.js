@@ -74,18 +74,30 @@ export async function getArticulationParams(receivingId, majorKey) {
   communityColleges.forEach((college) => {
     if (college.id) {
       const sending = college.id;
-      articulationParams.push({ year, sending, receiving, key });
+      const link = `https://assist.org/api/articulation/Agreements?Key=${year}/${sending}/to/${receiving}/Major/${key}`;
+
+      articulationParams.push({ link });
     }
   });
 
   return articulationParams;
 }
 
-async function sendArticulationRequest(paramsObj) {
-  const { year, sending, receiving, key } = paramsObj;
+async function sendArticulationRequests(links, signal) {
+  const linksList = JSON.stringify(links);
 
-  const endpoint = `https://classglance.onrender.com/articulations/${year}/${sending}/${receiving}/${key}`;
-  const response = await fetch(endpoint);
+  const endpoint = "https://assistscraper.onrender.com/articulation-data";
+
+  const response = await fetch(endpoint, {
+    body: linksList,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error("api is not ok");
+  }
 
   const data = await response.json();
   const dataArray = Object.values(data);
@@ -93,48 +105,71 @@ async function sendArticulationRequest(paramsObj) {
   return dataArray;
 }
 
-async function processNext(processingQueue, results) {
+async function processNext(processingQueue, results, signal) {
+  const concurrencyLimit = 10;
+
   if (processingQueue.length !== 0) {
-    const params = processingQueue.shift();
+    const linksChunk = processingQueue.splice(0, concurrencyLimit);
 
     try {
-      const result = await sendArticulationRequest(params);
-      results.push(result);
+      const result = await sendArticulationRequests(linksChunk, signal);
+      results.push(...result);
       // render the result as it comes
-      console.log(`processed request for ${params.sending}`);
-    } catch (error) {
-      console.error("error processing request:", error);
-    }
+      console.log("processed request");
 
-    await processNext(processingQueue, results);
+      await processNext(processingQueue, results, signal);
+    } catch (error) {
+      if (error.name === "AbortError") {
+        console.log("aborted request");
+      } else {
+        console.error("error processing request:", error);
+      }
+    }
   }
 }
 
-async function getArticulationData(articulationParams) {
+export async function getArticulationData(articulationParams) {
   const requestInProgress = sessionStorage.getItem("requestInProgress");
 
-  if (requestInProgress === false) {
+  if (!requestInProgress) {
     sessionStorage.setItem("requestInProgress", "true");
 
     const results = [];
     const processingQueue = articulationParams.slice();
-    const concurrencyLimit = 5;
+    const concurrencyLimit = 1;
+
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
+    window.addEventListener("beforeunload", () => abortController.abort());
 
     const initialPromises = Array.from({ length: concurrencyLimit }, () =>
-      processNext(processingQueue, results),
+      processNext(processingQueue, results, signal),
     );
-    await Promise.all(initialPromises);
 
-    console.log("all requests processed");
-    sessionStorage.setItem("requestInProgress", "false");
+    try {
+      await Promise.all(initialPromises);
 
-    return results.flat();
+      console.log("all requests processed");
+      // play a sound. user will have interacted with the page
+    } catch (error) {
+      if (error.name === "AbortError") {
+        console.log("requests aborted due to page unload");
+      } else {
+        console.error("error processing requests", error);
+      }
+    } finally {
+      sessionStorage.removeItem("requestInProgress");
+      window.removeEventListener("beforeunload", () => abortController.abort());
+    }
+
+    return results;
   }
 
   return "Please wait until the current request is finished.";
 }
 
-function debounce(func, delay) {
+export function debounce(func, delay) {
   let debounceTimeout;
 
   return (...args) => {
@@ -144,14 +179,4 @@ function debounce(func, delay) {
       func(...args);
     }, delay);
   };
-}
-
-export async function debouncedGetArticulationData(articulationParams) {
-  const debounceDelay = 100000;
-
-  const debouncedRequest = debounce(() => {
-    getArticulationData(articulationParams);
-  }, debounceDelay);
-
-  return debouncedRequest;
 }

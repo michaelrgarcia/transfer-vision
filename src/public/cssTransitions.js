@@ -77,3 +77,32 @@ export function hideSplash() {
     form.style.display = "none";
   });
 }
+
+export async function randomLoadingGif() {
+  const img = document.querySelector("img.loading-gif");
+
+  img.style.display = "block";
+  const response = await fetch(
+    "https://api.giphy.com/v1/gifs/translate?api_key=uldN0xaiyhNfeuN7QN98ROsslA7JpaDG&s=loading",
+    { mode: "cors" },
+  );
+  const gifData = await response.json();
+
+  try {
+    if (gifData) {
+      img.src = gifData.data.images.original.url;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function hideLoadingGif() {
+  const img = document.querySelector("img.loading-gif");
+
+  img.style.opacity = 0;
+  waitForElementTransition(img).then(() => {
+    img.style.display = "none";
+    img.src = "#";
+  });
+}

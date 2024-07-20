@@ -7,7 +7,8 @@ import helpBox from "./svgs/help-box.svg";
 import closeBox from "./svgs/close-box.svg";
 
 import {
-  debouncedGetArticulationData,
+  debounce,
+  getArticulationData,
   getArticulationParams,
 } from "./public/assistDataFetch";
 
@@ -52,10 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   applyDisabledState(submit.parentNode);
 
   renderFourYears(selects[0]);
-
-  // call a backend endpoint that tells frontend if there is request done
-  // if response says "done", change sessionStorage requestInProgress to false
-  // else, keep requestInProgress the way it is
 });
 
 selects[0].addEventListener("input", () => {
@@ -86,7 +83,7 @@ selects[1].addEventListener("input", () => {
 });
 
 selects[2].addEventListener("input", () => {
-  if (requestInProgress === false) {
+  if (!requestInProgress) {
     removeDisabledState(submit.parentNode);
   }
 });
@@ -98,17 +95,19 @@ submit.addEventListener("click", async (event) => {
   const selectedMajor = majorList.options[majorList.selectedIndex];
   const majorKey = selectedMajor.dataset.key;
 
-  if (classList.value && requestInProgress === false) {
-    // const params = await getArticulationParams(receivingId, majorKey);
-    // await debouncedGetArticulationData(params);
+  applyDisabledState(submit.parentNode);
 
-    applyDisabledState(submit.parentNode);
+  if (classList.value && !requestInProgress) {
+    const params = await getArticulationParams(receivingId, majorKey);
+
     hideSplash();
+
+    await getArticulationData(params);
 
     // get the specific class from getLowerDivs
     // make a function on backend that gets that 1 class
     // route will include the prefix, course #, and class title
-  } else if (requestInProgress === true) {
+  } else if (requestInProgress) {
     // show dialog saying that a request is in progress
     // tell user that sound will play when request is open
     // "unmute tab and keep it open"

@@ -106,7 +106,7 @@ async function sendArticulationRequests(links, signal) {
 }
 
 async function processNext(processingQueue, results, signal) {
-  const concurrencyLimit = 10;
+  const concurrencyLimit = 7;
 
   if (processingQueue.length !== 0) {
     const linksChunk = processingQueue.splice(0, concurrencyLimit);

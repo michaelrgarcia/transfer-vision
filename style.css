@@ -235,6 +235,10 @@ button[aria-disabled="true"] {
   opacity: 0.2;
 }
 
+.loading-gif {
+  display: none;
+}
+
 @font-face {
   font-family: "helvetica_neuelight";
   src:

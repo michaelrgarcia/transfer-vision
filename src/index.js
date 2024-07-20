@@ -24,8 +24,6 @@ import {
   removeDisabledState,
 } from "./public/cssTransitions";
 
-const requestInProgress = sessionStorage.getItem("requestInProgress");
-
 const selects = [
   document.getElementById("four-year"),
   document.getElementById("major"),
@@ -83,9 +81,7 @@ selects[1].addEventListener("input", () => {
 });
 
 selects[2].addEventListener("input", () => {
-  if (!requestInProgress) {
-    removeDisabledState(submit.parentNode);
-  }
+  removeDisabledState(submit.parentNode);
 });
 
 submit.addEventListener("click", async (event) => {
@@ -97,7 +93,7 @@ submit.addEventListener("click", async (event) => {
 
   applyDisabledState(submit.parentNode);
 
-  if (classList.value && !requestInProgress) {
+  if (classList.value) {
     const params = await getArticulationParams(receivingId, majorKey);
 
     hideSplash();
@@ -107,12 +103,6 @@ submit.addEventListener("click", async (event) => {
     // get the specific class from getLowerDivs
     // make a function on backend that gets that 1 class
     // route will include the prefix, course #, and class title
-  } else if (requestInProgress) {
-    // show dialog saying that a request is in progress
-    // tell user that sound will play when request is open
-    // "unmute tab and keep it open"
-    // 1 big request is allowed at a time
-    // beg the user for help (better API tier, how to handle multiple big requests)
   }
 
   event.preventDefault();

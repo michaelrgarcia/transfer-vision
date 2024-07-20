@@ -1,3 +1,5 @@
+import { hideLoadingGif, randomLoadingGif } from "./cssTransitions";
+
 async function getCommunityColleges() {
   try {
     const endpoint =
@@ -129,54 +131,38 @@ async function processNext(processingQueue, results, signal) {
 }
 
 export async function getArticulationData(articulationParams) {
-  const requestInProgress = sessionStorage.getItem("requestInProgress");
+  const results = [];
+  const processingQueue = articulationParams.slice();
+  const concurrencyLimit = 1;
 
-  if (!requestInProgress) {
-    sessionStorage.setItem("requestInProgress", "true");
+  const abortController = new AbortController();
+  const { signal } = abortController;
 
-    const results = [];
-    const processingQueue = articulationParams.slice();
-    const concurrencyLimit = 1;
+  window.addEventListener("beforeunload", () => abortController.abort());
 
-    const abortController = new AbortController();
-    const { signal } = abortController;
+  await randomLoadingGif();
 
-    window.addEventListener("beforeunload", () => abortController.abort());
+  const initialPromises = Array.from({ length: concurrencyLimit }, () =>
+    processNext(processingQueue, results, signal),
+  );
 
-    const initialPromises = Array.from({ length: concurrencyLimit }, () =>
-      processNext(processingQueue, results, signal),
-    );
+  try {
+    await Promise.all(initialPromises);
 
-    try {
-      await Promise.all(initialPromises);
-
-      console.log("all requests processed");
-      // play a sound. user will have interacted with the page
-    } catch (error) {
-      if (error.name === "AbortError") {
-        console.log("requests aborted due to page unload");
-      } else {
-        console.error("error processing requests", error);
-      }
-    } finally {
-      sessionStorage.removeItem("requestInProgress");
-      window.removeEventListener("beforeunload", () => abortController.abort());
+    hideLoadingGif();
+    console.log("all requests processed");
+    // play a sound. user will have interacted with the page
+    // install howler
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("requests aborted due to page unload");
+    } else {
+      console.error("error processing requests", error);
     }
-
-    return results;
+  } finally {
+    window.removeEventListener("beforeunload", () => abortController.abort());
   }
 
-  return "Please wait until the current request is finished.";
-}
-
-export function debounce(func, delay) {
-  let debounceTimeout;
-
-  return (...args) => {
-    clearTimeout(debounceTimeout);
-
-    debounceTimeout = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
+  console.log(results);
+  return results;
 }

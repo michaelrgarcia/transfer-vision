@@ -1,4 +1,10 @@
-import { hideLoadingGif, showRandomLoadingGif } from "./cssTransitions";
+import {
+  hideProgressTracker,
+  hideRandomLoadingGif,
+  showProgressTracker,
+  showRandomLoadingGif,
+} from "./cssTransitions";
+import { updateProgressTracker } from "./utils";
 
 async function getCommunityColleges() {
   try {
@@ -107,55 +113,77 @@ async function sendArticulationRequests(links, signal) {
   return dataArray;
 }
 
-async function processNext(processingQueue, results, signal) {
-  const concurrencyLimit = 7;
+async function processChunks(
+  processingQueue,
+  articulationData,
+  signal,
+  totalColleges,
+) {
+  const concurrencyLimit = 7; // dynamic value
+  const linksChunk = processingQueue.splice(0, concurrencyLimit);
 
-  if (processingQueue.length !== 0) {
-    const linksChunk = processingQueue.splice(0, concurrencyLimit);
+  const collegesProcessed = articulationData.length;
 
-    try {
-      const result = await sendArticulationRequests(linksChunk, signal);
-      results.push(...result);
-      // render the result as it comes
-      console.log("processed request");
+  if (processingQueue.length === 0) return;
 
-      await processNext(processingQueue, results, signal);
-    } catch (error) {
-      if (error.name === "AbortError") {
-        console.log("aborted request");
-      } else {
-        console.error("error processing request:", error);
-      }
+  try {
+    const result = await sendArticulationRequests(linksChunk, signal);
+
+    articulationData.push(...result);
+
+    updateProgressTracker(collegesProcessed, totalColleges);
+    // render the result as it comes
+    console.log("processed request");
+
+    await processChunks(
+      processingQueue,
+      articulationData,
+      signal,
+      totalColleges,
+    );
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("aborted request");
+    } else {
+      console.error("error processing request:", error);
     }
   }
 }
 
 export async function getArticulationData(articulationParams) {
-  const results = [];
-  const processingQueue = articulationParams.slice();
-  const concurrencyLimit = 1;
+  const articulationData = [];
+  const processingQueue = articulationParams.slice(); // shallow copy
+
+  const startingValue = 0;
+  const totalColleges = articulationParams.length;
 
   const abortController = new AbortController();
   const { signal } = abortController;
 
-  const initialPromises = [];
+  // wake up assist scraper w/ get request
+
+  // if get request response, execute below lines of code
 
   window.addEventListener("beforeunload", () => abortController.abort());
 
   await showRandomLoadingGif();
 
-  for (let i = 0; i < concurrencyLimit; ) {
-    const promise = processNext(processingQueue, results, signal);
-
-    initialPromises.push(promise);
-    i += 1;
-  }
+  showProgressTracker();
+  updateProgressTracker(startingValue, totalColleges);
 
   try {
-    await Promise.all(initialPromises);
+    await processChunks(
+      processingQueue,
+      articulationData,
+      signal,
+      totalColleges,
+    );
 
-    hideLoadingGif();
     console.log("all requests processed");
+
+    hideRandomLoadingGif();
+    hideProgressTracker();
+
     // play a sound. user will have interacted with the page
     // install howler
   } catch (error) {
@@ -168,6 +196,6 @@ export async function getArticulationData(articulationParams) {
     window.removeEventListener("beforeunload", () => abortController.abort());
   }
 
-  console.log(results);
-  return results;
+  console.log(articulationData);
+  return articulationData;
 }

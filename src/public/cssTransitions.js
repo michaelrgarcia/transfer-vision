@@ -5,6 +5,8 @@ import { getRandomLoadingGif } from "./utils";
 
 const dialog = document.querySelector("dialog");
 const form = document.querySelector("form");
+const img = document.querySelector("img.loading-gif");
+const progressTracker = document.querySelector(".progress-tracker");
 
 export function showDialog() {
   dialog.showModal();
@@ -80,8 +82,6 @@ export function hideSplash() {
 }
 
 export async function showRandomLoadingGif() {
-  const img = document.querySelector("img.loading-gif");
-
   waitForElementTransition(form).then(async () => {
     await getRandomLoadingGif(img);
 
@@ -90,12 +90,25 @@ export async function showRandomLoadingGif() {
   });
 }
 
-export function hideLoadingGif() {
-  const img = document.querySelector("img.loading-gif");
-
+export function hideRandomLoadingGif() {
   img.style.opacity = 0;
   waitForElementTransition(img).then(() => {
     img.style.display = "none";
     img.src = "#";
+  });
+}
+
+export function showProgressTracker() {
+  waitForElementTransition(img).then(() => {
+    progressTracker.style.display = "block";
+    progressTracker.style.opacity = 1;
+  });
+}
+
+export function hideProgressTracker() {
+  progressTracker.style.opacity = 0;
+
+  waitForElementTransition(img).then(() => {
+    progressTracker.style.display = "none";
   });
 }

@@ -60,3 +60,9 @@ export async function getRandomLoadingGif(imgElement) {
     console.log(error);
   }
 }
+
+export function updateProgressTracker(collegesProcessed, totalColleges) {
+  const progressTracker = document.querySelector(".progress-tracker");
+
+  progressTracker.textContent = `${collegesProcessed} out of ${totalColleges} colleges searched`;
+}

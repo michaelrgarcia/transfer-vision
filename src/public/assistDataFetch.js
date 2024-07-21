@@ -1,4 +1,4 @@
-import { hideLoadingGif, randomLoadingGif } from "./cssTransitions";
+import { hideLoadingGif, showRandomLoadingGif } from "./cssTransitions";
 
 async function getCommunityColleges() {
   try {
@@ -138,13 +138,18 @@ export async function getArticulationData(articulationParams) {
   const abortController = new AbortController();
   const { signal } = abortController;
 
+  const initialPromises = [];
+
   window.addEventListener("beforeunload", () => abortController.abort());
 
-  await randomLoadingGif();
+  await showRandomLoadingGif();
 
-  const initialPromises = Array.from({ length: concurrencyLimit }, () =>
-    processNext(processingQueue, results, signal),
-  );
+  for (let i = 0; i < concurrencyLimit; ) {
+    const promise = processNext(processingQueue, results, signal);
+
+    initialPromises.push(promise);
+    i += 1;
+  }
 
   try {
     await Promise.all(initialPromises);

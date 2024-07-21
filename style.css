@@ -46,6 +46,8 @@ header {
 
 main {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   flex: 1;
 
@@ -237,6 +239,9 @@ button[aria-disabled="true"] {
 
 .loading-gif {
   display: none;
+  opacity: 0;
+
+  width: 100px;
 }
 
 @font-face {

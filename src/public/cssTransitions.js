@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import waitForElementTransition from "wait-for-element-transition";
+import { getRandomLoadingGif } from "./utils";
 
 const dialog = document.querySelector("dialog");
 const form = document.querySelector("form");
@@ -78,23 +79,15 @@ export function hideSplash() {
   });
 }
 
-export async function randomLoadingGif() {
+export async function showRandomLoadingGif() {
   const img = document.querySelector("img.loading-gif");
 
-  img.style.display = "block";
-  const response = await fetch(
-    "https://api.giphy.com/v1/gifs/translate?api_key=uldN0xaiyhNfeuN7QN98ROsslA7JpaDG&s=loading",
-    { mode: "cors" },
-  );
-  const gifData = await response.json();
+  waitForElementTransition(form).then(async () => {
+    await getRandomLoadingGif(img);
 
-  try {
-    if (gifData) {
-      img.src = gifData.data.images.original.url;
-    }
-  } catch (error) {
-    console.log(error);
-  }
+    img.style.display = "block";
+    img.style.opacity = 1;
+  });
 }
 
 export function hideLoadingGif() {

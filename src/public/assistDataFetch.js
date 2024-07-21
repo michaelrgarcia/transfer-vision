@@ -122,8 +122,6 @@ async function processChunks(
   const concurrencyLimit = 7; // dynamic value
   const linksChunk = processingQueue.splice(0, concurrencyLimit);
 
-  const collegesProcessed = articulationData.length;
-
   if (processingQueue.length === 0) return;
 
   try {
@@ -131,7 +129,7 @@ async function processChunks(
 
     articulationData.push(...result);
 
-    updateProgressTracker(collegesProcessed, totalColleges);
+    updateProgressTracker(articulationData.length, totalColleges);
     // render the result as it comes
     console.log("processed request");
 

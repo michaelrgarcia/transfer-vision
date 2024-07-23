@@ -1,4 +1,11 @@
-import { defaultOption, selectOption } from "./elementPresets";
+/* eslint-disable consistent-return */
+import {
+  classListHeader,
+  classListMainDiv,
+  defaultOption,
+  selectOption,
+} from "./elementPresets";
+import { deNest } from "./utils";
 
 import {
   showDialog,
@@ -114,6 +121,35 @@ export async function renderLowerDivs(classList, receivingId, key) {
   stopLoading(formRow, loadingText);
 }
 
+function getCollegeName(articulationData) {
+  if (articulationData.sendingInstitution) {
+    const sendingData = deNest(articulationData.sendingInstitution);
+    let collegeName;
+
+    sendingData.forEach((item) => {
+      if (Array.isArray(item)) {
+        if (item[0].name) {
+          const { name } = item[0];
+
+          collegeName = name;
+        }
+      }
+    });
+
+    return collegeName;
+  }
+}
+
+export function createClassLists(chunk) {
+  chunk.forEach((college) => {
+    const classListDiv = classListMainDiv();
+
+    const collegeName = getCollegeName(college.result);
+
+    classListHeader(classListDiv, collegeName);
+  });
+}
+
 /*
 
 function getChunkArticulationData(jsonArray) {
@@ -138,24 +174,7 @@ function getChunkArticulationData(jsonArray) {
   return dataChunk;
 }
 
-function getChunkCollegeName(articulationData) {
-  if (articulationData.sendingInstitution) {
-    const sendingData = deNest(articulationData.sendingInstitution);
-    let collegeName;
 
-    sendingData.forEach((item) => {
-      if (Array.isArray(item)) {
-        if (item[0].name) {
-          const name = item[0].name;
-
-          collegeName = name;
-        }
-      }
-    });
-
-    return { collegeName };
-  }
-}
 
 function createArticulationList(articulationData) {
   if (articulationData) {

@@ -245,6 +245,31 @@ button[aria-disabled="true"] {
   width: 100px;
 }
 
+.articulations {
+  display: none;
+  grid-template-columns: repeat(auto-fit, 300px);
+  gap: 25px;
+  justify-content: center;
+  justify-self: center;
+
+  width: 80%;
+  max-width: 650px;
+
+  border: 1px ridge silver;
+  padding: 30px;
+  margin-top: -10px;
+
+  background-color: var(--second-bg-color);
+
+  opacity: 0;
+
+  transition: opacity 0.3s;
+}
+
+.articulations > .class-list {
+  border: 1px solid blue;
+}
+
 @font-face {
   font-family: "helvetica_neuelight";
   src:

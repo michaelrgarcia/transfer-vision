@@ -112,3 +112,12 @@ export function hideProgressTracker() {
     progressTracker.style.display = "none";
   });
 }
+
+export function showArticulations() {
+  const articulations = document.querySelector(".articulations");
+
+  waitForElementTransition(img).then(() => {
+    articulations.style.display = "grid";
+    articulations.style.opacity = 1;
+  });
+}

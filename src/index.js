@@ -34,7 +34,6 @@ const schoolList = selects[0];
 const majorList = selects[1];
 const classList = selects[2];
 
-const form = document.querySelector("form");
 const submit = document.querySelector(".submit");
 
 const dialog = document.querySelector("dialog");
@@ -100,7 +99,7 @@ submit.addEventListener("click", async (event) => {
 
     await getArticulationData(params);
 
-    // need to save class object...
+    // need to save class object..
 
     // get the specific class from getLowerDivs
     // make a function on backend that gets that 1 class

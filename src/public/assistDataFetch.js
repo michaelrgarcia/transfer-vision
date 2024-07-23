@@ -1,9 +1,11 @@
 import {
   hideProgressTracker,
   hideRandomLoadingGif,
+  showArticulations,
   showProgressTracker,
   showRandomLoadingGif,
 } from "./cssTransitions";
+import { createClassLists } from "./assistDataRender";
 import { updateProgressTracker } from "./utils";
 
 async function getCommunityColleges() {
@@ -128,6 +130,7 @@ async function processChunks(
     const result = await sendArticulationRequests(linksChunk, signal);
 
     articulationData.push(...result);
+    createClassLists(result);
 
     updateProgressTracker(articulationData.length, totalColleges);
     // render the result as it comes
@@ -158,16 +161,14 @@ export async function getArticulationData(articulationParams) {
   const abortController = new AbortController();
   const { signal } = abortController;
 
-  // wake up assist scraper w/ get request
-
-  // if get request response, execute below lines of code
-
   window.addEventListener("beforeunload", () => abortController.abort());
 
   await showRandomLoadingGif();
 
   showProgressTracker();
   updateProgressTracker(startingValue, totalColleges);
+
+  showArticulations();
 
   try {
     await processChunks(

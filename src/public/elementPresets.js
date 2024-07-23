@@ -21,3 +21,23 @@ export function defaultOption(keyword) {
 
   return option;
 }
+
+export function classListMainDiv() {
+  const articulations = document.querySelector(".articulations");
+  const classListDiv = document.createElement("div");
+
+  classListDiv.classList.add("class-list");
+
+  articulations.append(classListDiv);
+
+  return classListDiv;
+}
+
+export function classListHeader(parentDiv, collegeName) {
+  const header = document.createElement("button");
+
+  header.type = "button";
+  header.textContent = collegeName;
+
+  parentDiv.append(header);
+}

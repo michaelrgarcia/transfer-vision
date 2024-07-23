@@ -100,6 +100,8 @@ submit.addEventListener("click", async (event) => {
 
     await getArticulationData(params);
 
+    // need to save class object...
+
     // get the specific class from getLowerDivs
     // make a function on backend that gets that 1 class
     // route will include the prefix, course #, and class title

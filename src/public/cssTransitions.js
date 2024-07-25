@@ -6,7 +6,7 @@ import { getRandomLoadingGif } from "./utils";
 const dialog = document.querySelector("dialog");
 const form = document.querySelector("form");
 const img = document.querySelector("img.loading-gif");
-const progressTracker = document.querySelector(".progress-tracker");
+const results = document.querySelector(".results");
 
 export function showDialog() {
   dialog.showModal();
@@ -90,34 +90,21 @@ export async function showRandomLoadingGif() {
   });
 }
 
-export function hideRandomLoadingGif() {
-  img.style.opacity = 0;
-  waitForElementTransition(img).then(() => {
-    img.style.display = "none";
-    img.src = "#";
+export function showResults() {
+  waitForElementTransition(form).then(() => {
+    results.style.opacity = 1;
   });
+
+  results.style.display = "flex";
 }
 
-export function showProgressTracker() {
-  waitForElementTransition(img).then(() => {
-    progressTracker.style.display = "block";
-    progressTracker.style.opacity = 1;
-  });
-}
+export function hideResultsInfo() {
+  const resultsInfo = document.querySelector(".results-info");
 
-export function hideProgressTracker() {
-  progressTracker.style.opacity = 0;
+  // below code block, can turn into hideElement(element) function?
+  resultsInfo.style.opacity = 0;
 
-  waitForElementTransition(img).then(() => {
-    progressTracker.style.display = "none";
-  });
-}
-
-export function showArticulations() {
-  const articulations = document.querySelector(".articulations");
-
-  waitForElementTransition(img).then(() => {
-    articulations.style.display = "grid";
-    articulations.style.opacity = 1;
+  waitForElementTransition(resultsInfo).then(() => {
+    resultsInfo.style.display = "none";
   });
 }

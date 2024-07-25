@@ -121,6 +121,28 @@ export async function renderLowerDivs(classList, receivingId, key) {
   stopLoading(formRow, loadingText);
 }
 
+export function organizeArticulations() {
+  const articulationsDiv = document.querySelector(".articulations");
+  const classLists = document.querySelectorAll(".class-list");
+
+  const listArray = Array.from(classLists);
+
+  listArray.sort((a, b) => {
+    const currentButton = a.querySelector("button");
+    const nextButton = b.querySelector("button");
+
+    if (currentButton && nextButton) {
+      return currentButton.textContent.localeCompare(nextButton.textContent);
+    }
+
+    return 0;
+  });
+
+  listArray.forEach((list) => {
+    articulationsDiv.appendChild(list);
+  });
+}
+
 export function createClassLists(chunk) {
   chunk.forEach((college) => {
     if (college.result) {

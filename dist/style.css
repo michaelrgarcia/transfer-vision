@@ -24,7 +24,8 @@ body {
 
 header,
 .loading,
-.dialog-heading > span {
+.dialog-heading > span,
+.progress-tracker {
   font-family: "helvetica_neuelight", Verdana, sans-serif;
 }
 
@@ -152,13 +153,6 @@ select > option {
   cursor: pointer;
 }
 
-.loading,
-.loading-gif,
-.progress-tracker {
-  display: none;
-  opacity: 0;
-}
-
 .loading {
   align-self: center;
 
@@ -170,6 +164,7 @@ select > option {
 
   font-size: 2em;
 
+  opacity: 0;
   transition: opacity 3s;
 
   user-select: none;
@@ -242,18 +237,18 @@ button[aria-disabled="true"] {
 }
 
 .loading-gif {
-  width: 100px;
+  width: 70px;
+  border: 1px solid var(--dark-text);
 }
 
 .articulations {
-  display: none;
+  display: grid;
   grid-template-columns: repeat(auto-fit, 300px);
   gap: 25px;
   justify-content: center;
   justify-self: center;
 
-  width: 80%;
-  max-width: 650px;
+  width: 100%;
 
   border: 1px ridge silver;
   padding: 30px;
@@ -261,13 +256,50 @@ button[aria-disabled="true"] {
 
   background-color: var(--second-bg-color);
 
-  opacity: 0;
+  opacity: 1;
 
   transition: opacity 0.3s;
 }
 
 .articulations > .class-list {
-  border: 1px solid blue;
+  border: 1px solid var(--main-text);
+}
+
+.results-info {
+  margin-top: -15px;
+}
+
+.loading-container,
+.info-text {
+  display: flex;
+  align-items: center;
+}
+
+.loading-container {
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-bottom: 5px;
+
+  color: silver;
+}
+
+.info-text {
+  flex-direction: column;
+}
+
+.results {
+  display: none;
+  opacity: 0;
+
+  flex-direction: column;
+  gap: 20px;
+
+  transition: opacity 0.3s;
+
+  width: 80%;
+  max-width: 650px;
 }
 
 @font-face {

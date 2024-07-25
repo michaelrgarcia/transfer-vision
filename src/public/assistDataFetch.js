@@ -3,7 +3,7 @@ import {
   showRandomLoadingGif,
   showResults,
 } from "./cssTransitions";
-import { createClassLists } from "./assistDataRender";
+import { createClassLists, organizeArticulations } from "./assistDataRender";
 import { updateProgressTracker } from "./utils";
 
 async function getCommunityColleges() {
@@ -181,6 +181,8 @@ export async function getArticulationData(articulationParams) {
       signal,
       totalColleges,
     );
+
+    organizeArticulations();
 
     console.log("all requests processed");
 

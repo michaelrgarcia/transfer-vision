@@ -1,9 +1,7 @@
 import {
-  hideProgressTracker,
-  hideRandomLoadingGif,
-  showArticulations,
-  showProgressTracker,
+  hideResultsInfo,
   showRandomLoadingGif,
+  showResults,
 } from "./cssTransitions";
 import { createClassLists } from "./assistDataRender";
 import { updateProgressTracker } from "./utils";
@@ -158,17 +156,17 @@ export async function getArticulationData(articulationParams) {
   const startingValue = 0;
   const totalColleges = articulationParams.length;
 
+  console.log(totalColleges);
+
   const abortController = new AbortController();
   const { signal } = abortController;
 
   window.addEventListener("beforeunload", () => abortController.abort());
 
   await showRandomLoadingGif();
+  showResults();
 
-  showProgressTracker();
   updateProgressTracker(startingValue, totalColleges);
-
-  showArticulations();
 
   try {
     await processChunks(
@@ -180,8 +178,7 @@ export async function getArticulationData(articulationParams) {
 
     console.log("all requests processed");
 
-    hideRandomLoadingGif();
-    hideProgressTracker();
+    hideResultsInfo();
 
     // play a sound. user will have interacted with the page
     // install howler

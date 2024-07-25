@@ -66,3 +66,24 @@ export function updateProgressTracker(collegesProcessed, totalColleges) {
 
   progressTracker.textContent = `${collegesProcessed} out of ${totalColleges} colleges searched`;
 }
+
+export function getCollegeName(articulationData) {
+  if (articulationData && articulationData.sendingInstitution) {
+    const sendingData = deNest(articulationData.sendingInstitution);
+    let collegeName;
+
+    sendingData.forEach((item) => {
+      if (Array.isArray(item)) {
+        if (item[0].name) {
+          const { name } = item[0];
+
+          collegeName = name;
+        }
+      }
+    });
+
+    return collegeName;
+  }
+
+  return null;
+}

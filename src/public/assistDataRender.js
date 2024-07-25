@@ -5,7 +5,7 @@ import {
   defaultOption,
   selectOption,
 } from "./elementPresets";
-import { deNest } from "./utils";
+import { getCollegeName } from "./utils";
 
 import {
   showDialog,
@@ -121,36 +121,13 @@ export async function renderLowerDivs(classList, receivingId, key) {
   stopLoading(formRow, loadingText);
 }
 
-function getCollegeName(articulationData) {
-  if (articulationData) {
-    if (articulationData.sendingInstitution) {
-      const sendingData = deNest(articulationData.sendingInstitution);
-      let collegeName;
-
-      sendingData.forEach((item) => {
-        if (Array.isArray(item)) {
-          if (item[0].name) {
-            const { name } = item[0];
-
-            collegeName = name;
-          }
-        }
-      });
-
-      return collegeName;
-    }
-  }
-
-  return null;
-}
-
 export function createClassLists(chunk) {
   chunk.forEach((college) => {
-    const classListDiv = classListMainDiv();
+    if (college.result) {
+      const classListDiv = classListMainDiv();
 
-    const collegeName = getCollegeName(college.result);
+      const collegeName = getCollegeName(college.result);
 
-    if (collegeName) {
       classListHeader(classListDiv, collegeName);
     }
   });

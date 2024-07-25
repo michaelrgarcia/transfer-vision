@@ -122,22 +122,26 @@ export async function renderLowerDivs(classList, receivingId, key) {
 }
 
 function getCollegeName(articulationData) {
-  if (articulationData.sendingInstitution) {
-    const sendingData = deNest(articulationData.sendingInstitution);
-    let collegeName;
+  if (articulationData) {
+    if (articulationData.sendingInstitution) {
+      const sendingData = deNest(articulationData.sendingInstitution);
+      let collegeName;
 
-    sendingData.forEach((item) => {
-      if (Array.isArray(item)) {
-        if (item[0].name) {
-          const { name } = item[0];
+      sendingData.forEach((item) => {
+        if (Array.isArray(item)) {
+          if (item[0].name) {
+            const { name } = item[0];
 
-          collegeName = name;
+            collegeName = name;
+          }
         }
-      }
-    });
+      });
 
-    return collegeName;
+      return collegeName;
+    }
   }
+
+  return null;
 }
 
 export function createClassLists(chunk) {
@@ -146,7 +150,9 @@ export function createClassLists(chunk) {
 
     const collegeName = getCollegeName(college.result);
 
-    classListHeader(classListDiv, collegeName);
+    if (collegeName) {
+      classListHeader(classListDiv, collegeName);
+    }
   });
 }
 

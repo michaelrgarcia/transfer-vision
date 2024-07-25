@@ -9,7 +9,7 @@ import { updateProgressTracker } from "./utils";
 async function getCommunityColleges() {
   try {
     const endpoint =
-      "https://classglance.onrender.com/schools/community-colleges";
+      "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/community-colleges";
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -25,9 +25,10 @@ async function getCommunityColleges() {
 
 export async function getFourYears() {
   try {
-    const endpoint = "https://classglance.onrender.com/schools/four-years";
+    const endpoint =
+      "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/four-years";
 
-    const response = await fetch(endpoint);
+    const response = await fetch(endpoint, { mode: "cors" });
     const data = await response.json();
     const dataArray = Object.values(data);
 
@@ -41,7 +42,7 @@ export async function getFourYears() {
 
 export async function getMajorData(receivingId) {
   try {
-    const endpoint = `https://classglance.onrender.com/schools/major-data/${receivingId}/74`;
+    const endpoint = `https://cs46plizg2.execute-api.us-east-2.amazonaws.com/major-data/${receivingId}/74`;
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -57,7 +58,7 @@ export async function getMajorData(receivingId) {
 
 export async function getLowerDivs(receivingId, key) {
   try {
-    const endpoint = `https://classglance.onrender.com/schools/74/6/${receivingId}/${key}/lower-divs`;
+    const endpoint = `https://cs46plizg2.execute-api.us-east-2.amazonaws.com/74/6/${receivingId}/${key}/lower-divs`;
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -94,7 +95,8 @@ export async function getArticulationParams(receivingId, majorKey) {
 async function sendArticulationRequests(links, signal) {
   const linksList = JSON.stringify(links);
 
-  const endpoint = "https://assistscraper.onrender.com/articulation-data";
+  const endpoint =
+    "https://g4sc52rxwf.execute-api.us-east-2.amazonaws.com/articulation-data";
 
   const response = await fetch(endpoint, {
     body: linksList,
@@ -119,10 +121,16 @@ async function processChunks(
   signal,
   totalColleges,
 ) {
-  const concurrencyLimit = 7; // dynamic value
-  const linksChunk = processingQueue.splice(0, concurrencyLimit);
+  const concurrencyLimit = 29; // dynamic value
+  let linksChunk;
 
   if (processingQueue.length === 0) return;
+
+  if (processingQueue.length < concurrencyLimit) {
+    linksChunk = processingQueue.splice(0, processingQueue.length - 1);
+  } else {
+    linksChunk = processingQueue.splice(0, concurrencyLimit);
+  }
 
   try {
     const result = await sendArticulationRequests(linksChunk, signal);
@@ -156,8 +164,6 @@ export async function getArticulationData(articulationParams) {
   const startingValue = 0;
   const totalColleges = articulationParams.length;
 
-  console.log(totalColleges);
-
   const abortController = new AbortController();
   const { signal } = abortController;
 
@@ -180,7 +186,7 @@ export async function getArticulationData(articulationParams) {
 
     hideResultsInfo();
 
-    // play a sound. user will have interacted with the page
+    // play a sound? user will have interacted with the page
     // install howler
   } catch (error) {
     if (error.name === "AbortError") {

@@ -21,6 +21,7 @@ import {
   applyDisabledState,
   hideSplash,
   removeDisabledState,
+  showRandomLoadingGif,
 } from "./public/domFunctions/cssTransitions";
 
 const selects = [
@@ -38,7 +39,7 @@ const submit = document.querySelector(".submit");
 const dialog = document.querySelector("dialog");
 const closeDialog = document.querySelector(".close-dialog");
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
     if (selects[i].parentNode) {
       applyDisabledState(selects[i].parentNode);
@@ -49,6 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
   applyDisabledState(submit.parentNode);
 
   renderFourYears(selects[0]);
+
+  await showRandomLoadingGif();
 });
 
 selects[0].addEventListener("input", () => {

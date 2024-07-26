@@ -105,7 +105,6 @@ export async function getArticulationData(articulationParams) {
 
   window.addEventListener("beforeunload", () => abortController.abort());
 
-  await showRandomLoadingGif();
   showResults();
 
   updateProgressTracker(startingValue, totalColleges);

@@ -1,12 +1,16 @@
-import { getCommunityColleges } from "./schoolDataFetch";
-import { updateProgressTracker } from "../utils";
-import { createClassLists, organizeArticulations } from "../assistDataRender";
-
 import {
   showRandomLoadingGif,
   showResults,
   hideResultsInfo,
-} from "../cssTransitions";
+} from "../domFunctions/cssTransitions";
+
+import {
+  createClassLists,
+  organizeArticulations,
+} from "../domFunctions/assistDataRender";
+
+import { getCommunityColleges } from "./schoolDataFetch";
+import { updateProgressTracker } from "../utils";
 
 export async function getArticulationParams(receivingId, majorKey) {
   const articulationParams = [];

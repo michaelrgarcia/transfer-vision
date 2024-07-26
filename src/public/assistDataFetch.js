@@ -6,38 +6,81 @@ import {
 import { createClassLists, organizeArticulations } from "./assistDataRender";
 import { updateProgressTracker } from "./utils";
 
-async function getCommunityColleges() {
-  try {
-    const endpoint =
-      "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/community-colleges";
+async function getSchoolData(url, cacheKey) {
+  const now = new Date();
 
-    const response = await fetch(endpoint);
+  try {
+    const response = await fetch(url);
     const data = await response.json();
     const dataArray = Object.values(data);
 
+    localStorage.setItem(cacheKey, JSON.stringify(data));
+    localStorage.setItem("cacheTimestamp", now.toISOString());
+
     return dataArray;
   } catch (error) {
-    console.error("Error fetching community colleges:", error);
-
-    return null;
+    console.error("error caching school data:", error);
   }
+
+  return null;
+}
+
+async function getCommunityColleges() {
+  try {
+    const now = new Date().getTime();
+    const fiveDaysMs = 5 * (24 * 60 * 60 * 1000);
+
+    const cachedCCs = localStorage.getItem("communityColleges");
+    const cacheTimestamp = localStorage.getItem("cacheTimestamp");
+
+    if (cachedCCs && cacheTimestamp) {
+      const lastUpdateMs = new Date(cacheTimestamp).getTime();
+
+      if (now - lastUpdateMs < fiveDaysMs) {
+        return JSON.parse(cachedCCs);
+      }
+    } else {
+      const endpoint =
+        "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/community-colleges";
+
+      const latestData = await getSchoolData(endpoint, "communityColleges");
+
+      return latestData;
+    }
+  } catch (error) {
+    console.error("Error fetching community colleges:", error);
+  }
+
+  return null;
 }
 
 export async function getFourYears() {
   try {
-    const endpoint =
-      "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/four-years";
+    const now = new Date().getTime();
+    const fiveDaysMs = 5 * (24 * 60 * 60 * 1000);
 
-    const response = await fetch(endpoint, { mode: "cors" });
-    const data = await response.json();
-    const dataArray = Object.values(data);
+    const cachedFourYears = localStorage.getItem("fourYears");
+    const cacheTimestamp = localStorage.getItem("cacheTimestamp");
 
-    return dataArray;
+    if (cachedFourYears && cacheTimestamp) {
+      const lastUpdateMs = new Date(cacheTimestamp).getTime();
+
+      if (now - lastUpdateMs < fiveDaysMs) {
+        return JSON.parse(cachedFourYears);
+      }
+    } else {
+      const endpoint =
+        "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/four-years";
+
+      const latestData = await getSchoolData(endpoint, "fourYears");
+
+      return latestData;
+    }
   } catch (error) {
-    console.error("Error fetching universities:", error);
-
-    return null;
+    console.error("Error retrieving community colleges:", error);
   }
+
+  return null;
 }
 
 export async function getMajorData(receivingId) {

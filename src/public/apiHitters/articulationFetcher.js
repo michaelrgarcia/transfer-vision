@@ -45,10 +45,6 @@ async function sendArticulationRequests(links, signal) {
     signal,
   });
 
-  if (!response.ok) {
-    throw new Error("api is not ok");
-  }
-
   const data = await response.json();
   const dataArray = Object.values(data);
 

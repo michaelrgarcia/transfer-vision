@@ -1,15 +1,12 @@
 import {
-  showRandomLoadingGif,
-  showResults,
-  hideResultsInfo,
-} from "../domFunctions/cssTransitions";
-
-import {
   createClassLists,
   organizeArticulations,
 } from "../domFunctions/assistDataRender";
 
 import { getCommunityColleges } from "./schoolDataFetch";
+
+import { showResults, hideResultsInfo } from "../domFunctions/cssTransitions";
+
 import { updateProgressTracker } from "../utils";
 
 export async function getArticulationParams(receivingId, majorKey) {

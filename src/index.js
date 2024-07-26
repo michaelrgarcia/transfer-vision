@@ -7,22 +7,21 @@ import helpBox from "./svgs/help-box.svg";
 import closeBox from "./svgs/close-box.svg";
 
 import {
-  debounce,
   getArticulationData,
   getArticulationParams,
-} from "./public/assistDataFetch";
+} from "./public/apiHitters/articulationFetcher";
 
 import {
   renderFourYears,
   renderLowerDivs,
   renderMajorData,
-} from "./public/assistDataRender";
+} from "./public/domFunctions/assistDataRender";
 
 import {
   applyDisabledState,
   hideSplash,
   removeDisabledState,
-} from "./public/cssTransitions";
+} from "./public/domFunctions/cssTransitions";
 
 const selects = [
   document.getElementById("four-year"),

@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import {
   classListHeader,
   classListMainDiv,
@@ -14,7 +13,11 @@ import {
   stopLoading,
 } from "./cssTransitions";
 
-import { getFourYears, getLowerDivs, getMajorData } from "./assistDataFetch";
+import {
+  getFourYears,
+  getLowerDivs,
+  getMajorData,
+} from "./apiHitters/schoolDataFetch";
 
 export async function renderFourYears(schoolList) {
   const formRow = schoolList.parentNode;
@@ -72,9 +75,8 @@ export async function renderLowerDivs(classList, receivingId, key) {
   startLoading(formRow, loadingText);
 
   const lowerDivs = await getLowerDivs(receivingId, key);
-  // will send this data to backend through the form
-
-  // comparisons will happen there
+  // cache data
+  // if for some reason cached, use cached data
 
   const select = classList;
   const placeholder = defaultOption("class");

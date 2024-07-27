@@ -184,6 +184,7 @@ export function getMatches(responseArray, lowerDiv) {
     }
   });
 
+  console.log(matches);
   return matches;
 }
 
@@ -213,15 +214,11 @@ export function getSelectedClass(allLowerDivs) {
 
   allLowerDivs.forEach((lowerDiv) => {
     if (Array.isArray(lowerDiv)) {
-      const withStrings = lowerDiv.filter((item) => typeof item === "string");
-
-      const noSelectedObj = withStrings.filter(
-        (item) => typeof item === "object" && !item.selected,
-      );
-
-      if (noSelectedObj.length > 0) {
-        selectedClass = noSelectedObj;
-      }
+      lowerDiv.forEach((item) => {
+        if (item.selected) {
+          selectedClass = lowerDiv.filter((subitem) => !subitem.selected);
+        }
+      });
     } else if (typeof lowerDiv === "object" && lowerDiv.selected) {
       const { selected, ...noSelected } = lowerDiv;
 

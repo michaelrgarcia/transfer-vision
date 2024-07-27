@@ -3,6 +3,7 @@ import {
   classListMainDiv,
   defaultOption,
   selectOption,
+  lowerDivOption,
 } from "./elementPresets";
 
 import {
@@ -18,7 +19,7 @@ import {
   getMajorData,
 } from "../apiHitters/schoolDataFetch";
 
-import { getCollegeName } from "../utils";
+import { getCollegeName } from "../apiHitters/jsonHelper";
 
 export async function renderFourYears(schoolList) {
   const formRow = schoolList.parentNode;
@@ -76,8 +77,6 @@ export async function renderLowerDivs(classList, receivingId, key) {
   startLoading(formRow, loadingText);
 
   const lowerDivs = await getLowerDivs(receivingId, key);
-  // cache data
-  // if for some reason cached, use cached data
 
   const select = classList;
   const placeholder = defaultOption("class");
@@ -85,9 +84,7 @@ export async function renderLowerDivs(classList, receivingId, key) {
   select.replaceChildren();
   select.appendChild(placeholder);
 
-  // make below statement into a function?
-
-  lowerDivs.forEach((obj) => {
+  lowerDivs.forEach((obj, classIndex) => {
     if (Array.isArray(obj)) {
       let connector;
       let seriesString = "";
@@ -111,11 +108,11 @@ export async function renderLowerDivs(classList, receivingId, key) {
         }
       });
 
-      const option = selectOption(seriesString);
+      const option = lowerDivOption(seriesString, classIndex);
       select.appendChild(option);
     } else {
       const className = `${obj.prefix} ${obj.courseNumber} - ${obj.courseTitle}`;
-      const option = selectOption(className, null, null);
+      const option = lowerDivOption(className, classIndex);
 
       select.appendChild(option);
     }
@@ -216,81 +213,8 @@ function getReceivingCourses(articulationObj) {
   }
 }
 
-function getSendingCourses(articulationObj) {
-  const sendingArticulation = articulationObj.sendingArticulation;
-  if (sendingArticulation.items) {
-    const items = sendingArticulation.items;
 
-    if (!sendingArticulation.noArticulationReason) {
-      let courseList = [];
 
-      items.forEach((courseObj) => {
-        const courses = courseObj.items;
 
-        if (courses.length > 1) {
-          const connector = courseObj.courseConjunction;
-          let courseGroup = createGroup(connector, courses);
-
-          courseList.push(courseGroup);
-        } else {
-          const course = getCourse(courses[0]);
-
-          courseList.push(course);
-        }
-      });
-
-      if (items.length > 1) {
-        const groupConnector = extractGroupConnector(sendingArticulation);
-
-        courseList = conjoin(courseList, groupConnector);
-
-        return courseList;
-      } else {
-        return courseList;
-      }
-    } else {
-      return sendingArticulation.noArticulationReason;
-    }
-  }
-}
-
-function extractGroupConnector(sendingArticulation) {
-  if (sendingArticulation.courseGroupConjunctions) {
-    const arr = sendingArticulation.courseGroupConjunctions;
-    const lastItem = arr[arr.length - 1];
-
-    if (lastItem) {
-      if (lastItem.groupConjunction) {
-        return lastItem.groupConjunction;
-      }
-    }
-  }
-}
-
-function getCourse(courseObj) {
-  const { prefix, courseNumber, courseTitle } = courseObj;
-
-  return { prefix, courseNumber, courseTitle };
-}
-
-function createGroup(conjunction, groupCourses) {
-  const connector = conjunction;
-  const coursesInGroup = groupCourses;
-  let group = [];
-
-  // may not need these...
-  const pad1 = connector.padStart(connector.length + 1, " ");
-  const pad2 = pad1.padEnd(pad1.length + 1, " ");
-
-  coursesInGroup.forEach((courseObj) => {
-    const course = getCourse(courseObj);
-
-    group.push(course);
-  });
-
-  group = alphaSort(group, ["courseNumber"]);
-
-  return conjoin(group, pad2);
-}
 
 */

@@ -38,7 +38,7 @@ async function fetchLowerDivs(receivingId, key) {
 export async function getCommunityColleges() {
   try {
     const now = new Date().getTime();
-    const fiveDaysMs = 5 * (24 * 60 * 60 * 1000);
+    const tenDaysMs = 10 * (24 * 60 * 60 * 1000);
 
     const cachedCCs = localStorage.getItem("communityColleges");
     const cacheTimestamp = localStorage.getItem("cacheTimestamp");
@@ -46,7 +46,7 @@ export async function getCommunityColleges() {
     if (cachedCCs && cacheTimestamp) {
       const lastUpdateMs = new Date(cacheTimestamp).getTime();
 
-      if (now - lastUpdateMs < fiveDaysMs) {
+      if (now - lastUpdateMs < tenDaysMs) {
         return JSON.parse(cachedCCs);
       }
     } else {
@@ -67,7 +67,7 @@ export async function getCommunityColleges() {
 export async function getFourYears() {
   try {
     const now = new Date().getTime();
-    const fiveDaysMs = 5 * (24 * 60 * 60 * 1000);
+    const tenDaysMs = 10 * (24 * 60 * 60 * 1000);
 
     const cachedFourYears = localStorage.getItem("fourYears");
     const cacheTimestamp = localStorage.getItem("cacheTimestamp");
@@ -75,7 +75,7 @@ export async function getFourYears() {
     if (cachedFourYears && cacheTimestamp) {
       const lastUpdateMs = new Date(cacheTimestamp).getTime();
 
-      if (now - lastUpdateMs < fiveDaysMs) {
+      if (now - lastUpdateMs < tenDaysMs) {
         return JSON.parse(cachedFourYears);
       }
     } else {
@@ -113,13 +113,6 @@ export async function getMajorData(receivingId) {
 
 export async function getLowerDivs(receivingId, key) {
   try {
-    // below is temporary caching. lower divs will be cached somewhere else
-    const cachedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
-
-    if (cachedLowerDivs) {
-      return JSON.parse(cachedLowerDivs);
-    }
-
     const latestData = await fetchLowerDivs(receivingId, key);
 
     return latestData;

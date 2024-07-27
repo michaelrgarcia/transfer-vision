@@ -25,7 +25,8 @@ body {
 header,
 .loading,
 .dialog-heading > span,
-.progress-tracker {
+.progress-tracker,
+.class-list > button {
   font-family: "helvetica_neuelight", Verdana, sans-serif;
 }
 
@@ -250,7 +251,7 @@ button[aria-disabled="true"] {
 
 .articulations {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 300px);
+  grid-template-columns: repeat(auto-fit, 270px);
   gap: 25px;
   justify-content: center;
   justify-self: center;
@@ -269,7 +270,27 @@ button[aria-disabled="true"] {
 }
 
 .articulations > .class-list {
-  border: 1px solid var(--main-text);
+  border: 1px solid silver;
+
+  display: flex;
+  justify-content: center;
+}
+
+.class-list > button {
+  width: 100%;
+
+  background-color: silver;
+  color: var(--main-text);
+
+  padding: 5px;
+
+  font-size: 1.1em;
+
+  cursor: pointer;
+}
+
+.class-list > button:hover {
+  background-color: #adadad;
 }
 
 .results-info {

@@ -12,37 +12,6 @@ export function conjoin(array, conjunction) {
   return result;
 }
 
-export function seriesBreakdown(seriesObj) {
-  const connector = seriesObj.conjunction;
-  const series = [];
-
-  if (seriesObj.courses) {
-    const coursesInSeries = seriesObj.courses;
-
-    coursesInSeries.forEach((course) => {
-      const { prefix, courseNumber, courseTitle } = course;
-
-      series.push({ prefix, courseNumber, courseTitle });
-    });
-
-    return conjoin(series, connector);
-  }
-
-  return null;
-}
-
-export function deNest(data) {
-  const json = JSON.parse(data);
-
-  if (json) {
-    const processed = Object.values(json);
-
-    return processed;
-  }
-
-  return null;
-}
-
 export async function getRandomLoadingGif(imgElement) {
   const img = imgElement;
 
@@ -65,25 +34,4 @@ export function updateProgressTracker(collegesProcessed, totalColleges) {
   const progressTracker = document.querySelector(".progress-tracker");
 
   progressTracker.textContent = `${collegesProcessed} out of ${totalColleges} colleges searched`;
-}
-
-export function getCollegeName(articulationData) {
-  if (articulationData && articulationData.sendingInstitution) {
-    const sendingData = deNest(articulationData.sendingInstitution);
-    let collegeName;
-
-    sendingData.forEach((item) => {
-      if (Array.isArray(item)) {
-        if (item[0].name) {
-          const { name } = item[0];
-
-          collegeName = name;
-        }
-      }
-    });
-
-    return collegeName;
-  }
-
-  return null;
 }

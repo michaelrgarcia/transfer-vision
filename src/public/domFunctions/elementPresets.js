@@ -11,6 +11,15 @@ export function selectOption(value, id, keyword) {
   return option;
 }
 
+export function lowerDivOption(text, value) {
+  const option = document.createElement("option");
+
+  option.textContent = text;
+  option.value = value;
+
+  return option;
+}
+
 export function defaultOption(keyword) {
   const option = document.createElement("option");
 

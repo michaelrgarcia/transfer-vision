@@ -89,11 +89,16 @@ selects[2].addEventListener("change", (event) => {
       sessionStorage.getItem("selectedLowerDivs"),
     );
 
-    lowerDivsList.forEach((obj, index) => {
-      const lowerDiv = obj;
+    lowerDivsList.forEach((item, index) => {
+      const lowerDiv = item;
+      const selected = true;
 
       if (index === selectedIndex) {
-        lowerDiv.selected = true;
+        if (Array.isArray(lowerDiv)) {
+          lowerDiv.push({ selected });
+        } else {
+          lowerDiv.selected = true;
+        }
       }
     });
 

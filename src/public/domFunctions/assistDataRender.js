@@ -143,78 +143,14 @@ export function organizeArticulations() {
   });
 }
 
-export function createClassLists(chunk) {
-  chunk.forEach((college) => {
-    if (college.result) {
-      const classListDiv = classListMainDiv();
+export function createClassLists(articulationChunk) {
+  articulationChunk.forEach((articulation) => {
+    if (Array.isArray(articulation)) {
+      const collegeName = articulation[articulation.length - 1];
 
-      const collegeName = getCollegeName(college.result);
+      const classListDiv = classListMainDiv();
 
       classListHeader(classListDiv, collegeName);
     }
   });
 }
-
-/*
-
-function getChunkArticulationData(jsonArray) {
-  const dataChunk = [];
-
-  jsonArray.forEach((json) => {
-    const articulationData = Object.values(json)[0];
-    const collegeName = getChunkCollegeName(articulationData);
-    console.log(collegeName);
-
-    const list = createArticulationList(articulationData);
-
-    if (list) {
-      if (list.length >= 2) {
-        list.push(collegeName);
-      }
-
-      dataChunk.push(list);
-    }
-  });
-
-  return dataChunk;
-}
-
-
-
-function createArticulationList(articulationData) {
-  if (articulationData) {
-    if (articulationData.articulations) {
-      const availableArticulations = deNest(articulationData.articulations);
-      let articulationGroup = [];
-
-      availableArticulations.forEach((dataset) => {
-        const articulationObj = dataset.articulation;
-
-        const receiving = getReceivingCourses(articulationObj);
-        const sending = getSendingCourses(articulationObj);
-
-        articulationGroup.push({ receiving, sending });
-      });
-
-      return articulationGroup;
-    }
-  }
-}
-
-function getReceivingCourses(articulationObj) {
-  if (articulationObj.course) {
-    const courseObj = articulationObj.course;
-
-    return getCourse(courseObj);
-  } else if (articulationObj.series) {
-    const seriesObj = articulationObj.series;
-
-    return seriesBreakdown(seriesObj);
-  }
-}
-
-
-
-
-
-*/

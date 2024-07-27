@@ -252,7 +252,7 @@ button[aria-disabled="true"] {
 .articulations {
   display: grid;
   grid-template-columns: repeat(auto-fit, 270px);
-  gap: 25px;
+  gap: 50px 100px;
   justify-content: center;
   justify-self: center;
 
@@ -270,10 +270,14 @@ button[aria-disabled="true"] {
 }
 
 .articulations > .class-list {
-  border: 1px solid silver;
-
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  color: #adadada4;
 }
 
 .class-list > button {

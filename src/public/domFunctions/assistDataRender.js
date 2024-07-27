@@ -147,10 +147,52 @@ export function createClassLists(articulationChunk) {
   articulationChunk.forEach((articulation) => {
     if (Array.isArray(articulation)) {
       const collegeName = articulation[articulation.length - 1];
+      const noCollegeName = articulation.slice(0, -1);
 
       const classListDiv = classListMainDiv();
 
       classListHeader(classListDiv, collegeName);
+
+      let finalString = "";
+
+      noCollegeName.forEach((item, index) => {
+        if (typeof item === "object") {
+          if (item.prefix && item.courseNumber && item.CourseTitle) {
+            const className = `${item.prefix} ${item.courseNumber} - ${item.courseTitle}`;
+
+            finalString += className;
+          }
+        } else if (Array.isArray(item)) {
+          let seriesString = "";
+          const connector = item.find((subitem) => typeof subitem === "string");
+
+          item.forEach((obj, subindex) => {
+            if (typeof item === "object") {
+              if (obj.prefix && obj.courseNumber && obj.CourseTitle) {
+                const className = `${obj.prefix} ${obj.courseNumber} - ${obj.courseTitle}`;
+
+                seriesString += className;
+
+                if (subindex < item.length - 1) {
+                  seriesString += connector || "";
+                }
+              }
+            }
+          });
+
+          finalString += seriesString;
+        } else if (
+          typeof item === "string" &&
+          index < noCollegeName.length - 1
+        ) {
+          finalString += `\n${item}`;
+        }
+      });
+
+      const textElement = document.createElement("p");
+      textElement.textContent = finalString;
+
+      classListDiv.appendChild(textElement);
     }
   });
 }

@@ -81,7 +81,25 @@ selects[1].addEventListener("input", () => {
   applyDisabledState(submit.parentNode);
 });
 
-selects[2].addEventListener("input", () => {
+selects[2].addEventListener("change", (event) => {
+  const selectedIndex = Number(event.target.value);
+
+  if (selectedIndex !== "") {
+    const lowerDivsList = JSON.parse(
+      sessionStorage.getItem("selectedLowerDivs"),
+    );
+
+    lowerDivsList.forEach((obj, index) => {
+      const lowerDiv = obj;
+
+      if (index === selectedIndex) {
+        lowerDiv.selected = true;
+      }
+    });
+
+    sessionStorage.setItem("selectedLowerDivs", JSON.stringify(lowerDivsList));
+  }
+
   removeDisabledState(submit.parentNode);
 });
 
@@ -96,16 +114,14 @@ submit.addEventListener("click", async (event) => {
 
   if (classList.value) {
     const params = await getArticulationParams(receivingId, majorKey);
+    const selectedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
 
     hideSplash();
 
-    await getArticulationData(params);
-
-    // need to save class object..
-
-    // get the specific class from getLowerDivs
-    // make a function on backend that gets that 1 class
-    // route will include the prefix, course #, and class title
+    if (selectedLowerDivs) {
+      // need college name and major here for database caching
+      await getArticulationData(params, JSON.parse(selectedLowerDivs));
+    }
   }
 
   event.preventDefault();
@@ -114,7 +130,3 @@ submit.addEventListener("click", async (event) => {
 closeDialog.addEventListener("click", () => {
   dialog.close();
 });
-
-// save school data in sessionStorage
-
-// (the API needs to start up to load the schools)

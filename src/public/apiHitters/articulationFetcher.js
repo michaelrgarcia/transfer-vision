@@ -4,9 +4,9 @@ import {
 } from "../domFunctions/assistDataRender";
 
 import { getCommunityColleges } from "./schoolDataFetch";
+import { getMatches, getSelectedClass } from "./jsonHelper";
 
 import { showResults, hideResultsInfo } from "../domFunctions/cssTransitions";
-
 import { updateProgressTracker } from "../utils";
 
 export async function getArticulationParams(receivingId, majorKey) {
@@ -53,6 +53,7 @@ async function processChunks(
   articulationData,
   signal,
   totalColleges,
+  lowerDiv,
 ) {
   const concurrencyLimit = 29; // dynamic value
   let linksChunk;
@@ -66,10 +67,16 @@ async function processChunks(
   }
 
   try {
+    // will be an array if data is not already cached
+    if (Array.isArray(lowerDiv)) {
+      //
+    }
+
     const result = await sendArticulationRequests(linksChunk, signal);
+    const articulationChunk = getMatches(result, lowerDiv);
 
     articulationData.push(...result);
-    createClassLists(result);
+    createClassLists(articulationChunk);
 
     updateProgressTracker(articulationData.length, totalColleges);
     // render the result as it comes
@@ -80,6 +87,7 @@ async function processChunks(
       articulationData,
       signal,
       totalColleges,
+      lowerDiv,
     );
   } catch (error) {
     if (error.name === "AbortError") {
@@ -90,7 +98,7 @@ async function processChunks(
   }
 }
 
-export async function getArticulationData(articulationParams) {
+export async function getArticulationData(articulationParams, allLowerDivs) {
   const articulationData = [];
   const processingQueue = articulationParams.slice(); // shallow copy
 
@@ -100,11 +108,19 @@ export async function getArticulationData(articulationParams) {
   const abortController = new AbortController();
   const { signal } = abortController;
 
+  const selectedClass = getSelectedClass(allLowerDivs);
+
   window.addEventListener("beforeunload", () => abortController.abort());
 
   showResults();
 
   updateProgressTracker(startingValue, totalColleges);
+
+  // this function will check dataBase for selected class
+
+  // if not in there, pass in allLowerDivs array to processChunks
+
+  // if in there, pass in selected class only, make the requests
 
   try {
     await processChunks(
@@ -112,6 +128,7 @@ export async function getArticulationData(articulationParams) {
       articulationData,
       signal,
       totalColleges,
+      selectedClass,
     );
 
     organizeArticulations();
@@ -119,6 +136,7 @@ export async function getArticulationData(articulationParams) {
     console.log("all requests processed");
 
     hideResultsInfo();
+    sessionStorage.removeItem("selectedLowerDivs");
 
     // play a sound? user will have interacted with the page
     // install howler

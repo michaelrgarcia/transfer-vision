@@ -67,20 +67,13 @@ async function processChunks(
   }
 
   try {
-    // will be an array if data is not already cached
-    if (Array.isArray(lowerDiv)) {
-      //
-    }
-
     const result = await sendArticulationRequests(linksChunk, signal);
     const articulationChunk = getMatches(result, lowerDiv);
 
-    articulationData.push(...result);
+    articulationData.push(...result); // for possible caching
     createClassLists(articulationChunk);
 
     updateProgressTracker(articulationData.length, totalColleges);
-    // render the result as it comes
-    console.log("processed request");
 
     await processChunks(
       processingQueue,
@@ -131,15 +124,16 @@ export async function getArticulationData(articulationParams, allLowerDivs) {
       selectedClass,
     );
 
+    // put articulation params in session storage
+
+    // need to put assist links in the headers
+
     organizeArticulations();
 
     console.log("all requests processed");
 
     hideResultsInfo();
     sessionStorage.removeItem("selectedLowerDivs");
-
-    // play a sound? user will have interacted with the page
-    // install howler
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("requests aborted due to page unload");

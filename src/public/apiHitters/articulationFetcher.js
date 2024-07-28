@@ -1,13 +1,18 @@
 import {
   createClassLists,
+  getClassName,
   organizeArticulations,
 } from "../domFunctions/assistDataRender";
 
 import { getCommunityColleges } from "./schoolDataFetch";
 import { getMatches, getSelectedClass } from "./jsonHelper";
 
-import { showResults, hideResultsInfo } from "../domFunctions/cssTransitions";
-import { updateProgressTracker } from "../utils";
+import {
+  showResults,
+  hideLoadingContainer,
+} from "../domFunctions/cssTransitions";
+
+import { changeSelectedClassTxt, updateProgressTracker } from "../utils";
 
 export async function getArticulationParams(receivingId, majorKey) {
   const articulationParams = [];
@@ -103,10 +108,15 @@ export async function getArticulationData(articulationParams, allLowerDivs) {
 
   const selectedClass = getSelectedClass(allLowerDivs);
 
+  console.log(selectedClass);
+
+  const formattedClass = getClassName(selectedClass);
+
   window.addEventListener("beforeunload", () => abortController.abort());
 
   showResults();
 
+  changeSelectedClassTxt(formattedClass);
   updateProgressTracker(startingValue, totalColleges);
 
   // this function will check dataBase for selected class
@@ -132,7 +142,7 @@ export async function getArticulationData(articulationParams, allLowerDivs) {
 
     console.log("all requests processed");
 
-    hideResultsInfo();
+    hideLoadingContainer();
     sessionStorage.removeItem("selectedLowerDivs");
   } catch (error) {
     if (error.name === "AbortError") {

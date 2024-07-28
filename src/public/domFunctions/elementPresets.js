@@ -50,3 +50,26 @@ export function classListHeader(parentDiv, collegeName) {
 
   parentDiv.append(header);
 }
+
+export function course(className, parent) {
+  const textElement = document.createElement("p");
+
+  textElement.textContent = className;
+  parent.appendChild(textElement);
+}
+
+export function connector(text, parent) {
+  const textElement = document.createElement("p");
+  textElement.classList.add("connector");
+
+  textElement.textContent = text;
+  parent.appendChild(textElement);
+}
+
+export function conjunction(text, parent) {
+  const textElement = document.createElement("p");
+  textElement.classList.add("conjunction");
+
+  textElement.textContent = text;
+  parent.appendChild(textElement);
+}

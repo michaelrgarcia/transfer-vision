@@ -97,13 +97,13 @@ export function showResults() {
   results.style.display = "flex";
 }
 
-export function hideResultsInfo() {
-  const resultsInfo = document.querySelector(".results-info");
+export function hideLoadingContainer() {
+  const loadingContainer = document.querySelector(".loading-container");
 
   // below code block, can turn into hideElement(element) function?
-  resultsInfo.style.opacity = 0;
+  loadingContainer.style.opacity = 0;
 
-  waitForElementTransition(resultsInfo).then(() => {
-    resultsInfo.style.display = "none";
+  waitForElementTransition(loadingContainer).then(() => {
+    loadingContainer.style.display = "none";
   });
 }

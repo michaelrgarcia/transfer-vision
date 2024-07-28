@@ -35,3 +35,9 @@ export function updateProgressTracker(collegesProcessed, totalColleges) {
 
   progressTracker.textContent = `${collegesProcessed} out of ${totalColleges} colleges searched`;
 }
+
+export function changeSelectedClassTxt(classString) {
+  const selectedClass = document.querySelector(".selected-class");
+
+  selectedClass.textContent = `Articulations for: ${classString}`;
+}

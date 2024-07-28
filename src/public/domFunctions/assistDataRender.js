@@ -7,6 +7,7 @@ import {
   connector,
   conjunction,
   course,
+  noArticulations,
 } from "./elementPresets";
 
 import {
@@ -71,6 +72,46 @@ export async function renderMajorData(majorList, receivingId) {
   stopLoading(formRow, loadingText);
 }
 
+function getSeriesString(seriesArray) {
+  let seriesString = "";
+
+  seriesArray.forEach((lowerDiv, index) => {
+    let courseConnector;
+    const seriesCourse = lowerDiv;
+
+    if (typeof seriesCourse === "object") {
+      const { prefix } = seriesCourse;
+      const { courseNumber } = seriesCourse;
+
+      const className = ` ${prefix} ${courseNumber} `;
+
+      seriesString += className;
+    }
+
+    if (typeof seriesCourse === "string") {
+      courseConnector = seriesCourse.toLowerCase();
+
+      if (index < seriesCourse.length - 1) {
+        seriesString += ` ${courseConnector} `;
+      }
+    }
+  });
+
+  return seriesString;
+}
+
+export function getClassName(objOrArray) {
+  let formattedClass = "";
+
+  if (typeof objOrArray === "object" && !Array.isArray(objOrArray)) {
+    formattedClass = `${objOrArray.prefix} ${objOrArray.courseNumber} - ${objOrArray.courseTitle}`;
+  } else if (Array.isArray(objOrArray)) {
+    formattedClass = getSeriesString(objOrArray);
+  }
+
+  return formattedClass;
+}
+
 export async function renderLowerDivs(classList, receivingId, key) {
   const formRow = classList.parentNode;
   const loadingText = formRow.querySelector(".loading");
@@ -85,38 +126,11 @@ export async function renderLowerDivs(classList, receivingId, key) {
   select.replaceChildren();
   select.appendChild(placeholder);
 
-  lowerDivs.forEach((obj, classIndex) => {
-    if (Array.isArray(obj)) {
-      let courseConnector;
-      let seriesString = "";
+  lowerDivs.forEach((lowerDiv, classIndex) => {
+    const className = getClassName(lowerDiv, classIndex);
+    const option = lowerDivOption(className, classIndex);
 
-      obj.forEach((item, index) => {
-        if (typeof item === "string") {
-          courseConnector = item.toLowerCase();
-
-          if (index < obj.length - 1) {
-            seriesString += ` ${courseConnector} `;
-          }
-        }
-
-        if (item.prefix && item.courseNumber && item.courseTitle) {
-          const { prefix } = item;
-          const { courseNumber } = item;
-
-          const className = ` ${prefix} ${courseNumber} `;
-
-          seriesString += className;
-        }
-      });
-
-      const option = lowerDivOption(seriesString, classIndex);
-      select.appendChild(option);
-    } else {
-      const className = `${obj.prefix} ${obj.courseNumber} - ${obj.courseTitle}`;
-      const option = lowerDivOption(className, classIndex);
-
-      select.appendChild(option);
-    }
+    select.appendChild(option);
   });
 
   stopLoading(formRow, loadingText);
@@ -128,20 +142,24 @@ export function organizeArticulations() {
 
   const listArray = Array.from(classLists);
 
-  listArray.sort((a, b) => {
-    const currentButton = a.querySelector("button");
-    const nextButton = b.querySelector("button");
+  if (classLists.length === 0) {
+    noArticulations(articulationsDiv);
+  } else {
+    listArray.sort((a, b) => {
+      const currentButton = a.querySelector("button");
+      const nextButton = b.querySelector("button");
 
-    if (currentButton && nextButton) {
-      return currentButton.textContent.localeCompare(nextButton.textContent);
-    }
+      if (currentButton && nextButton) {
+        return currentButton.textContent.localeCompare(nextButton.textContent);
+      }
 
-    return 0;
-  });
+      return 0;
+    });
 
-  listArray.forEach((list) => {
-    articulationsDiv.appendChild(list);
-  });
+    listArray.forEach((list) => {
+      articulationsDiv.appendChild(list);
+    });
+  }
 }
 
 export function createClassLists(articulationChunk) {

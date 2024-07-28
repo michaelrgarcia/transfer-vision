@@ -251,7 +251,7 @@ button[aria-disabled="true"] {
 
 .articulations {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 270px);
+  grid-template-columns: repeat(auto-fit, 275px);
   gap: 50px 100px;
   justify-content: center;
   justify-self: center;
@@ -277,6 +277,8 @@ button[aria-disabled="true"] {
 
   gap: 10px;
 
+  height: min-content;
+
   color: #adadada4;
 }
 
@@ -295,6 +297,12 @@ button[aria-disabled="true"] {
 
 .class-list > button:hover {
   background-color: #adadad;
+}
+
+.class-list > p {
+  text-align: center;
+
+  white-space-collapse: discard;
 }
 
 .results-info {
@@ -332,6 +340,19 @@ button[aria-disabled="true"] {
 
   width: 80%;
   max-width: 700px;
+}
+
+.conjunction {
+  font-weight: bold;
+  text-decoration: underline;
+
+  font-size: 2em;
+
+  color: var(--dark-text);
+}
+
+.connector {
+  color: silver;
 }
 
 @font-face {

@@ -37,6 +37,9 @@ export function classListMainDiv() {
 
   classListDiv.classList.add("class-list");
 
+  classListDiv.style.display = "flex";
+  classListDiv.style.opacity = "1";
+
   articulations.append(classListDiv);
 
   return classListDiv;
@@ -72,4 +75,14 @@ export function conjunction(text, parent) {
 
   textElement.textContent = text;
   parent.appendChild(textElement);
+}
+
+export function noArticulations(parent) {
+  const textElement = document.createElement("p");
+  textElement.classList.add("no-articulations");
+
+  textElement.textContent = "No articulations found.";
+  parent.appendChild(textElement);
+
+  textElement.style.opacity = 1;
 }

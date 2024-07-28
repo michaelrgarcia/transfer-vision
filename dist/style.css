@@ -26,7 +26,9 @@ header,
 .loading,
 .dialog-heading > span,
 .progress-tracker,
-.class-list > button {
+.class-list > button,
+.no-articulations,
+.selected-class {
   font-family: "helvetica_neuelight", Verdana, sans-serif;
 }
 
@@ -270,12 +272,16 @@ button[aria-disabled="true"] {
 }
 
 .articulations > .class-list {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
   gap: 10px;
+
+  opacity: 0;
+
+  transition: opacity 0.3s;
 
   height: min-content;
 
@@ -351,8 +357,22 @@ button[aria-disabled="true"] {
   color: var(--dark-text);
 }
 
-.connector {
+.connector,
+.no-articulations,
+.selected-class {
   color: silver;
+}
+
+.no-articulations {
+  opacity: 0;
+
+  justify-self: center;
+
+  transition: opacity 0.3s;
+}
+
+.selected-class {
+  font-size: 1.2em;
 }
 
 @font-face {

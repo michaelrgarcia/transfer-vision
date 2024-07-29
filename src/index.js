@@ -16,6 +16,7 @@ import {
   renderFourYears,
   renderLowerDivs,
   renderMajorData,
+  getClassName,
 } from "./public/domFunctions/assistDataRender";
 
 import {
@@ -24,7 +25,12 @@ import {
   removeDisabledState,
   showRandomLoadingGif,
 } from "./public/domFunctions/cssTransitions";
-import { deSelectAllClasses, selectClassByIndex } from "./public/utils";
+
+import {
+  deSelectAllClasses,
+  selectClassByIndex,
+  getSelectedClass,
+} from "./public/utils";
 
 const selects = [
   document.getElementById("four-year"),
@@ -40,6 +46,8 @@ const submit = document.querySelector(".submit");
 
 const dialog = document.querySelector("dialog");
 const closeDialog = document.querySelector(".close-dialog");
+
+const backButton = document.querySelector(".back");
 
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
@@ -112,11 +120,14 @@ submit.addEventListener("click", async (event) => {
 
     const selectedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
 
+    const selectedClass = getSelectedClass(JSON.parse(selectedLowerDivs));
+    const formattedClass = getClassName(selectedClass);
+
     hideSplash();
 
     if (selectedLowerDivs) {
       // need college name and major here for database caching
-      await getArticulationData(params, JSON.parse(selectedLowerDivs));
+      await getArticulationData(params, selectedClass, formattedClass);
     }
   }
 
@@ -126,3 +137,5 @@ submit.addEventListener("click", async (event) => {
 closeDialog.addEventListener("click", () => {
   dialog.close();
 });
+
+backButton.addEventListener("click", () => {});

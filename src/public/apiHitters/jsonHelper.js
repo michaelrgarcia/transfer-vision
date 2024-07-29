@@ -1,4 +1,4 @@
-import { conjoin } from "../utils";
+import { conjoin, alphaSort } from "../utils";
 
 function getCourse(courseObj) {
   const { prefix, courseNumber, courseTitle } = courseObj;
@@ -61,7 +61,7 @@ export function getCollegeName(articulationData) {
 export function createGroup(conjunction, groupCourses) {
   const connector = conjunction;
   const coursesInGroup = groupCourses;
-  const group = [];
+  let group = [];
 
   // may not need these...
   const pad1 = connector.padStart(connector.length + 1, " ");
@@ -73,7 +73,7 @@ export function createGroup(conjunction, groupCourses) {
     group.push(course);
   });
 
-  // group = alphaSort(group, ["courseNumber"]);
+  group = alphaSort(group, ["courseNumber"]);
 
   return conjoin(group, pad2);
 }
@@ -132,25 +132,8 @@ export function getSendingCourses(articulationObj, ccName) {
   return null;
 }
 
-// need a cache updater function too
-
 export function getMatches(responseArray, lowerDiv) {
-  // gonna be big
-  // split into separate functions?
-
   const matches = [];
-
-  let primedLowerDiv;
-
-  // def this below func into a separate one
-
-  if (Array.isArray(lowerDiv)) {
-    primedLowerDiv = lowerDiv.filter((item) => !item.selected);
-  } else if (lowerDiv && typeof lowerDiv === "object") {
-    const { selected, ...noSelected } = lowerDiv;
-
-    primedLowerDiv = noSelected;
-  }
 
   responseArray.forEach((response) => {
     const articulationData = Object.values(response)[0];
@@ -173,9 +156,7 @@ export function getMatches(responseArray, lowerDiv) {
           receivingCourse = seriesBreakdown(seriesObj);
         }
 
-        if (
-          JSON.stringify(primedLowerDiv) === JSON.stringify(receivingCourse)
-        ) {
+        if (JSON.stringify(lowerDiv) === JSON.stringify(receivingCourse)) {
           const articulations = getSendingCourses(articulationObj, ccName);
 
           matches.push(articulations);
@@ -184,7 +165,6 @@ export function getMatches(responseArray, lowerDiv) {
     }
   });
 
-  console.log(matches);
   return matches;
 }
 

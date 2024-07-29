@@ -253,8 +253,9 @@ button[aria-disabled="true"] {
 
 .articulations {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 275px);
-  gap: 50px 100px;
+  grid-template-columns: repeat(auto-fit, 280px);
+  gap: 100px;
+
   justify-content: center;
   justify-self: center;
 
@@ -333,6 +334,7 @@ button[aria-disabled="true"] {
 
 .info-text {
   flex-direction: column;
+  text-align: center;
 }
 
 .results {
@@ -372,7 +374,8 @@ button[aria-disabled="true"] {
 }
 
 .selected-class {
-  font-size: 1.2em;
+  font-size: 1.4em;
+  text-align: center;
 }
 
 @font-face {

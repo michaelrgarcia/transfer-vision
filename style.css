@@ -26,7 +26,7 @@ header,
 .loading,
 .dialog-heading > span,
 .progress-tracker,
-.class-list > button,
+.class-list > a,
 .no-articulations,
 .selected-class {
   font-family: "helvetica_neuelight", Verdana, sans-serif;
@@ -258,6 +258,8 @@ button[aria-disabled="true"] {
   grid-template-columns: repeat(auto-fit, 280px);
   gap: 50px 100px;
 
+  justify-content: center;
+
   width: 100%;
 
   border: 1px ridge silver;
@@ -290,21 +292,29 @@ button[aria-disabled="true"] {
   color: #adadada4;
 }
 
-.class-list > button {
+.class-list > a {
   width: 100%;
+
+  text-decoration: none;
+  text-align: center;
 
   background-color: silver;
   color: var(--main-text);
 
-  padding: 5px;
+  padding: 7px;
+  border: 1px solid var(--input-color);
 
   font-size: 1.1em;
 
   cursor: pointer;
 }
 
-.class-list > button:hover {
-  background-color: #adadad;
+.class-list > a:hover {
+  background-color: #a1a1a1;
+}
+
+.class-list > a:active {
+  background-color: #888888;
 }
 
 .class-list > p {

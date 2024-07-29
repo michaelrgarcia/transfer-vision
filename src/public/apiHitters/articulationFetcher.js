@@ -1,11 +1,10 @@
 import {
   createClassLists,
-  getClassName,
   organizeArticulations,
 } from "../domFunctions/assistDataRender";
 
 import { getCommunityColleges } from "./schoolDataFetch";
-import { getMatches, getSelectedClass } from "./jsonHelper";
+import { getMatches } from "./jsonHelper";
 
 import {
   showResults,
@@ -26,8 +25,9 @@ export async function getArticulationParams(receivingId, majorKey) {
     if (college.id) {
       const sending = college.id;
       const link = `https://assist.org/api/articulation/Agreements?Key=${year}/${sending}/to/${receiving}/Major/${key}`;
+      const agreementLink = `https://assist.org/transfer/results?year=${year}&institution=${sending}&agreement=${receiving}&agreementType=to&view=agreement&viewBy=major&viewSendingAgreements=false&viewByKey=${year}/${sending}/to/${receiving}/Major/${key}`;
 
-      articulationParams.push({ link });
+      articulationParams.push({ link, agreementLink });
     }
   });
 
@@ -61,7 +61,8 @@ async function processChunks(
   lowerDiv,
 ) {
   const concurrencyLimit = 29; // dynamic value
-  let linksChunk;
+
+  let linksChunk; // test
 
   if (processingQueue.length === 0) return;
 
@@ -72,11 +73,15 @@ async function processChunks(
   }
 
   try {
-    const result = await sendArticulationRequests(linksChunk, signal);
+    const apiLinks = linksChunk.filter((item) => item.link);
+    const agreementLinks = linksChunk.filter((item) => item.agreementLink);
+
+    const result = await sendArticulationRequests(apiLinks, signal);
     const articulationChunk = getMatches(result, lowerDiv);
 
-    articulationData.push(...result); // for possible caching
-    createClassLists(articulationChunk);
+    articulationData.push(...result);
+
+    createClassLists(articulationChunk, agreementLinks);
 
     updateProgressTracker(articulationData.length, totalColleges);
 
@@ -96,7 +101,11 @@ async function processChunks(
   }
 }
 
-export async function getArticulationData(articulationParams, allLowerDivs) {
+export async function getArticulationData(
+  articulationParams,
+  selectedClass,
+  formattedClass,
+) {
   const articulationData = [];
   const processingQueue = articulationParams.slice(); // shallow copy
 
@@ -105,12 +114,6 @@ export async function getArticulationData(articulationParams, allLowerDivs) {
 
   const abortController = new AbortController();
   const { signal } = abortController;
-
-  const selectedClass = getSelectedClass(allLowerDivs);
-
-  console.log(selectedClass);
-
-  const formattedClass = getClassName(selectedClass);
 
   window.addEventListener("beforeunload", () => abortController.abort());
 

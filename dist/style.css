@@ -46,6 +46,8 @@ header {
 
   color: silver;
   font-size: 2.5em;
+
+  user-select: none;
 }
 
 main {
@@ -254,10 +256,7 @@ button[aria-disabled="true"] {
 .articulations {
   display: grid;
   grid-template-columns: repeat(auto-fit, 280px);
-  gap: 100px;
-
-  justify-content: center;
-  justify-self: center;
+  gap: 50px 100px;
 
   width: 100%;
 
@@ -277,6 +276,8 @@ button[aria-disabled="true"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  margin-bottom: 20px;
 
   gap: 10px;
 
@@ -335,6 +336,31 @@ button[aria-disabled="true"] {
 .info-text {
   flex-direction: column;
   text-align: center;
+
+  margin-bottom: 5px;
+}
+
+.dynamic-class-info {
+  display: grid;
+
+  align-items: center;
+
+  grid-template-columns: 0fr 1000fr;
+}
+
+.back {
+  filter: invert(22%) sepia(17%) saturate(30%) hue-rotate(314deg)
+    brightness(97%) contrast(84%);
+
+  user-select: none;
+
+  width: 40px;
+}
+
+.back:hover {
+  background-color: #adadad1a;
+
+  cursor: pointer;
 }
 
 .results {
@@ -374,7 +400,7 @@ button[aria-disabled="true"] {
 }
 
 .selected-class {
-  font-size: 1.4em;
+  font-size: 2.5vh;
   text-align: center;
 }
 

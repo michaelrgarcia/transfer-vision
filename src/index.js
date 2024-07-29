@@ -5,6 +5,7 @@ import helveticaNeueLightWoff2 from "./fonts/helveticaneuelight-webfont.woff2";
 import selectArrow from "./imgs/arrow-204-16.png";
 import helpBox from "./svgs/help-box.svg";
 import closeBox from "./svgs/close-box.svg";
+import leftArrow from "./imgs/arrow-left.svg";
 
 import {
   getArticulationData,
@@ -23,6 +24,7 @@ import {
   removeDisabledState,
   showRandomLoadingGif,
 } from "./public/domFunctions/cssTransitions";
+import { deSelectAllClasses, selectClassByIndex } from "./public/utils";
 
 const selects = [
   document.getElementById("four-year"),
@@ -89,20 +91,8 @@ selects[2].addEventListener("change", (event) => {
       sessionStorage.getItem("selectedLowerDivs"),
     );
 
-    lowerDivsList.forEach((item, index) => {
-      const lowerDiv = item;
-      const selected = true;
-
-      if (index === selectedIndex) {
-        if (Array.isArray(lowerDiv)) {
-          lowerDiv.push({ selected });
-        } else {
-          lowerDiv.selected = true;
-        }
-      }
-    });
-
-    sessionStorage.setItem("selectedLowerDivs", JSON.stringify(lowerDivsList));
+    deSelectAllClasses(lowerDivsList);
+    selectClassByIndex(lowerDivsList, selectedIndex);
   }
 
   removeDisabledState(submit.parentNode);
@@ -119,6 +109,7 @@ submit.addEventListener("click", async (event) => {
 
   if (classList.value) {
     const params = await getArticulationParams(receivingId, majorKey);
+
     const selectedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
 
     hideSplash();

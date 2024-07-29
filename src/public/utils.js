@@ -50,3 +50,38 @@ export function alphaSort(array1, array2) {
 
   return arr;
 }
+
+export function selectClassByIndex(lowerDivsList, selectedIndex) {
+  lowerDivsList.forEach((item, index) => {
+    const lowerDiv = item;
+    const selected = true;
+
+    if (index === selectedIndex) {
+      if (Array.isArray(lowerDiv)) {
+        lowerDiv.push({ selected });
+      } else {
+        lowerDiv.selected = true;
+      }
+    }
+  });
+
+  sessionStorage.setItem("selectedLowerDivs", JSON.stringify(lowerDivsList));
+}
+
+export function deSelectAllClasses(lowerDivsList) {
+  lowerDivsList.forEach((item) => {
+    const lowerDiv = item;
+
+    if (Array.isArray(lowerDiv)) {
+      lowerDiv.forEach((subitem, subIndex) => {
+        if (typeof subitem === "object" && subitem.selected) {
+          lowerDiv.splice(subIndex, 1);
+        }
+      });
+    } else if (typeof lowerDiv === "object" && !Array.isArray(lowerDiv)) {
+      delete lowerDiv.selected;
+    }
+  });
+
+  sessionStorage.setItem("selectedLowerDivs", JSON.stringify(lowerDivsList));
+}

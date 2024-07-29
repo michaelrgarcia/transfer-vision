@@ -80,20 +80,19 @@ function getSeriesString(seriesArray) {
     const seriesCourse = lowerDiv;
 
     if (typeof seriesCourse === "object") {
-      const { prefix } = seriesCourse;
-      const { courseNumber } = seriesCourse;
+      const { prefix, courseNumber } = seriesCourse;
 
-      const className = ` ${prefix} ${courseNumber} `;
+      const className = `${prefix} ${courseNumber}`;
 
       seriesString += className;
-    }
-
-    if (typeof seriesCourse === "string") {
+    } else if (typeof seriesCourse === "string") {
       courseConnector = seriesCourse.toLowerCase();
 
-      if (index < seriesCourse.length - 1) {
-        seriesString += ` ${courseConnector} `;
-      }
+      seriesString += courseConnector;
+    }
+
+    if (index < seriesArray.length - 1) {
+      seriesString += " ";
     }
   });
 

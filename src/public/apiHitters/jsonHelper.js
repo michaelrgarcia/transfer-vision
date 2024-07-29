@@ -188,25 +188,3 @@ export function getChunkArticulationData(jsonArray) {
 
   */
 }
-
-// this logic can be used for deSelecting classes in utils
-
-export function getSelectedClass(allLowerDivs) {
-  let selectedClass;
-
-  allLowerDivs.forEach((lowerDiv) => {
-    if (Array.isArray(lowerDiv)) {
-      lowerDiv.forEach((item) => {
-        if (item.selected) {
-          selectedClass = lowerDiv.filter((subitem) => !subitem.selected);
-        }
-      });
-    } else if (typeof lowerDiv === "object" && lowerDiv.selected) {
-      const { selected, ...noSelected } = lowerDiv;
-
-      selectedClass = noSelected;
-    }
-  });
-
-  return selectedClass;
-}

@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export function conjoin(array, conjunction) {
   const result = [];
 
@@ -40,4 +42,11 @@ export function changeSelectedClassTxt(classString) {
   const selectedClass = document.querySelector(".selected-class");
 
   selectedClass.textContent = `Articulations for: ${classString}`;
+}
+
+export function alphaSort(array1, array2) {
+  let arr = array1;
+  arr = _.orderBy(arr, array2, ["asc"]);
+
+  return arr;
 }

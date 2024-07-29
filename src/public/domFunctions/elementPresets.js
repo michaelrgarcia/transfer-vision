@@ -45,13 +45,15 @@ export function classListMainDiv() {
   return classListDiv;
 }
 
-export function classListHeader(parentDiv, collegeName) {
-  const header = document.createElement("button");
+export function classListHeader(parentDiv, collegeName, link) {
+  const linkElement = document.createElement("a");
 
-  header.type = "button";
-  header.textContent = collegeName;
+  linkElement.href = link;
+  linkElement.target = "_blank";
 
-  parentDiv.append(header);
+  linkElement.textContent = collegeName;
+
+  parentDiv.append(linkElement);
 }
 
 export function course(className, parent) {

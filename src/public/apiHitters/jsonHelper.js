@@ -44,8 +44,8 @@ export function getCollegeName(articulationData) {
 
     sendingData.forEach((item) => {
       if (Array.isArray(item)) {
-        if (item[0].name) {
-          const { name } = item[0];
+        if (item[item.length - 1].name) {
+          const { name } = item[item.length - 1];
 
           collegeName = name;
         }
@@ -188,6 +188,8 @@ export function getChunkArticulationData(jsonArray) {
 
   */
 }
+
+// this logic can be used for deSelecting classes in utils
 
 export function getSelectedClass(allLowerDivs) {
   let selectedClass;

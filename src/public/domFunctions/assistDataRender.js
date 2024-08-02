@@ -161,15 +161,16 @@ export function organizeArticulations() {
   }
 }
 
-export function createClassLists(articulationChunk, agreementLinksChunk) {
-  articulationChunk.forEach((articulation, index) => {
+export function createClassLists(articulationChunk) {
+  articulationChunk.forEach((articulation) => {
     if (articulation) {
-      const collegeName = articulation[articulation.length - 1];
-      const courseLists = articulation.slice(0, -1);
-      const link = agreementLinksChunk[index].agreementLink;
+      const collegeName = articulation[articulation.length - 2];
+      const agreementLink = articulation[articulation.length - 1];
+
+      const courseLists = articulation.slice(0, -2);
 
       const classListDiv = classListMainDiv();
-      classListHeader(classListDiv, collegeName, link);
+      classListHeader(classListDiv, collegeName, agreementLink);
 
       courseLists.forEach((item) => {
         if (Array.isArray(item)) {

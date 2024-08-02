@@ -62,7 +62,7 @@ async function processChunks(
 ) {
   const concurrencyLimit = 29; // dynamic value
 
-  let linksChunk; // test
+  let linksChunk;
 
   if (processingQueue.length === 0) return;
 
@@ -73,15 +73,12 @@ async function processChunks(
   }
 
   try {
-    const apiLinks = linksChunk.filter((item) => item.link);
-    const agreementLinks = linksChunk.filter((item) => item.agreementLink);
-
-    const result = await sendArticulationRequests(apiLinks, signal);
+    const result = await sendArticulationRequests(linksChunk, signal);
     const articulationChunk = getMatches(result, lowerDiv);
 
     articulationData.push(...result);
 
-    createClassLists(articulationChunk, agreementLinks);
+    createClassLists(articulationChunk);
 
     updateProgressTracker(articulationData.length, totalColleges);
 

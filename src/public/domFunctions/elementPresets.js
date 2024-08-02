@@ -45,10 +45,10 @@ export function classListMainDiv() {
   return classListDiv;
 }
 
-export function classListHeader(parentDiv, collegeName, link) {
+export function classListHeader(parentDiv, collegeName, agreementLink) {
   const linkElement = document.createElement("a");
 
-  linkElement.href = link;
+  linkElement.href = agreementLink;
   linkElement.target = "_blank";
 
   linkElement.textContent = collegeName;

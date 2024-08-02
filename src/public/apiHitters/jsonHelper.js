@@ -136,10 +136,12 @@ export function getMatches(responseArray, lowerDiv) {
   const matches = [];
 
   responseArray.forEach((response) => {
+    const { agreementLink } = response;
+
     const articulationData = Object.values(response)[0];
     const ccName = getCollegeName(articulationData);
 
-    if (articulationData && articulationData.articulations) {
+    if (articulationData && articulationData.articulations && agreementLink) {
       const availableArticulations = deNest(articulationData.articulations);
 
       availableArticulations.forEach((dataset) => {
@@ -159,7 +161,10 @@ export function getMatches(responseArray, lowerDiv) {
         if (JSON.stringify(lowerDiv) === JSON.stringify(receivingCourse)) {
           const articulations = getSendingCourses(articulationObj, ccName);
 
-          matches.push(articulations);
+          if (articulations && Array.isArray(articulations)) {
+            articulations.push(agreementLink);
+            matches.push(articulations);
+          }
         }
       });
     }

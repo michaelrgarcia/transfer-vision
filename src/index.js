@@ -126,6 +126,8 @@ submit.addEventListener("click", async (event) => {
     const selectedClass = getSelectedClass(JSON.parse(selectedLowerDivs));
     const formattedClass = getClassName(selectedClass);
 
+    console.log(selectedClass);
+
     hideSplash();
 
     if (selectedLowerDivs) {

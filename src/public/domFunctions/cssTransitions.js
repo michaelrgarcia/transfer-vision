@@ -6,6 +6,12 @@ const dialog = document.querySelector("dialog");
 const form = document.querySelector("form");
 const img = document.querySelector("img.loading-gif");
 const results = document.querySelector(".results");
+const loadingContainer = document.querySelector(".loading-container");
+
+function showLoadingContainer() {
+  loadingContainer.style.opacity = 1;
+  loadingContainer.style.display = "flex";
+}
 
 export function showDialog() {
   dialog.showModal();
@@ -92,18 +98,32 @@ export async function showRandomLoadingGif() {
 export function showResults() {
   waitForElementTransition(form).then(() => {
     results.style.opacity = 1;
+    showLoadingContainer();
   });
 
   results.style.display = "flex";
 }
 
 export function hideLoadingContainer() {
-  const loadingContainer = document.querySelector(".loading-container");
-
   // below code block, can turn into hideElement(element) function?
   loadingContainer.style.opacity = 0;
 
   waitForElementTransition(loadingContainer).then(() => {
     loadingContainer.style.display = "none";
+  });
+}
+
+export function hideResults() {
+  results.style.opacity = "0";
+
+  waitForElementTransition(results).then(() => {
+    results.style.display = "none";
+  });
+}
+
+export function showSplash() {
+  waitForElementTransition(results).then(() => {
+    form.style.opacity = 1;
+    form.style.display = "flex";
   });
 }

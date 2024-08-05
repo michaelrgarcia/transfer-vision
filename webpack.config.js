@@ -1,5 +1,6 @@
 /* eslint-disable no-dupe-keys */
 const path = require("path");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: ["./src/index.js"],
@@ -11,6 +12,7 @@ module.exports = {
     assetModuleFilename: "svgs/[name].[ext]",
     assetModuleFilename: "fonts/[name].[ext]",
   },
+  plugins: [new Dotenv()],
   module: {
     rules: [
       {

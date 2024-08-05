@@ -62,12 +62,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   applyDisabledState(submit.parentNode);
 
-  renderFourYears(selects[0]);
+  renderFourYears(schoolList);
 
   await showRandomLoadingGif();
 });
 
-selects[0].addEventListener("input", () => {
+schoolList.addEventListener("input", () => {
   const selectedOption = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedOption.dataset.sending;
 
@@ -80,7 +80,7 @@ selects[0].addEventListener("input", () => {
   applyDisabledState(submit.parentNode);
 });
 
-selects[1].addEventListener("input", () => {
+majorList.addEventListener("input", () => {
   const selectedSchool = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedSchool.dataset.sending;
 
@@ -94,7 +94,7 @@ selects[1].addEventListener("input", () => {
   applyDisabledState(submit.parentNode);
 });
 
-selects[2].addEventListener("change", (event) => {
+classList.addEventListener("change", (event) => {
   const selectedIndex = Number(event.target.value);
 
   if (selectedIndex !== "") {
@@ -129,7 +129,6 @@ submit.addEventListener("click", async (event) => {
     hideSplash();
 
     if (selectedLowerDivs) {
-      // need college name and major here for database caching
       await getArticulationData(params, selectedClass, formattedClass);
     }
   }

@@ -18,10 +18,9 @@ export function conjoin(array, conjunction) {
 export async function getRandomLoadingGif(imgElement) {
   const img = imgElement;
 
-  const response = await fetch(
-    "https://api.giphy.com/v1/gifs/translate?api_key=uldN0xaiyhNfeuN7QN98ROsslA7JpaDG&s=loading",
-    { mode: "cors" },
-  );
+  const response = await fetch(process.env.LOADING_GIF_ENDPOINT, {
+    mode: "cors",
+  });
   const gifData = await response.json();
 
   try {

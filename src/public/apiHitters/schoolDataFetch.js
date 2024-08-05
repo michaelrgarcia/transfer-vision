@@ -1,3 +1,5 @@
+const schoolDataFetcher = process.env.SCHOOL_DATA_FETCHER;
+
 async function fetchSchoolData(url, cacheKey) {
   const now = new Date();
 
@@ -19,7 +21,7 @@ async function fetchSchoolData(url, cacheKey) {
 
 async function fetchLowerDivs(receivingId, key) {
   try {
-    const endpoint = `https://cs46plizg2.execute-api.us-east-2.amazonaws.com/74/6/${receivingId}/${key}/lower-divs`;
+    const endpoint = `${schoolDataFetcher}/74/6/${receivingId}/${key}/lower-divs`;
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -50,8 +52,7 @@ export async function getCommunityColleges() {
         return JSON.parse(cachedCCs);
       }
     } else {
-      const endpoint =
-        "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/community-colleges";
+      const endpoint = `${schoolDataFetcher}/community-colleges`;
 
       const latestData = await fetchSchoolData(endpoint, "communityColleges");
 
@@ -79,8 +80,7 @@ export async function getFourYears() {
         return JSON.parse(cachedFourYears);
       }
     } else {
-      const endpoint =
-        "https://cs46plizg2.execute-api.us-east-2.amazonaws.com/four-years";
+      const endpoint = `${schoolDataFetcher}/four-years`;
 
       const latestData = await fetchSchoolData(endpoint, "fourYears");
 
@@ -95,7 +95,7 @@ export async function getFourYears() {
 
 export async function getMajorData(receivingId) {
   try {
-    const endpoint = `https://cs46plizg2.execute-api.us-east-2.amazonaws.com/major-data/${receivingId}/74`;
+    const endpoint = `${schoolDataFetcher}/major-data/${receivingId}/74`;
 
     const response = await fetch(endpoint);
     const data = await response.json();

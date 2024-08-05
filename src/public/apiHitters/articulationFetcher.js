@@ -38,8 +38,8 @@ export async function getArticulationParams(receivingId, majorKey) {
   communityColleges.forEach((college) => {
     if (college.id) {
       const sending = college.id;
-      const link = `https://assist.org/api/articulation/Agreements?Key=${year}/${sending}/to/${receiving}/Major/${key}`;
-      const agreementLink = `https://assist.org/transfer/results?year=${year}&institution=${sending}&agreement=${receiving}&agreementType=to&view=agreement&viewBy=major&viewSendingAgreements=false&viewByKey=${year}/${sending}/to/${receiving}/Major/${key}`;
+      const link = `${process.env.ASSIST_API_PARAMS}=${year}/${sending}/to/${receiving}/Major/${key}`;
+      const agreementLink = `${process.env.ASSIST_AGREEMENT_PARAMS}=${year}&institution=${sending}&agreement=${receiving}&agreementType=to&view=agreement&viewBy=major&viewSendingAgreements=false&viewByKey=${year}/${sending}/to/${receiving}/Major/${key}`;
 
       articulationParams.push({ link, agreementLink });
     }
@@ -51,8 +51,7 @@ export async function getArticulationParams(receivingId, majorKey) {
 async function sendArticulationRequests(links, signal) {
   const linksList = JSON.stringify(links);
 
-  const endpoint =
-    "https://g4sc52rxwf.execute-api.us-east-2.amazonaws.com/articulation-data";
+  const endpoint = process.env.ARTICULATION_FETCHER;
 
   const response = await fetch(endpoint, {
     body: linksList,

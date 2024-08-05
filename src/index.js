@@ -21,15 +21,18 @@ import {
 
 import {
   applyDisabledState,
+  hideResults,
   hideSplash,
   removeDisabledState,
   showRandomLoadingGif,
+  showSplash,
 } from "./public/domFunctions/cssTransitions";
 
 import {
   deSelectAllClasses,
   selectClassByIndex,
   getSelectedClass,
+  resetResults,
 } from "./public/utils";
 
 const selects = [
@@ -138,4 +141,6 @@ closeDialog.addEventListener("click", () => {
   dialog.close();
 });
 
-backButton.addEventListener("click", () => {});
+backButton.addEventListener("click", () => {
+  removeDisabledState(submit.parentNode);
+});

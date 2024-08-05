@@ -9,9 +9,23 @@ import { getMatches } from "./jsonHelper";
 import {
   showResults,
   hideLoadingContainer,
+  hideResults,
+  showSplash,
 } from "../domFunctions/cssTransitions";
 
-import { changeSelectedClassTxt, updateProgressTracker } from "../utils";
+import {
+  changeSelectedClassTxt,
+  updateProgressTracker,
+  resetResults,
+} from "../utils";
+
+function abortRequest(abortController) {
+  abortController.abort();
+
+  hideResults();
+  showSplash();
+  resetResults();
+}
 
 export async function getArticulationParams(receivingId, majorKey) {
   const articulationParams = [];
@@ -109,10 +123,19 @@ export async function getArticulationData(
   const startingValue = 0;
   const totalColleges = articulationParams.length;
 
+  const abortButton = document.querySelector(".back");
+
   const abortController = new AbortController();
   const { signal } = abortController;
 
+  let aborted = false;
+
   window.addEventListener("beforeunload", () => abortController.abort());
+
+  abortButton.addEventListener("click", () => {
+    aborted = true;
+    abortRequest(abortController);
+  });
 
   showResults();
 
@@ -134,16 +157,13 @@ export async function getArticulationData(
       selectedClass,
     );
 
-    // put articulation params in session storage
+    if (!aborted) {
+      organizeArticulations();
 
-    // need to put assist links in the headers
+      hideLoadingContainer();
 
-    organizeArticulations();
-
-    console.log("all requests processed");
-
-    hideLoadingContainer();
-    sessionStorage.removeItem("selectedLowerDivs");
+      console.log("all requests processed");
+    }
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("requests aborted due to page unload");
@@ -154,6 +174,5 @@ export async function getArticulationData(
     window.removeEventListener("beforeunload", () => abortController.abort());
   }
 
-  console.log(articulationData);
   return articulationData;
 }

@@ -11,6 +11,7 @@
   --main-text: #555;
   --second-bg-color: #0d1117;
   --dark-text: #e6edf3;
+  --border-color: #ebdbb7;
 }
 
 body {
@@ -59,7 +60,7 @@ main {
 
   padding: 20px;
 
-  color: var(--main-text);
+  color: gray;
 
   font-weight: 100;
 }
@@ -73,11 +74,12 @@ form {
   width: 90%;
   max-width: 400px;
 
-  border: 1px ridge silver;
+  border: 1px ridge var(--dark-text);
   padding: 20px;
   margin-top: -10px;
 
-  background-color: var(--second-bg-color);
+  background-color: var(--bg-color);
+  color: var(--dark-text);
 
   transition: opacity 0.3s;
 }
@@ -109,8 +111,8 @@ label {
 
 .help {
   width: 25px;
-  filter: invert(22%) sepia(17%) saturate(30%) hue-rotate(314deg)
-    brightness(97%) contrast(84%);
+  filter: invert(88%) sepia(0%) saturate(207%) hue-rotate(136deg)
+    brightness(79%) contrast(82%);
 
   cursor: pointer;
 }
@@ -120,7 +122,7 @@ select {
   width: 100%;
 
   padding: 3px 5px;
-  border: 1px ridge rgb(100, 100, 100);
+  border: 1px ridge silver;
 
   background-color: var(--input-color);
 }
@@ -152,8 +154,8 @@ select > option {
 
   font-size: 0.9em;
 
-  background-color: var(--main-text);
-  color: var(--bg-color);
+  background-color: var(--bg-color);
+  color: var(--dark-text);
 
   cursor: pointer;
 }
@@ -231,14 +233,14 @@ dialog > p {
 }
 
 :not(label)[aria-disabled="true"] {
-  opacity: 0.3;
+  opacity: 0.2;
 
   cursor: not-allowed;
   user-select: none;
 }
 
 button[aria-disabled="true"] {
-  opacity: 0.2;
+  opacity: 0.1;
 }
 
 .loading-gif {
@@ -266,7 +268,7 @@ button[aria-disabled="true"] {
   padding: 30px;
   margin-top: -10px;
 
-  background-color: var(--second-bg-color);
+  background-color: var(--bg-color);
 
   opacity: 1;
 
@@ -289,7 +291,7 @@ button[aria-disabled="true"] {
 
   height: min-content;
 
-  color: #adadada4;
+  color: var(--dark-text);
 }
 
 .class-list > a {
@@ -298,11 +300,11 @@ button[aria-disabled="true"] {
   text-decoration: none;
   text-align: center;
 
-  background-color: silver;
-  color: var(--main-text);
+  background-color: var(--bg-color);
+  color: var(--dark-text);
 
   padding: 7px;
-  border: 1px solid var(--input-color);
+  border: 1px solid var(--dark-text);
 
   font-size: 1.1em;
 
@@ -310,11 +312,11 @@ button[aria-disabled="true"] {
 }
 
 .class-list > a:hover {
-  background-color: #a1a1a1;
+  background-color: #111111;
 }
 
 .class-list > a:active {
-  background-color: #888888;
+  background-color: #1f1f1f;
 }
 
 .class-list > p {
@@ -359,8 +361,8 @@ button[aria-disabled="true"] {
 }
 
 .back {
-  filter: invert(22%) sepia(17%) saturate(30%) hue-rotate(314deg)
-    brightness(97%) contrast(84%);
+  filter: invert(91%) sepia(0%) saturate(746%) hue-rotate(143deg)
+    brightness(95%) contrast(91%);
 
   user-select: none;
 
@@ -392,13 +394,11 @@ button[aria-disabled="true"] {
 
   font-size: 2em;
 
-  color: var(--dark-text);
+  color: #888888;
 }
 
-.connector,
-.no-articulations,
-.selected-class {
-  color: silver;
+.connector {
+  color: #666666;
 }
 
 .no-articulations {
@@ -407,11 +407,15 @@ button[aria-disabled="true"] {
   justify-self: center;
 
   transition: opacity 0.3s;
+
+  color: var(--dark-text);
 }
 
 .selected-class {
   font-size: 2.5vh;
   text-align: center;
+
+  color: var(--dark-text);
 }
 
 @font-face {

@@ -3,3 +3,4 @@ src/fonts/
 src/imgs/
 src/svgs/
 src/sounds/
+.env

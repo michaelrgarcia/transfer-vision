@@ -1,4 +1,5 @@
 import _ from "lodash";
+import waitForElementTransition from "wait-for-element-transition";
 
 export function conjoin(array, conjunction) {
   const result = [];
@@ -104,4 +105,18 @@ export function getSelectedClass(allLowerDivs) {
   });
 
   return selectedClass;
+}
+
+export function resetResults() {
+  const results = document.querySelector(".results");
+
+  const progressTracker = document.querySelector(".progress-tracker");
+  const selectedClass = document.querySelector(".selected-class");
+  const articulations = document.querySelector(".articulations");
+
+  waitForElementTransition(results).then(() => {
+    articulations.replaceChildren();
+    progressTracker.textContent = "";
+    selectedClass.textContent = "";
+  });
 }

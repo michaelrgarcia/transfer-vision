@@ -1,23 +1,20 @@
 const schoolDataFetcher = process.env.SCHOOL_DATA_FETCHER;
 
-async function fetchSchoolData(url, cacheKey) {
-  const now = new Date();
+async function fetchSchoolData(url) {
+  let dataArray;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
-    const dataArray = Object.values(data);
-
-    localStorage.setItem(cacheKey, JSON.stringify(data));
-    localStorage.setItem("cacheTimestamp", now.toISOString());
-
-    return dataArray;
+    dataArray = Object.values(data);
   } catch (error) {
-    console.error("error caching school data:", error);
+    console.error("error fetching school data:", error);
   }
 
-  return null;
+  return dataArray;
 }
+
+// need to accommodate this for dynamodb
 
 async function fetchLowerDivs(receivingId, key) {
   try {
@@ -39,25 +36,11 @@ async function fetchLowerDivs(receivingId, key) {
 
 export async function getCommunityColleges() {
   try {
-    const now = new Date().getTime();
-    const tenDaysMs = 10 * (24 * 60 * 60 * 1000);
+    const endpoint = `${schoolDataFetcher}/community-colleges`;
 
-    const cachedCCs = localStorage.getItem("communityColleges");
-    const cacheTimestamp = localStorage.getItem("cacheTimestamp");
+    const latestData = await fetchSchoolData(endpoint, "communityColleges");
 
-    if (cachedCCs && cacheTimestamp) {
-      const lastUpdateMs = new Date(cacheTimestamp).getTime();
-
-      if (now - lastUpdateMs > tenDaysMs) {
-        return JSON.parse(cachedCCs);
-      }
-    } else {
-      const endpoint = `${schoolDataFetcher}/community-colleges`;
-
-      const latestData = await fetchSchoolData(endpoint, "communityColleges");
-
-      return latestData;
-    }
+    return latestData;
   } catch (error) {
     console.error("error retrieving community colleges:", error);
   }

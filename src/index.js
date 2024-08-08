@@ -21,18 +21,15 @@ import {
 
 import {
   applyDisabledState,
-  hideResults,
   hideSplash,
   removeDisabledState,
   showRandomLoadingGif,
-  showSplash,
 } from "./public/domFunctions/cssTransitions";
 
 import {
   deSelectAllClasses,
   selectClassByIndex,
   getSelectedClass,
-  resetResults,
 } from "./public/utils";
 
 const selects = [
@@ -65,6 +62,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderFourYears(schoolList);
 
   await showRandomLoadingGif();
+
+  localStorage.removeItem("cacheTimestamp");
+  localStorage.removeItem("fourYears");
+  localStorage.removeItem("communityColleges");
 });
 
 schoolList.addEventListener("input", () => {

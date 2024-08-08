@@ -48,7 +48,7 @@ export async function getCommunityColleges() {
     if (cachedCCs && cacheTimestamp) {
       const lastUpdateMs = new Date(cacheTimestamp).getTime();
 
-      if (now - lastUpdateMs < tenDaysMs) {
+      if (now - lastUpdateMs > tenDaysMs) {
         return JSON.parse(cachedCCs);
       }
     } else {
@@ -76,7 +76,10 @@ export async function getFourYears() {
     if (cachedFourYears && cacheTimestamp) {
       const lastUpdateMs = new Date(cacheTimestamp).getTime();
 
-      if (now - lastUpdateMs < tenDaysMs) {
+      // flawed caching system
+
+      // lets look into dynamo db...
+      if (now - lastUpdateMs > tenDaysMs) {
         return JSON.parse(cachedFourYears);
       }
     } else {

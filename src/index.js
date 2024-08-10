@@ -63,6 +63,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await showRandomLoadingGif();
 
+  // remove old caches that may be stuck on devices
+
   localStorage.removeItem("cacheTimestamp");
   localStorage.removeItem("fourYears");
   localStorage.removeItem("communityColleges");

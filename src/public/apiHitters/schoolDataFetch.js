@@ -1,22 +1,25 @@
 const schoolDataFetcher = process.env.SCHOOL_DATA_FETCHER;
 
 async function fetchSchoolData(url) {
-  let dataArray;
+  let schoolData;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
-    dataArray = Object.values(data);
+
+    schoolData = Object.values(data);
   } catch (error) {
     console.error("error fetching school data:", error);
   }
 
-  return dataArray;
+  return schoolData;
 }
 
 // need to accommodate this for dynamodb
 
 async function fetchLowerDivs(receivingId, key) {
+  let lowerDivs;
+
   try {
     const endpoint = `${schoolDataFetcher}/74/6/${receivingId}/${key}/lower-divs`;
 
@@ -26,60 +29,49 @@ async function fetchLowerDivs(receivingId, key) {
 
     sessionStorage.setItem("selectedLowerDivs", JSON.stringify(data));
 
-    return latestData;
+    lowerDivs = latestData;
   } catch (error) {
     console.log("error fetching lower divs:", error);
   }
 
-  return null;
+  return lowerDivs;
 }
 
 export async function getCommunityColleges() {
+  let communityColleges;
+
   try {
     const endpoint = `${schoolDataFetcher}/community-colleges`;
 
     const latestData = await fetchSchoolData(endpoint, "communityColleges");
 
-    return latestData;
+    communityColleges = latestData;
   } catch (error) {
     console.error("error retrieving community colleges:", error);
   }
 
-  return null;
+  return communityColleges;
 }
 
 export async function getFourYears() {
+  let fourYears;
+
   try {
-    const now = new Date().getTime();
-    const tenDaysMs = 10 * (24 * 60 * 60 * 1000);
+    const endpoint = `${schoolDataFetcher}/four-years`;
 
-    const cachedFourYears = localStorage.getItem("fourYears");
-    const cacheTimestamp = localStorage.getItem("cacheTimestamp");
+    const latestData = await fetchSchoolData(endpoint, "fourYears");
 
-    if (cachedFourYears && cacheTimestamp) {
-      const lastUpdateMs = new Date(cacheTimestamp).getTime();
-
-      // flawed caching system
-
-      // lets look into dynamo db...
-      if (now - lastUpdateMs > tenDaysMs) {
-        return JSON.parse(cachedFourYears);
-      }
-    } else {
-      const endpoint = `${schoolDataFetcher}/four-years`;
-
-      const latestData = await fetchSchoolData(endpoint, "fourYears");
-
-      return latestData;
-    }
+    fourYears = latestData;
   } catch (error) {
     console.error("error retrieving four years:", error);
   }
 
-  return null;
+  return fourYears;
 }
 
 export async function getMajorData(receivingId) {
+  let majorData;
+
   try {
     const endpoint = `${schoolDataFetcher}/major-data/${receivingId}/74`;
 
@@ -87,24 +79,24 @@ export async function getMajorData(receivingId) {
     const data = await response.json();
     const dataArray = Object.values(data);
 
-    return dataArray;
+    majorData = dataArray;
   } catch (error) {
     console.error(`Error fetching majors for ${receivingId}:`, error);
-
-    return null;
   }
 
-  // cache this on schoolDataFetcher DB
+  return majorData;
 }
 
 export async function getLowerDivs(receivingId, key) {
+  let lowerDivs;
+
   try {
     const latestData = await fetchLowerDivs(receivingId, key);
 
-    return latestData;
+    lowerDivs = latestData;
   } catch (error) {
     console.error("error retrieving lower divs:", error);
   }
 
-  return null;
+  return lowerDivs;
 }

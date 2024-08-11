@@ -172,24 +172,3 @@ export function getMatches(responseArray, lowerDiv) {
 
   return matches;
 }
-
-export function getChunkArticulationData(jsonArray) {
-  // re work
-  /*
-
-  const dataChunk = [];
-
-  jsonArray.forEach((json) => {
-    const articulationData = Object.values(json)[0];
-
-    const list = createArticulationList(articulationData);
-
-    if (list) {
-      dataChunk.push(list);
-    }
-  });
-
-  return dataChunk;
-
-  */
-}

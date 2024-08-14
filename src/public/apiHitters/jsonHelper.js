@@ -164,6 +164,8 @@ export function getMatches(responseArray, lowerDiv) {
           if (articulations && Array.isArray(articulations)) {
             articulations.push(agreementLink);
             matches.push(articulations);
+
+            console.log(articulations);
           }
         }
       });

@@ -119,5 +119,3 @@ export function resetResults() {
     selectedClass.textContent = "";
   });
 }
-
-// test

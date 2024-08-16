@@ -48,12 +48,15 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 ### Look on TransferVision for a course that transfers to these two schools, including your other choices.
 
 *UC Berkeley*
+
 ![image](https://github.com/user-attachments/assets/278e0c2e-39c0-40da-909e-eeee1fbf00a0)
 
 *UC Irvine*
+
 ![image](https://github.com/user-attachments/assets/4e7cb0d1-5246-43cb-9a64-a2f301c25cb1)
 
 *UC Los Angeles*
+
 ![image](https://github.com/user-attachments/assets/950c2369-843c-4920-938a-b2190919b522)
 
 ### To verify the data, click on a college name to view the respective ASSIST.org agreement.

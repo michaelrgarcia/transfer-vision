@@ -99,7 +99,7 @@ Here are various examples of TransferVision doing so:
 
 **Each option shown by TransferVision happens to be asynchronous.**
 
-*From College Of San Mateo's Fall 2024 Class Schedule*
+*From College Of San Mateo's Fall & Spring 2024 Class Schedule*
 
 ![image](https://github.com/user-attachments/assets/822dc980-7161-4620-897c-753c803a2afb)
 ![image](https://github.com/user-attachments/assets/b55a77b7-544c-4317-83fb-f95e45b4d800)

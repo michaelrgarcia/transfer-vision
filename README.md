@@ -33,9 +33,11 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 ![image](https://github.com/user-attachments/assets/ce5e4c15-0316-4d6b-be5e-5fdfabd843f9)
 
-### "Exactly one alternative. Some research shows that the course is asynchronous, which means I can take it without commuting to Santa Barbara."
+### Exactly one alternative.
 
 ![image](https://github.com/user-attachments/assets/b991af31-095c-4e39-a863-941de1cc20d1)
+
+### "Some research shows that the course is asynchronous, which means that I can take it without commuting to Santa Barbara."
 
 ![image](https://github.com/user-attachments/assets/bd0c7d8c-0400-4e93-9b39-cfafde1b3518)
 

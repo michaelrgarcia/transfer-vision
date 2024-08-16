@@ -1,12 +1,25 @@
 # TransferVision
 
-TransferVision is a full-stack web application that allows a user to view all California Community College classes from ASSIST.org that satisfy the selected UC/CSU requirement.
+Wanting to apply to multiple UC/CSU institutions as a community college student can be unnecessarily difficult. These institutions often have differing requirements, making extensive scanning through ASSIST.org agreements a neccessity to transferring well.
+
+TransferVision is a full-stack web application that allows a user to view all California Community College classes listed on ASSIST.org that satisfy the selected UC/CSU requirement.
 
 Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 # Index
-- [Use Cases](#use-cases)
 - [Technical Details](#technical-details)
+- [Use Cases](#use-cases)
+- [CVC](#cvc)
+
+## Technical Details
+
+**Frontend**: Vanilla JavaScript, HTML, and CSS
+
+**Backend**: 2 Express.js APIs hosted on AWS Lambda / API Gateway.
+
+**Database**: Amazon DynamoDB
+
+I will likely get around to writing the frontend in a JavaScript framework such as React or Vue. 
 
 ## Use Cases
 
@@ -67,21 +80,41 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 (from Santa Barbara City College's Spring 2024 class schedule page)
 
-## Technical Details
+## CVC 
 
-**Frontend**: Vanilla JavaScript, HTML, and CSS
+CVC does have useful features (live seat count, instant enrollment, etc.) but often fails to display courses that meet specific UC/CSU major requirements. More importantly, asynchronous options that may meet these requirements are often not shown on CVC.
 
-**Backend**: 2 Express.js APIs hosted on AWS Lambda / API Gateway.
+TransferVision adresses this, but it understandably lacks these features which are *exclusive* to the discretion of California Community Colleges. More information can be found on CVC's [website](https://cvc.edu/).
 
-**Database**: Amazon DynamoDB
+Here are various examples of TransferVision doing so:
 
-I will likely get around to writing the frontend in a JavaScript framework such as React or Vue. 
+### Example 1:
 
+![image](https://github.com/user-attachments/assets/4376289d-4f1d-4629-ac2c-2a1508c8330b)
 
+![image](https://github.com/user-attachments/assets/fc386d31-cd48-4da9-ab1b-856582a56259)
 
+**Each option shown by TransferVision happens to be asynchronous.**
 
+*From College Of San Mateo's Fall 2024 Class Schedule*
+![image](https://github.com/user-attachments/assets/822dc980-7161-4620-897c-753c803a2afb)
 
+*From Evergreen Valley College's Fall 2024 Class Schedule*
+![image](https://github.com/user-attachments/assets/764e9bf6-0bd8-4053-a012-c8fc6f29cdd8)
 
+*From Laney College's Fall 2024 Class Schedule (2 asynchronous sections)*
+![image](https://github.com/user-attachments/assets/1cc2d97f-afeb-42cf-b8ba-939f784a091a)
 
+### Example 2:
 
+![6d3dbe5f7e24ab1de3420f0c21c89ce5](https://github.com/user-attachments/assets/e6d4baa5-3f9c-48f3-a9c2-ee50d9504ddf)
 
+**A similar course is listed on CVC, but according to ASSIST.org, the course from Saddleback College does not articulate.**
+
+![image](https://github.com/user-attachments/assets/66fcd555-768d-4d47-80c6-b30d91b3f2c2)
+
+**Along with this, Saddleback College is not present on the list of colleges that offer courses that articulate to PHILOS 12A.**
+
+![3649f390639afb69135d6dafc7de9065](https://github.com/user-attachments/assets/f04710e6-5f2d-4c14-9ab6-27bc9d27ec6c)
+
+Some of these may be very specific, but people often have specific goals for what major they'd like to transfer into. Before transferring, completing as many lower division requirements as possible is usually encouraged by the UC/CSU system. In fact, some majors may require all requirements to be met before transfer.

@@ -143,4 +143,4 @@ If this course wasn't asynchronous, I would have been able commute a short dista
 
 ![image](https://github.com/user-attachments/assets/8ce1462d-fd6f-4c67-8885-243f58dcdbe8)
 
-Some of these may be very specific, but people often have specific goals for what major they'd like to transfer into. UC/CSU institutions tend to recommend completing as many lower division requirements as possible prior to transfer. In fact, some majors may *require* all requirements to be met prior to transfer.
+These may be very specific, but people often have specific goals for what major and school they'd like to transfer into. UC/CSU institutions tend to recommend completing as many lower division requirements as possible prior to transfer. In fact, some may *require* all requirements to be met prior to transfer.

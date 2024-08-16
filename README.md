@@ -4,11 +4,6 @@ TransferVision is a full-stack web application that allows a user to view all Ca
 
 Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
-# Index
-
-- [Use Cases](#use-cases)
-- [Technical Details](#technical-details)
-
 ## Use Cases
 
 ## "I am trying to find a college where this course is offered. I would prefer to take it before I transfer."

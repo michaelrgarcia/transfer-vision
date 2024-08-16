@@ -97,12 +97,15 @@ Here are various examples of TransferVision doing so:
 **Each option shown by TransferVision happens to be asynchronous.**
 
 *From College Of San Mateo's Fall 2024 Class Schedule*
+
 ![image](https://github.com/user-attachments/assets/822dc980-7161-4620-897c-753c803a2afb)
 
 *From Evergreen Valley College's Fall 2024 Class Schedule*
+
 ![image](https://github.com/user-attachments/assets/764e9bf6-0bd8-4053-a012-c8fc6f29cdd8)
 
 *From Laney College's Fall 2024 Class Schedule (2 asynchronous sections taught by Professor Ortak)*
+
 ![image](https://github.com/user-attachments/assets/1cc2d97f-afeb-42cf-b8ba-939f784a091a)
 
 ### Example 2:

@@ -45,7 +45,7 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 ![image](https://github.com/user-attachments/assets/2fa8edac-8567-4fd3-b12e-c3a4f5ca7b1e)
 
-### Look on TransferVision for a course that transfers to these two schools, including your other choices.
+### Use TransferVision to find a course that transfers to these two schools, while having every other school in mind.
 
 *UC Berkeley*
 

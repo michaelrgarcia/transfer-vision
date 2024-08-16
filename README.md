@@ -110,7 +110,7 @@ Here are various examples of TransferVision doing so:
 
 If this course wasn't asynchronous, I would have been able commute a short distance in order to take it, due to EVC being relatively close to me. This is another dimension that TransferVision has over CVC.
 
-*From Laney College's Fall 2024 Class Schedule (2 asynchronous sections taught by Professor Ortak)*
+*From Laney College's Fall 2024 Class Schedule (2 asynchronous sections)*
 
 ![image](https://github.com/user-attachments/assets/1cc2d97f-afeb-42cf-b8ba-939f784a091a)
 

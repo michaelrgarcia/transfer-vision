@@ -13,7 +13,7 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 2. [Use Cases](#use-cases)
    - [Example 1](#i-am-trying-to-find-a-college-where-this-course-is-offered-i-would-prefer-to-take-it-before-i-transfer)
    - [Example 2](#i-would-like-to-minimize-my-courseload-by-taking-a-course-that-transfers-to-all-of-the-schools-that-i-want-to-apply-to)
-   - [Example 3](#my-college-does-offer-this-course-but-the-professor-that-teaches-it-would-jeopardize-my-gpa))
+   - [Example 3](#my-college-does-offer-this-course-but-the-professor-that-teaches-it-would-jeopardize-my-gpa)
 4. [Issues with CVC](#cvc)
    - [Example 1](#example-1)
    - [Example 2](#example-2)

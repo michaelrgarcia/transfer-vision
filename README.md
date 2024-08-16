@@ -31,7 +31,7 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 ![image](https://github.com/user-attachments/assets/b47c18bf-5b2e-4975-bcbd-ab04b81facfb)
 
-![image](https://github.com/user-attachments/assets/2ab3d30e-1f72-452b-9d97-2f89686aad9e)
+![image](https://github.com/user-attachments/assets/2fa8edac-8567-4fd3-b12e-c3a4f5ca7b1e)
 
 ### Look on TransferVision for a course that transfers to all three of these schools.
 

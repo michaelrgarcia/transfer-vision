@@ -11,7 +11,9 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 # Index
 - [Technical Details](#technical-details)
 - [Use Cases](#use-cases)
-- [CVC](#cvc)
+- [Issues with CVC](#cvc)
+  -[Example 1](#example-1)
+  -[Example 2](#example-2)
 
 ## Technical Details
 

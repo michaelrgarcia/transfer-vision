@@ -41,7 +41,7 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 ![image](https://github.com/user-attachments/assets/a49a6a2d-55d9-4463-8820-f4d49991495c)
 
-***"CIS 21JA transfers to every other school but these two. I would really like to attend either of these two schools."***
+**"CIS 21JA transfers to every other school but these two. I would really like to attend either of these two schools."**
 
 ![image](https://github.com/user-attachments/assets/b47c18bf-5b2e-4975-bcbd-ab04b81facfb)
 
@@ -71,7 +71,7 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 ![image](https://github.com/user-attachments/assets/333259ef-7a62-4da6-b248-24a1552d3b5e)
 
-**Use TransferVision to find a possible alternative.***
+**Use TransferVision to find a possible alternative.**
 
 ![image](https://github.com/user-attachments/assets/ce5e4c15-0316-4d6b-be5e-5fdfabd843f9)
 

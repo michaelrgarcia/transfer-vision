@@ -128,5 +128,12 @@ Here are various examples of TransferVision doing so:
 
 ![image](https://github.com/user-attachments/assets/53c75355-ba56-4efe-aa20-75bbffaebb92)
 
+*From Grossmont College's Fall 2024 Class Schedule*
+
+While not fully asynchronous, a community college student would still have the option of taking this course.
+
+![image](https://github.com/user-attachments/assets/8ce1462d-fd6f-4c67-8885-243f58dcdbe8)
+
+
 
 Some of these may be very specific, but people often have specific goals for what major they'd like to transfer into. UC/CSU institutions tend to recommend completing as many lower division requirements as possible prior to transfer. In fact, some majors may *require* all requirements to be met prior to transfer.

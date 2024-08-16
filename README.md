@@ -85,9 +85,9 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 ## CVC 
 
-CVC does have useful features (live seat count, instant enrollment, etc.) but often fails to display courses that meet specific UC/CSU major requirements. More importantly, asynchronous options that may meet these requirements are often not shown on CVC.
+CVC does have useful features (live seat count, instant enrollment, etc.) but often fails to display courses that meet specific UC/CSU major requirements.
 
-TransferVision adresses this, but it understandably lacks these features which are *exclusive* to the discretion of California Community Colleges. More information can be found on CVC's [website](https://cvc.edu/).
+TransferVision adresses this, but it understandably lacks CVC's extra features which are *exclusive* to the discretion of California Community Colleges. More information can be found on CVC's [website](https://cvc.edu/).
 
 Here are various examples of TransferVision doing so:
 
@@ -107,6 +107,8 @@ Here are various examples of TransferVision doing so:
 *From Evergreen Valley College's Fall 2024 Class Schedule*
 
 ![image](https://github.com/user-attachments/assets/764e9bf6-0bd8-4053-a012-c8fc6f29cdd8)
+
+If this course wasn't asynchronous, I would have been able commute a short distance in order to take it, due to EVC being relatively close to me. This is another dimension that TransferVision has over CVC.
 
 *From Laney College's Fall 2024 Class Schedule (2 asynchronous sections taught by Professor Ortak)*
 

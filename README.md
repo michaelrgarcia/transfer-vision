@@ -128,6 +128,10 @@ Here are various examples of TransferVision doing so:
 
 ![image](https://github.com/user-attachments/assets/035cbf01-85a5-4079-a9a0-6243038655eb)
 
+*From Sierra College's Fall 2024 Class Schedule*
+
+![image](https://github.com/user-attachments/assets/71f6ebb6-c2d2-41b3-8c50-6d05fd629015)
+
 *From Chaffey College's Fall 2024 Class Schedule*
 
 ![image](https://github.com/user-attachments/assets/53c75355-ba56-4efe-aa20-75bbffaebb92)

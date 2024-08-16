@@ -124,4 +124,9 @@ Here are various examples of TransferVision doing so:
 
 ![3649f390639afb69135d6dafc7de9065](https://github.com/user-attachments/assets/f04710e6-5f2d-4c14-9ab6-27bc9d27ec6c)
 
+*From Chaffey College's Fall 2024 Class Schedule*
+
+![image](https://github.com/user-attachments/assets/53c75355-ba56-4efe-aa20-75bbffaebb92)
+
+
 Some of these may be very specific, but people often have specific goals for what major they'd like to transfer into. UC/CSU institutions tend to recommend completing as many lower division requirements as possible prior to transfer. In fact, some majors may *require* all requirements to be met prior to transfer.

@@ -8,17 +8,6 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 - [Technical Details](#technical-details)
 
-
-## Technical Details
-
-**Frontend**: Vanilla JavaScript, HTML, and CSS
-
-**Backend**: 2 Express.js APIs hosted on AWS Lambda / API Gateway.
-
-**Database**: Amazon DynamoDB
-
-I will likely get around to writing the frontend in a JavaScript framework such as React or Vue. 
-
 ## Use Cases
 
 ## "I am trying to find a college where this course is offered. I would prefer to take it before I transfer."
@@ -32,6 +21,18 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 ### There are a plethora of (possibly asynchronous) options to choose from.
 
 https://github.com/user-attachments/assets/bca32d82-0f7f-40ac-98c7-c4edf511cc1a
+
+## Technical Details
+
+**Frontend**: Vanilla JavaScript, HTML, and CSS
+
+**Backend**: 2 Express.js APIs hosted on AWS Lambda / API Gateway.
+
+**Database**: Amazon DynamoDB
+
+I will likely get around to writing the frontend in a JavaScript framework such as React or Vue. 
+
+
 
 
 

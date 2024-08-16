@@ -4,7 +4,7 @@ TransferVision is a full-stack web application that allows a user to view all Ca
 
 Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
-## Index
+# Index
 
 - [Technical Details](#technical-details)
 

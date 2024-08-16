@@ -130,7 +130,7 @@ Here are various examples of TransferVision doing so:
 
 *From Grossmont College's Fall 2024 Class Schedule*
 
-While not fully asynchronous, a community college student would still have the option of taking this course.
+While not fully asynchronous, a student would still have the option of taking this course without a commute.
 
 ![image](https://github.com/user-attachments/assets/8ce1462d-fd6f-4c67-8885-243f58dcdbe8)
 

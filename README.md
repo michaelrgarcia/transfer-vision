@@ -81,9 +81,8 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 **"Some research shows that the course is asynchronous, which means that I can take it without commuting to Santa Barbara."**
 
+*From Santa Barbara City College's Spring 2024 Class Schedule*
 ![image](https://github.com/user-attachments/assets/bd0c7d8c-0400-4e93-9b39-cfafde1b3518)
-
-(from Santa Barbara City College's Spring 2024 class schedule page)
 
 ## CVC 
 

@@ -25,13 +25,13 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 ![image](https://github.com/user-attachments/assets/31168613-464a-498c-95de-b5c37e4b9f27)
 
-### Select the corresponding school, major, and class on TransferVision to find a college that offers this course.
+### Select the corresponding school, major, and course on TransferVision to find a college that offers this course.
 
 ![image](https://github.com/user-attachments/assets/acd1d613-3d08-488d-a879-b135e419ccc2)
 
 ### There are a plethora of (possibly asynchronous) options to choose from.
 
-![image](https://github.com/user-attachments/assets/68d6b98a-9cab-4dda-9a11-aa88d20ed080)
+https://gyazo.com/d9b42655be244a3022f19d90c646c91a
 
 
 

@@ -6,6 +6,7 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 # Index
 
+- [Use Cases](#use-cases)
 - [Technical Details](#technical-details)
 
 ## Use Cases

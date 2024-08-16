@@ -33,7 +33,7 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 ![image](https://github.com/user-attachments/assets/2fa8edac-8567-4fd3-b12e-c3a4f5ca7b1e)
 
-### Look on TransferVision for a course that transfers to all three of these schools.
+### Look on TransferVision for a course that transfers to these two schools, including your other choices.
 
 *UC Berkeley*
 ![image](https://github.com/user-attachments/assets/278e0c2e-39c0-40da-909e-eeee1fbf00a0)

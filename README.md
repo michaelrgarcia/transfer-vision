@@ -11,11 +11,11 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 ## Technical Details
 
-Frontend: Vanilla JavaScript, HTML, and CSS
+**Frontend**: Vanilla JavaScript, HTML, and CSS
 
-Backend: 2 Express.js APIs hosted on AWS Lambda / API Gateway.
+**Backend**: 2 Express.js APIs hosted on AWS Lambda / API Gateway.
 
-Database: Amazon DynamoDB
+**Database**: Amazon DynamoDB
 
 I will likely get around to writing the frontend in a JavaScript framework such as React or Vue. 
 

@@ -20,7 +20,7 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 ### There are a plethora of (possibly asynchronous) options to choose from.
 
-https://github.com/user-attachments/assets/bca32d82-0f7f-40ac-98c7-c4edf511cc1a
+![d9b42655be244a3022f19d90c646c91a](https://github.com/user-attachments/assets/20f1a736-a304-48bf-98cb-843a8258375b)
 
 ## Technical Details
 

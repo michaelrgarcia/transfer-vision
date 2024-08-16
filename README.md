@@ -4,7 +4,7 @@ Wanting to apply to multiple UC/CSU institutions as a prospective transfer can b
 
 TransferVision is a full-stack web application that allows a user to conveniently view all of the California Community College courses listed on ASSIST.org that satisfy the selected UC/CSU requirement at once.
 
-As of now, TransferVision utilizes the newest usable data from ASSIST.org. As of August 2024, no other applications similar to TransferVision utilize 23-24 major agreements. 
+As of now, TransferVision utilizes the newest usable data from ASSIST.org. As of August 2024, no other applications similar to TransferVision utilize 2023-24 major agreements. 
 
 Inspired by https://github.com/jacobtbigham/ccc_transfers.
 

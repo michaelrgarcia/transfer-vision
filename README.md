@@ -102,14 +102,15 @@ Here are various examples of TransferVision doing so:
 *From Evergreen Valley College's Fall 2024 Class Schedule*
 ![image](https://github.com/user-attachments/assets/764e9bf6-0bd8-4053-a012-c8fc6f29cdd8)
 
-*From Laney College's Fall 2024 Class Schedule (2 asynchronous sections)*
+*From Laney College's Fall 2024 Class Schedule (2 asynchronous sections taught by Professor Ortak)*
 ![image](https://github.com/user-attachments/assets/1cc2d97f-afeb-42cf-b8ba-939f784a091a)
 
 ### Example 2:
 
 ![6d3dbe5f7e24ab1de3420f0c21c89ce5](https://github.com/user-attachments/assets/e6d4baa5-3f9c-48f3-a9c2-ee50d9504ddf)
 
-**A similar course is listed on CVC, but according to ASSIST.org, the course from Saddleback College does not articulate.**
+**Similar courses are listed on CVC, but according to ASSIST.org, none of these courses truly articulate to PHILOS 12A.**
+**Here is the ASSIST.org agreement for Saddleback College.**
 
 ![image](https://github.com/user-attachments/assets/66fcd555-768d-4d47-80c6-b30d91b3f2c2)
 

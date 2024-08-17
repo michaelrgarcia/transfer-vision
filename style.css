@@ -9,7 +9,7 @@
   --bg-color: #010409;
   --input-color: #0d1117;
   --main-text: #555;
-  --second-bg-color: #0d1117;
+  --second-bg-color: #0c0c14;
   --dark-text: #e6edf3;
   --border-color: #ebdbb7;
 }
@@ -38,17 +38,59 @@ dialog > p {
   font-family: "Segoe UI", Verdana, sans-serif;
 }
 
+form,
+input,
+select,
+.submit,
+.loading-gif,
+.articulations,
+.class-list > a {
+  border: 1px ridge var(--dark-text);
+  border-radius: 5px;
+}
+
 header {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+
+  position: sticky;
+  top: 0;
 
   height: 20%;
+  z-index: 10;
+
+  border-bottom: 1px ridge;
+  margin-bottom: 20px;
   padding: 10px;
 
+  background-color: var(--second-bg-color);
   color: silver;
+
   font-size: 2.5em;
 
   user-select: none;
+}
+
+header > p {
+  margin: auto;
+}
+
+.back {
+  display: none;
+  opacity: 0;
+
+  filter: invert(91%) sepia(0%) saturate(746%) hue-rotate(143deg)
+    brightness(95%) contrast(91%);
+
+  user-select: none;
+
+  width: 40px;
+}
+
+.back:hover {
+  background-color: #adadad1a;
+
+  cursor: pointer;
 }
 
 main {
@@ -74,7 +116,6 @@ form {
   width: 90%;
   max-width: 400px;
 
-  border: 1px ridge var(--dark-text);
   padding: 20px;
   margin-top: -10px;
 
@@ -122,7 +163,6 @@ select {
   width: 100%;
 
   padding: 3px 5px;
-  border: 1px ridge silver;
 
   background-color: var(--input-color);
 }
@@ -150,7 +190,6 @@ select > option {
 
   margin-top: 15px;
   padding: 5px;
-  border: 1px ridge silver;
 
   font-size: 0.9em;
 
@@ -245,7 +284,6 @@ button[aria-disabled="true"] {
 
 .loading-gif {
   width: 70px;
-  border: 1px solid var(--dark-text);
 }
 
 .results {
@@ -325,10 +363,6 @@ button[aria-disabled="true"] {
   white-space-collapse: discard;
 }
 
-.results-info {
-  margin-top: -15px;
-}
-
 .loading-container,
 .info-text {
   display: flex;
@@ -350,29 +384,7 @@ button[aria-disabled="true"] {
   text-align: center;
 
   margin-bottom: 5px;
-}
-
-.dynamic-class-info {
-  display: grid;
-
-  align-items: center;
-
-  grid-template-columns: 0fr 1000fr;
-}
-
-.back {
-  filter: invert(91%) sepia(0%) saturate(746%) hue-rotate(143deg)
-    brightness(95%) contrast(91%);
-
-  user-select: none;
-
-  width: 40px;
-}
-
-.back:hover {
-  background-color: #adadad1a;
-
-  cursor: pointer;
+  margin-top: -20px;
 }
 
 .results {

@@ -49,6 +49,13 @@ select,
   border-radius: 5px;
 }
 
+header,
+select,
+.loading,
+.loading-container {
+  color: silver;
+}
+
 header {
   display: flex;
   justify-content: flex-start;
@@ -64,7 +71,6 @@ header {
   padding: 10px;
 
   background-color: var(--second-bg-color);
-  color: silver;
 
   font-size: 2.5em;
 
@@ -169,8 +175,6 @@ select {
   appearance: none;
   background: url("./fonts/arrow-204-16..png") no-repeat right;
   background-position-x: calc(100% - 5px);
-
-  color: silver;
 }
 
 select > option {
@@ -205,8 +209,6 @@ select > option {
   position: absolute;
 
   margin-top: 1vh;
-
-  color: silver;
 
   font-size: 2em;
 

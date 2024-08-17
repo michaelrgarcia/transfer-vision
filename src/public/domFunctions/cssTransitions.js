@@ -7,10 +7,24 @@ const form = document.querySelector("form");
 const img = document.querySelector("img.loading-gif");
 const results = document.querySelector(".results");
 const loadingContainer = document.querySelector(".loading-container");
+const backButton = document.querySelector(".back");
 
 function showLoadingContainer() {
   loadingContainer.style.opacity = 1;
   loadingContainer.style.display = "flex";
+}
+
+function showBackButton() {
+  backButton.style.opacity = 1;
+  backButton.style.display = "block";
+}
+
+export function hideBackButton() {
+  backButton.style.opacity = 0;
+
+  waitForElementTransition(backButton).then(async () => {
+    backButton.style.display = "none";
+  });
 }
 
 export function showDialog() {
@@ -99,6 +113,7 @@ export function showResults() {
   waitForElementTransition(form).then(() => {
     results.style.opacity = 1;
     showLoadingContainer();
+    showBackButton();
   });
 
   results.style.display = "flex";

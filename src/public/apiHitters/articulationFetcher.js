@@ -11,6 +11,7 @@ import {
   hideLoadingContainer,
   hideResults,
   showSplash,
+  hideBackButton,
 } from "../domFunctions/cssTransitions";
 
 import {
@@ -23,6 +24,7 @@ function abortRequest(abortController) {
   abortController.abort();
 
   hideResults();
+  hideBackButton();
   showSplash();
   resetResults();
 }

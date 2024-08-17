@@ -9,7 +9,7 @@
   --bg-color: #010409;
   --input-color: #0d1117;
   --main-text: #555;
-  --second-bg-color: #0c0c14;
+  --second-bg-color: #0b0b11;
   --dark-text: #e6edf3;
   --border-color: #ebdbb7;
 }
@@ -150,14 +150,6 @@ label {
   font-size: 0.9em;
 }
 
-.help {
-  width: 25px;
-  filter: invert(88%) sepia(0%) saturate(207%) hue-rotate(136deg)
-    brightness(79%) contrast(82%);
-
-  cursor: pointer;
-}
-
 input,
 select {
   width: 100%;
@@ -197,6 +189,14 @@ select > option {
   color: var(--dark-text);
 
   cursor: pointer;
+}
+
+.submit:hover {
+  background-color: #0a0c0f;
+}
+
+.submit:active {
+  background-color: #0e1014;
 }
 
 .loading {
@@ -367,6 +367,7 @@ button[aria-disabled="true"] {
 .info-text {
   display: flex;
   align-items: center;
+  margin-top: -20px;
 }
 
 .loading-container {
@@ -374,7 +375,7 @@ button[aria-disabled="true"] {
 
   gap: 15px;
 
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 
   color: silver;
 }
@@ -384,7 +385,6 @@ button[aria-disabled="true"] {
   text-align: center;
 
   margin-bottom: 5px;
-  margin-top: -20px;
 }
 
 .results {

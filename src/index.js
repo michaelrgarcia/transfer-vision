@@ -49,6 +49,8 @@ const closeDialog = document.querySelector(".close-dialog");
 
 const backButton = document.querySelector(".back");
 
+const endpoint = process.env.ARTICULATION_FETCHER;
+
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
     if (selects[i].parentNode) {
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await showRandomLoadingGif();
 
-  // remove old caches that may be stuck on devices
+  await fetch(endpoint);
 
   localStorage.removeItem("cacheTimestamp");
   localStorage.removeItem("fourYears");

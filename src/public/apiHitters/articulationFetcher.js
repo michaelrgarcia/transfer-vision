@@ -143,12 +143,6 @@ export async function getArticulationData(
   changeSelectedClassTxt(formattedClass);
   updateProgressTracker(startingValue, totalColleges);
 
-  // this function will check dataBase for selected class
-
-  // if not in there, pass in allLowerDivs array to processChunks
-
-  // if in there, pass in selected class only, make the requests
-
   try {
     await processChunks(
       processingQueue,

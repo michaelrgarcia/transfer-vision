@@ -102,20 +102,26 @@ export function getSendingCourses(articulationObj, ccName) {
     if (!sendingArticulation.noArticulationReason) {
       let courseList = [];
 
-      items.forEach((courseObj) => {
-        const courses = courseObj.items;
+      for (let i = 0; i < items.length; ) {
+        const courseObj = items[i];
 
-        if (courses.length > 1) {
-          const connector = courseObj.courseConjunction;
-          const courseGroup = createGroup(connector, courses);
+        if (courseObj) {
+          const courses = courseObj.items;
 
-          courseList.push(courseGroup);
-        } else {
-          const course = getCourse(courses[0]);
+          if (courses.length > 1) {
+            const connector = courseObj.courseConjunction;
+            const courseGroup = createGroup(connector, courses);
 
-          courseList.push(course);
+            courseList.push(courseGroup);
+          } else {
+            const course = getCourse(courses[0]);
+
+            courseList.push(course);
+          }
+
+          i += 1;
         }
-      });
+      }
 
       if (items.length > 1) {
         const groupConnector = extractGroupConnector(sendingArticulation);
@@ -135,7 +141,8 @@ export function getSendingCourses(articulationObj, ccName) {
 export function getMatches(responseArray, lowerDiv) {
   const matches = [];
 
-  responseArray.forEach((response) => {
+  for (let i = 0; i < responseArray.length; ) {
+    const response = responseArray[i];
     const { agreementLink } = response;
 
     const articulationData = Object.values(response)[0];
@@ -144,7 +151,8 @@ export function getMatches(responseArray, lowerDiv) {
     if (articulationData && articulationData.articulations && agreementLink) {
       const availableArticulations = deNest(articulationData.articulations);
 
-      availableArticulations.forEach((dataset) => {
+      for (let j = 0; j < availableArticulations.length; ) {
+        const dataset = availableArticulations[j];
         const articulationObj = dataset.articulation;
         let receivingCourse;
 
@@ -166,9 +174,13 @@ export function getMatches(responseArray, lowerDiv) {
             matches.push(articulations);
           }
         }
-      });
+
+        j += 1;
+      }
     }
-  });
+
+    i += 1;
+  }
 
   return matches;
 }

@@ -433,6 +433,82 @@ button[aria-disabled="true"] {
   color: var(--dark-text);
 }
 
+.cid-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.cid-info {
+  width: 30px;
+
+  filter: invert(58%) sepia(21%) saturate(0%) hue-rotate(143deg) brightness(83%)
+    contrast(99%);
+}
+
+.cids {
+  position: relative;
+  display: inline-block;
+
+  width: 60px;
+  height: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+
+  height: 26px;
+  width: 26px;
+
+  bottom: 3px;
+  left: 4px;
+
+  background-color: var(--dark-text);
+  transition: 0.4s;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  transition: 0.4s;
+}
+
+.slider.round {
+  border-radius: 34px;
+  border: 1px solid silver;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.cids input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cids input:checked + .slider {
+  background-color: #5555558c;
+}
+
+.cids input:checked + .slider:before {
+  transform: translateX(123%);
+}
+
+.cids input:focus + .slider {
+  box-shadow: 0 0 1px var(--main-text);
+}
+
 @font-face {
   font-family: "helvetica_neuelight";
   src:

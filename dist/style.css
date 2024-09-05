@@ -434,9 +434,11 @@ button[aria-disabled="true"] {
 }
 
 .cid-section {
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
+
+  opacity: 0;
 
   gap: 20px;
 

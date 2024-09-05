@@ -439,22 +439,37 @@ button[aria-disabled="true"] {
   align-items: center;
 
   gap: 20px;
+
+  font-size: 0.9em;
+}
+
+.cid-section > p {
+  width: 60%;
+  margin-left: -3px;
+
+  font-size: 1.1em;
+
+  color: silver;
 }
 
 .cid-info {
-  width: 30px;
+  width: 25px;
+  margin-left: -20px;
 
-  filter: invert(58%) sepia(21%) saturate(0%) hue-rotate(143deg) brightness(83%)
-    contrast(99%);
+  cursor: pointer;
+
+  filter: invert(30%) sepia(0%) saturate(1646%) hue-rotate(195deg) brightness(101%) contrast(84%);
 }
 
 .cids {
   position: relative;
   display: inline-block;
 
-  width: 60px;
+  width: 70px;
   height: 34px;
 }
+
+
 
 .slider:before {
   position: absolute;
@@ -498,11 +513,11 @@ button[aria-disabled="true"] {
 }
 
 .cids input:checked + .slider {
-  background-color: #5555558c;
+  background-color: #55555581;
 }
 
 .cids input:checked + .slider:before {
-  transform: translateX(123%);
+  transform: translateX(105%);
 }
 
 .cids input:focus + .slider {

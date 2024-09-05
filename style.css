@@ -72,13 +72,14 @@ header {
 
   background-color: var(--second-bg-color);
 
-  font-size: 2.5em;
+  font-size: 1.3em;
 
   user-select: none;
 }
 
-header > p {
+header > h1 {
   margin: auto;
+  font-weight: lighter;
 }
 
 .back {

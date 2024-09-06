@@ -440,13 +440,15 @@ button[aria-disabled="true"] {
 
   opacity: 0;
 
+  margin: -20px 0 25px 0;
+
   gap: 20px;
 
   font-size: 0.9em;
 }
 
 .cid-section > p {
-  width: 60%;
+  
   margin-left: -3px;
 
   font-size: 1.1em;
@@ -456,7 +458,7 @@ button[aria-disabled="true"] {
 
 .cid-info {
   width: 25px;
-  margin-left: -20px;
+  margin-left: -10px;
 
   cursor: pointer;
 
@@ -469,6 +471,8 @@ button[aria-disabled="true"] {
 
   width: 70px;
   height: 34px;
+
+  margin-right: 5px;
 }
 
 
@@ -519,7 +523,7 @@ button[aria-disabled="true"] {
 }
 
 .cids input:checked + .slider:before {
-  transform: translateX(105%);
+  transform: translateX(165%);
 }
 
 .cids input:focus + .slider {

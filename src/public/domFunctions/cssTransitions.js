@@ -8,6 +8,7 @@ const img = document.querySelector("img.loading-gif");
 const results = document.querySelector(".results");
 const loadingContainer = document.querySelector(".loading-container");
 const backButton = document.querySelector(".back");
+const cidSection = document.querySelector(".cid-section");
 
 function showLoadingContainer() {
   loadingContainer.style.opacity = 1;
@@ -140,5 +141,20 @@ export function showSplash() {
   waitForElementTransition(results).then(() => {
     form.style.opacity = 1;
     form.style.display = "flex";
+  });
+}
+
+export function showCidSection() {
+  waitForElementTransition(loadingContainer).then(() => {
+    cidSection.style.display = "flex";
+    cidSection.style.opacity = 1;
+  });
+}
+
+export function hideCidSection() {
+  cidSection.style.opacity = 0;
+
+  waitForElementTransition(cidSection).then(() => {
+    cidSection.style.display = "none";
   });
 }

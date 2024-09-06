@@ -12,6 +12,8 @@ import {
   hideResults,
   showSplash,
   hideBackButton,
+  hideCidSection,
+  showCidSection,
 } from "../domFunctions/cssTransitions";
 
 import {
@@ -24,6 +26,7 @@ function abortRequest(abortController) {
   abortController.abort();
 
   hideResults();
+  hideCidSection(); // may be a "toggle tab in future"
   hideBackButton();
   showSplash();
   resetResults();
@@ -156,6 +159,8 @@ export async function getArticulationData(
       organizeArticulations();
 
       hideLoadingContainer();
+
+      showCidSection();
 
       console.log("all requests processed");
     }

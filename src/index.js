@@ -49,6 +49,8 @@ const closeDialog = document.querySelector(".close-dialog");
 
 const backButton = document.querySelector(".back");
 
+const cidToggle = document.querySelector(".cid-section input");
+
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
     if (selects[i].parentNode) {
@@ -144,3 +146,14 @@ closeDialog.addEventListener("click", () => {
 backButton.addEventListener("click", () => {
   removeDisabledState(submit.parentNode);
 });
+
+cidToggle.addEventListener("click", () => {
+  if (cidToggle.checked === true) {
+    // showCids
+    // event listener will be added during CID request
+  } else {
+    // hideCids
+  }
+})
+
+

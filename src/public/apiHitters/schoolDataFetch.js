@@ -15,8 +15,6 @@ async function fetchSchoolData(url) {
   return schoolData;
 }
 
-// need to accommodate this for dynamodb
-
 async function fetchLowerDivs(receivingId, key) {
   let lowerDivs;
 

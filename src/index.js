@@ -17,6 +17,7 @@ import {
   renderLowerDivs,
   renderMajorData,
   getClassName,
+  getId,
 } from "./public/domFunctions/assistDataRender";
 
 import {
@@ -125,6 +126,7 @@ submit.addEventListener("click", async (event) => {
     const selectedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
 
     const selectedClass = getSelectedClass(JSON.parse(selectedLowerDivs));
+    const courseId = getId(selectedClass);
     const formattedClass = getClassName(selectedClass);
 
     hideSplash();
@@ -135,6 +137,7 @@ submit.addEventListener("click", async (event) => {
         selectedClass,
         formattedClass,
         receivingId,
+        courseId,
       );
     }
   }

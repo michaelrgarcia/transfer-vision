@@ -130,7 +130,12 @@ submit.addEventListener("click", async (event) => {
     hideSplash();
 
     if (selectedLowerDivs) {
-      await getArticulationData(params, selectedClass, formattedClass);
+      await getArticulationData(
+        params,
+        selectedClass,
+        formattedClass,
+        receivingId,
+      );
     }
   }
 

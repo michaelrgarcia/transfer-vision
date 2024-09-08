@@ -50,10 +50,10 @@ export async function getArticulationParams(receivingId, majorKey) {
   return articulationParams;
 }
 
-async function sendArticulationRequests(links, signal) {
+async function sendArticulationRequests(links, signal, receivingId, courseId) {
   const linksList = JSON.stringify(links);
 
-  const endpoint = process.env.ARTICULATION_FETCHER;
+  const endpoint = `${process.env.ARTICULATION_FETCHER}/${receivingId}/${courseId}`;
 
   const response = await fetch(endpoint, {
     body: linksList,
@@ -74,6 +74,8 @@ async function processChunks(
   signal,
   totalColleges,
   lowerDiv,
+  receivingId,
+  courseId,
 ) {
   const concurrencyLimit = 29; // dynamic value
 
@@ -88,7 +90,13 @@ async function processChunks(
   }
 
   try {
-    const result = await sendArticulationRequests(linksChunk, signal);
+    const result = await sendArticulationRequests(
+      linksChunk,
+      signal,
+      receivingId,
+      courseId,
+    );
+
     const articulationChunk = getMatches(result, lowerDiv);
 
     articulationData.push(...result);
@@ -103,6 +111,8 @@ async function processChunks(
       signal,
       totalColleges,
       lowerDiv,
+      receivingId,
+      courseId,
     );
   } catch (error) {
     if (error.name === "AbortError") {
@@ -117,6 +127,8 @@ export async function getArticulationData(
   articulationParams,
   selectedClass,
   formattedClass,
+  receivingId,
+  courseId,
 ) {
   const articulationData = [];
   const processingQueue = articulationParams.slice(); // shallow copy
@@ -150,6 +162,8 @@ export async function getArticulationData(
       signal,
       totalColleges,
       selectedClass,
+      receivingId,
+      courseId,
     );
 
     if (!aborted) {

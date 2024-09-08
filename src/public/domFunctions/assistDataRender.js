@@ -22,6 +22,7 @@ import {
   getLowerDivs,
   getMajorData,
 } from "../apiHitters/schoolDataFetch";
+import { filterLowerDiv } from "../apiHitters/jsonHelper";
 
 export async function renderFourYears(schoolList) {
   const formRow = schoolList.parentNode;
@@ -73,9 +74,12 @@ export async function renderMajorData(majorList, receivingId) {
 }
 
 function getSeriesString(seriesArray) {
+  const seriesArrayCopy = seriesArray.slice();
+  const filtered = filterLowerDiv(seriesArrayCopy);
+
   let seriesString = "";
 
-  seriesArray.forEach((lowerDiv, index) => {
+  filtered.forEach((lowerDiv, index) => {
     let courseConnector;
     const seriesCourse = lowerDiv;
 
@@ -91,7 +95,7 @@ function getSeriesString(seriesArray) {
       seriesString += courseConnector;
     }
 
-    if (index < seriesArray.length - 1) {
+    if (index < filtered.length - 1) {
       seriesString += " ";
     }
   });
@@ -111,6 +115,26 @@ export function getClassName(objOrArray) {
   return formattedClass;
 }
 
+export function getId(objOrArray) {
+  let id;
+
+  if (typeof objOrArray === "object" && !Array.isArray(objOrArray)) {
+    id = objOrArray.courseId;
+  } else if (Array.isArray(objOrArray)) {
+    for (let i = 0; i < objOrArray.length; ) {
+      const item = objOrArray[i];
+
+      if (item.seriesId) {
+        id = item.seriesId;
+      }
+
+      i += 1;
+    }
+  }
+
+  return id;
+}
+
 export async function renderLowerDivs(classList, receivingId, key) {
   const formRow = classList.parentNode;
   const loadingText = formRow.querySelector(".loading");
@@ -127,7 +151,8 @@ export async function renderLowerDivs(classList, receivingId, key) {
 
   lowerDivs.forEach((lowerDiv, classIndex) => {
     const className = getClassName(lowerDiv, classIndex);
-    const option = lowerDivOption(className, classIndex);
+    const id = getId(lowerDiv);
+    const option = lowerDivOption(className, classIndex, id);
 
     select.appendChild(option);
   });

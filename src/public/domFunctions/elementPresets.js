@@ -11,11 +11,13 @@ export function selectOption(value, id, keyword) {
   return option;
 }
 
-export function lowerDivOption(text, value) {
+export function lowerDivOption(text, value, id) {
   const option = document.createElement("option");
 
   option.textContent = text;
   option.value = value;
+
+  option.setAttribute("data-id", id);
 
   return option;
 }

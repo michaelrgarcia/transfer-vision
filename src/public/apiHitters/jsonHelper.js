@@ -37,6 +37,26 @@ function seriesBreakdown(seriesObj) {
   return null;
 }
 
+export function filterLowerDiv(objOrArray) {
+  const lowerDiv = objOrArray;
+
+  if (typeof lowerDiv === "object" && !Array.isArray(lowerDiv)) {
+    delete lowerDiv.courseId;
+  } else if (Array.isArray(lowerDiv)) {
+    for (let i = 0; i < lowerDiv.length; ) {
+      const item = lowerDiv[i];
+
+      if (item.seriesId) {
+        lowerDiv.splice(i, 1);
+      }
+
+      i += 1;
+    }
+  }
+
+  return lowerDiv;
+}
+
 export function getCollegeName(articulationData) {
   if (articulationData && articulationData.sendingInstitution) {
     const sendingData = deNest(articulationData.sendingInstitution);
@@ -63,7 +83,6 @@ export function createGroup(conjunction, groupCourses) {
   const coursesInGroup = groupCourses;
   let group = [];
 
-  // may not need these...
   const pad1 = connector.padStart(connector.length + 1, " ");
   const pad2 = pad1.padEnd(pad1.length + 1, " ");
 
@@ -140,6 +159,7 @@ export function getSendingCourses(articulationObj, ccName) {
 
 export function getMatches(responseArray, lowerDiv) {
   const matches = [];
+  const filteredClass = filterLowerDiv(lowerDiv);
 
   for (let i = 0; i < responseArray.length; ) {
     const response = responseArray[i];
@@ -166,7 +186,7 @@ export function getMatches(responseArray, lowerDiv) {
           receivingCourse = seriesBreakdown(seriesObj);
         }
 
-        if (JSON.stringify(lowerDiv) === JSON.stringify(receivingCourse)) {
+        if (JSON.stringify(filteredClass) === JSON.stringify(receivingCourse)) {
           const articulations = getSendingCourses(articulationObj, ccName);
 
           if (articulations && Array.isArray(articulations)) {

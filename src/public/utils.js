@@ -119,3 +119,23 @@ export function resetResults() {
     selectedClass.textContent = "";
   });
 }
+
+export function filterLowerDiv(objOrArray) {
+  const lowerDiv = objOrArray;
+
+  if (typeof lowerDiv === "object" && !Array.isArray(lowerDiv)) {
+    delete lowerDiv.courseId;
+  } else if (Array.isArray(lowerDiv)) {
+    for (let i = 0; i < lowerDiv.length; ) {
+      const item = lowerDiv[i];
+
+      if (item.seriesId) {
+        lowerDiv.splice(i, 1);
+      }
+
+      i += 1;
+    }
+  }
+
+  return lowerDiv;
+}

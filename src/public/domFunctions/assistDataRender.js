@@ -22,7 +22,8 @@ import {
   getLowerDivs,
   getMajorData,
 } from "../apiHitters/schoolDataFetch";
-import { filterLowerDiv } from "../apiHitters/jsonHelper";
+
+import { filterLowerDiv } from "../utils";
 
 export async function renderFourYears(schoolList) {
   const formRow = schoolList.parentNode;

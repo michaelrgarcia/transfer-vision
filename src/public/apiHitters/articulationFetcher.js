@@ -1,10 +1,11 @@
+/* eslint-disable no-await-in-loop */
+
 import {
   createClassLists,
   organizeArticulations,
 } from "../domFunctions/assistDataRender";
 
 import { getCommunityColleges } from "./schoolDataFetch";
-import { getMatches } from "./jsonHelper";
 
 import {
   showResults,
@@ -50,92 +51,50 @@ export async function getArticulationParams(receivingId, majorKey) {
   return articulationParams;
 }
 
-async function sendArticulationRequests(links, signal, receivingId, courseId) {
-  const linksList = JSON.stringify(links);
+async function processStream(stream) {
+  const reader = stream.getReader();
+  const decoder = new TextDecoder();
 
-  const endpoint = `${process.env.ARTICULATION_FETCHER}/${receivingId}/${courseId}`;
+  let chunk = await reader.read();
 
-  const response = await fetch(endpoint, {
-    body: linksList,
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal,
-  });
+  while (!chunk.done) {
+    const data = decoder.decode(chunk.value, { stream: true });
+    const articulation = JSON.parse(data);
 
-  const data = await response.json();
-  const dataArray = Object.values(data);
+    createClassLists(articulation);
 
-  return dataArray;
-}
+    // updateProgressTracker(startingValue, totalColleges);
 
-async function processChunks(
-  processingQueue,
-  articulationData,
-  signal,
-  totalColleges,
-  lowerDiv,
-  receivingId,
-  courseId,
-) {
-  const concurrencyLimit = 29; // dynamic value
-
-  let linksChunk;
-
-  if (processingQueue.length === 0) return;
-
-  if (processingQueue.length < concurrencyLimit) {
-    linksChunk = processingQueue.splice(0, processingQueue.length - 1);
-  } else {
-    linksChunk = processingQueue.splice(0, concurrencyLimit);
+    chunk = await reader.read();
   }
 
+  reader.releaseLock();
+
+  return null;
+}
+
+async function requestArticulations(links, signal, receivingId, courseId) {
   try {
-    const result = await sendArticulationRequests(
-      linksChunk,
+    const linksList = JSON.stringify(links);
+
+    const endpoint = `${process.env.ARTICULATION_FETCHER}/${receivingId}/${courseId}/articulation-data`;
+
+    const response = await fetch(endpoint, {
+      body: linksList,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       signal,
-      receivingId,
-      courseId,
-    );
+    });
 
-    const articulationChunk = getMatches(result, lowerDiv);
-
-    articulationData.push(...result);
-
-    createClassLists(articulationChunk);
-
-    updateProgressTracker(articulationData.length, totalColleges);
-
-    await processChunks(
-      processingQueue,
-      articulationData,
-      signal,
-      totalColleges,
-      lowerDiv,
-      receivingId,
-      courseId,
-    );
+    await processStream(response.body);
   } catch (error) {
-    if (error.name === "AbortError") {
-      console.log("aborted request");
-    } else {
-      console.error("error processing request:", error);
-    }
+    console.error(`error processing stream: ${error}`);
   }
+
+  return null;
 }
 
-export async function getArticulationData(
-  articulationParams,
-  selectedClass,
-  formattedClass,
-  receivingId,
-  courseId,
-) {
-  const articulationData = [];
-  const processingQueue = articulationParams.slice(); // shallow copy
-
-  const startingValue = 0;
-  const totalColleges = articulationParams.length;
-
+export async function getArticulationData(links, receivingId, courseId) {
   const abortButton = document.querySelector(".back");
 
   const abortController = new AbortController();
@@ -152,26 +111,18 @@ export async function getArticulationData(
 
   showResults();
 
-  changeSelectedClassTxt(formattedClass);
-  updateProgressTracker(startingValue, totalColleges);
+  // just to selected option's text
+  // changeSelectedClassTxt(formattedClass);
 
   try {
-    await processChunks(
-      processingQueue,
-      articulationData,
-      signal,
-      totalColleges,
-      selectedClass,
-      receivingId,
-      courseId,
-    );
+    await requestArticulations(links, signal, receivingId, courseId);
 
     if (!aborted) {
       organizeArticulations();
 
       hideLoadingContainer();
 
-      console.log("all requests processed");
+      console.log("request finished");
     }
   } catch (error) {
     if (error.name === "AbortError") {
@@ -183,5 +134,5 @@ export async function getArticulationData(
     window.removeEventListener("beforeunload", () => abortController.abort());
   }
 
-  return articulationData;
+  return null;
 }

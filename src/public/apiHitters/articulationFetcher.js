@@ -1,10 +1,11 @@
+/* eslint-disable no-await-in-loop */
+
 import {
   createClassLists,
   organizeArticulations,
 } from "../domFunctions/assistDataRender";
 
 import { getCommunityColleges } from "./schoolDataFetch";
-import { getMatches } from "./jsonHelper";
 
 import {
   showResults,
@@ -50,34 +51,86 @@ export async function getArticulationParams(receivingId, majorKey) {
   return articulationParams;
 }
 
-async function sendArticulationRequests(links, signal, receivingId, courseId) {
-  const linksList = JSON.stringify(links);
+async function processStream(stream, updateProgress) {
+  const reader = stream.getReader();
+  const decoder = new TextDecoder("utf-8");
 
-  const endpoint = `${process.env.ARTICULATION_FETCHER}/${receivingId}/${courseId}`;
+  let accumulatedData = "";
 
-  const response = await fetch(endpoint, {
-    body: linksList,
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal,
-  });
+  while (true) {
+    const { value, done } = await reader.read();
 
-  const data = await response.json();
-  const dataArray = Object.values(data);
+    if (done) {
+      break;
+    }
 
-  return dataArray;
+    const decodedChunk = decoder.decode(value, { stream: true });
+    accumulatedData += decodedChunk;
+
+    let end = accumulatedData.indexOf("\n");
+
+    while (end !== -1) {
+      const jsonString = accumulatedData.slice(0, end);
+      accumulatedData = accumulatedData.slice(end + 1);
+
+      try {
+        const articulation = JSON.parse(jsonString);
+
+        createClassLists(articulation);
+        updateProgress(1);
+      } catch (error) {
+        console.error(`error parsing articulation: ${error}`);
+      }
+
+      end = accumulatedData.indexOf("\n");
+    }
+  }
+
+  if (accumulatedData.length > 0) {
+    console.log(accumulatedData);
+  }
+
+  return null;
+}
+
+async function requestArticulations(
+  links,
+  signal,
+  receivingId,
+  courseId,
+  updateProgress,
+) {
+  try {
+    const linksList = JSON.stringify(links);
+
+    const endpoint = `${process.env.NEW_ARTICULATION_FETCHER}/?receivingId=${receivingId}&courseId=${courseId}`;
+
+    const response = await fetch(endpoint, {
+      body: linksList,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Connection: "keep-alive",
+      },
+      signal,
+    });
+
+    await processStream(response.body, updateProgress);
+  } catch (error) {
+    console.error(`error processing stream: ${error}`);
+  }
+
+  return null;
 }
 
 async function processChunks(
   processingQueue,
-  articulationData,
   signal,
-  totalColleges,
-  lowerDiv,
   receivingId,
   courseId,
+  updateProgress,
 ) {
-  const concurrencyLimit = 29; // dynamic value
+  const concurrencyLimit = 29;
 
   let linksChunk;
 
@@ -90,52 +143,32 @@ async function processChunks(
   }
 
   try {
-    const result = await sendArticulationRequests(
+    await requestArticulations(
       linksChunk,
       signal,
       receivingId,
       courseId,
+      updateProgress,
     );
-
-    const articulationChunk = getMatches(result, lowerDiv);
-
-    articulationData.push(...result);
-
-    createClassLists(articulationChunk);
-
-    updateProgressTracker(articulationData.length, totalColleges);
 
     await processChunks(
       processingQueue,
-      articulationData,
       signal,
-      totalColleges,
-      lowerDiv,
       receivingId,
       courseId,
+      updateProgress,
     );
   } catch (error) {
     if (error.name === "AbortError") {
-      console.log("aborted request");
+      console.log("aborted reqeust");
     } else {
-      console.error("error processing request:", error);
+      console.error("error processing chunk:", error);
     }
   }
 }
 
-export async function getArticulationData(
-  articulationParams,
-  selectedClass,
-  formattedClass,
-  receivingId,
-  courseId,
-) {
-  const articulationData = [];
-  const processingQueue = articulationParams.slice(); // shallow copy
-
-  const startingValue = 0;
-  const totalColleges = articulationParams.length;
-
+export async function getArticulationData(links, receivingId, courseId) {
+  const processingQueue = links.slice();
   const abortButton = document.querySelector(".back");
 
   const abortController = new AbortController();
@@ -152,18 +185,24 @@ export async function getArticulationData(
 
   showResults();
 
-  changeSelectedClassTxt(formattedClass);
-  updateProgressTracker(startingValue, totalColleges);
+  let totalProcessed = 0;
+  const updateProgress = (processed) => {
+    totalProcessed += processed;
+    updateProgressTracker(totalProcessed, links.length);
+  };
+
+  updateProgressTracker(0, links.length);
+
+  // just to selected option's text
+  // changeSelectedClassTxt(formattedClass);
 
   try {
     await processChunks(
       processingQueue,
-      articulationData,
       signal,
-      totalColleges,
-      selectedClass,
       receivingId,
       courseId,
+      updateProgress,
     );
 
     if (!aborted) {
@@ -171,7 +210,7 @@ export async function getArticulationData(
 
       hideLoadingContainer();
 
-      console.log("all requests processed");
+      console.log("request finished");
     }
   } catch (error) {
     if (error.name === "AbortError") {
@@ -183,5 +222,5 @@ export async function getArticulationData(
     window.removeEventListener("beforeunload", () => abortController.abort());
   }
 
-  return articulationData;
+  return null;
 }

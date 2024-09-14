@@ -196,9 +196,6 @@ export async function getArticulationData(links, receivingId, courseId) {
 
   updateProgressTracker(0, links.length);
 
-  // just to selected option's text
-  // changeSelectedClassTxt(formattedClass);
-
   try {
     await processChunks(
       processingQueue,

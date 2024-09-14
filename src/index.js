@@ -124,7 +124,7 @@ submit.addEventListener("click", async (event) => {
     }
   }
 
-  // dummy commit
+  console.log("hey");
 
   event.preventDefault();
 });

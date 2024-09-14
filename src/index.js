@@ -31,6 +31,7 @@ import {
   deSelectAllClasses,
   selectClassByIndex,
   getSelectedClass,
+  changeSelectedClassTxt,
 } from "./public/utils";
 
 const selects = [
@@ -96,18 +97,7 @@ majorList.addEventListener("input", () => {
   applyDisabledState(submit.parentNode);
 });
 
-classList.addEventListener("change", (event) => {
-  const selectedIndex = Number(event.target.value);
-
-  if (selectedIndex !== "") {
-    const lowerDivsList = JSON.parse(
-      sessionStorage.getItem("selectedLowerDivs"),
-    );
-
-    deSelectAllClasses(lowerDivsList);
-    selectClassByIndex(lowerDivsList, selectedIndex);
-  }
-
+classList.addEventListener("change", () => {
   removeDisabledState(submit.parentNode);
 });
 
@@ -123,14 +113,13 @@ submit.addEventListener("click", async (event) => {
   if (classList.value) {
     const links = await getArticulationParams(receivingId, majorKey);
 
-    const selectedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
-
-    const selectedClass = getSelectedClass(JSON.parse(selectedLowerDivs));
-    const courseId = getId(selectedClass);
+    const selectedClass = classList.options[classList.selectedIndex];
+    const courseId = selectedClass.dataset.id;
 
     hideSplash();
 
-    if (selectedLowerDivs) {
+    if (selectedClass) {
+      changeSelectedClassTxt(selectedClass.textContent);
       await getArticulationData(links, receivingId, courseId);
     }
   }

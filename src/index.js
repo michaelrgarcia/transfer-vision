@@ -121,24 +121,17 @@ submit.addEventListener("click", async (event) => {
   applyDisabledState(submit.parentNode);
 
   if (classList.value) {
-    const params = await getArticulationParams(receivingId, majorKey);
+    const links = await getArticulationParams(receivingId, majorKey);
 
     const selectedLowerDivs = sessionStorage.getItem("selectedLowerDivs");
 
     const selectedClass = getSelectedClass(JSON.parse(selectedLowerDivs));
     const courseId = getId(selectedClass);
-    const formattedClass = getClassName(selectedClass);
 
     hideSplash();
 
     if (selectedLowerDivs) {
-      await getArticulationData(
-        params,
-        selectedClass,
-        formattedClass,
-        receivingId,
-        courseId,
-      );
+      await getArticulationData(links, receivingId, courseId);
     }
   }
 

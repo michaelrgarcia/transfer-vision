@@ -51,7 +51,7 @@ export async function getArticulationParams(receivingId, majorKey) {
   return articulationParams;
 }
 
-async function processStream(stream) {
+async function processStream(stream, updateProgress) {
   const reader = stream.getReader();
   const decoder = new TextDecoder("utf-8");
 
@@ -75,11 +75,9 @@ async function processStream(stream) {
 
       try {
         const articulation = JSON.parse(jsonString);
-        console.log(articulation);
 
-        // createClassLists(articulation);
-
-        // updateProgressTracker(startingValue, totalColleges);
+        createClassLists(articulation);
+        updateProgress(1);
       } catch (error) {
         console.error(`error parsing articulation: ${error}`);
       }
@@ -95,7 +93,13 @@ async function processStream(stream) {
   return null;
 }
 
-async function requestArticulations(links, signal, receivingId, courseId) {
+async function requestArticulations(
+  links,
+  signal,
+  receivingId,
+  courseId,
+  updateProgress,
+) {
   try {
     const linksList = JSON.stringify(links);
 
@@ -111,7 +115,7 @@ async function requestArticulations(links, signal, receivingId, courseId) {
       signal,
     });
 
-    await processStream(response.body);
+    await processStream(response.body, updateProgress);
   } catch (error) {
     console.error(`error processing stream: ${error}`);
   }
@@ -119,7 +123,13 @@ async function requestArticulations(links, signal, receivingId, courseId) {
   return null;
 }
 
-async function processChunks(processingQueue, signal, receivingId, courseId) {
+async function processChunks(
+  processingQueue,
+  signal,
+  receivingId,
+  courseId,
+  updateProgress,
+) {
   const concurrencyLimit = 29;
 
   let linksChunk;
@@ -133,9 +143,21 @@ async function processChunks(processingQueue, signal, receivingId, courseId) {
   }
 
   try {
-    await requestArticulations(linksChunk, signal, receivingId, courseId);
+    await requestArticulations(
+      linksChunk,
+      signal,
+      receivingId,
+      courseId,
+      updateProgress,
+    );
 
-    await processChunks(processingQueue, signal);
+    await processChunks(
+      processingQueue,
+      signal,
+      receivingId,
+      courseId,
+      updateProgress,
+    );
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted reqeust");
@@ -146,6 +168,7 @@ async function processChunks(processingQueue, signal, receivingId, courseId) {
 }
 
 export async function getArticulationData(links, receivingId, courseId) {
+  const processingQueue = links.slice();
   const abortButton = document.querySelector(".back");
 
   const abortController = new AbortController();
@@ -162,11 +185,25 @@ export async function getArticulationData(links, receivingId, courseId) {
 
   showResults();
 
+  let totalProcessed = 0;
+  const updateProgress = (processed) => {
+    totalProcessed += processed;
+    updateProgressTracker(totalProcessed, links.length);
+  };
+
+  updateProgressTracker(0, links.length);
+
   // just to selected option's text
   // changeSelectedClassTxt(formattedClass);
 
   try {
-    await processChunks(links, signal, receivingId, courseId);
+    await processChunks(
+      processingQueue,
+      signal,
+      receivingId,
+      courseId,
+      updateProgress,
+    );
 
     if (!aborted) {
       organizeArticulations();

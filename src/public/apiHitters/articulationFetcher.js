@@ -53,22 +53,44 @@ export async function getArticulationParams(receivingId, majorKey) {
 
 async function processStream(stream) {
   const reader = stream.getReader();
-  const decoder = new TextDecoder();
+  const decoder = new TextDecoder("utf-8");
 
-  let chunk = await reader.read();
+  let accumulatedData = "";
 
-  while (!chunk.done) {
-    const data = decoder.decode(chunk.value, { stream: true });
-    const articulation = JSON.parse(data);
+  while (true) {
+    const { value, done } = await reader.read();
 
-    createClassLists(articulation);
+    if (done) {
+      break;
+    }
 
-    // updateProgressTracker(startingValue, totalColleges);
+    const decodedChunk = decoder.decode(value, { stream: true });
+    accumulatedData += decodedChunk;
 
-    chunk = await reader.read();
+    let end = accumulatedData.indexOf("\n");
+
+    while (end !== -1) {
+      const jsonString = accumulatedData.slice(0, end);
+      accumulatedData = accumulatedData.slice(end + 1);
+
+      try {
+        const articulation = JSON.parse(jsonString);
+        console.log(articulation);
+
+        // createClassLists(articulation);
+
+        // updateProgressTracker(startingValue, totalColleges);
+      } catch (error) {
+        console.error(`error parsing articulation: ${error}`);
+      }
+
+      end = accumulatedData.indexOf("\n");
+    }
   }
 
-  reader.releaseLock();
+  if (accumulatedData.length > 0) {
+    console.log(accumulatedData);
+  }
 
   return null;
 }
@@ -77,12 +99,15 @@ async function requestArticulations(links, signal, receivingId, courseId) {
   try {
     const linksList = JSON.stringify(links);
 
-    const endpoint = `${process.env.ARTICULATION_FETCHER}/${receivingId}/${courseId}/articulation-data`;
+    const endpoint = `${process.env.NEW_ARTICULATION_FETCHER}/?receivingId=${receivingId}&courseId=${courseId}`;
 
     const response = await fetch(endpoint, {
       body: linksList,
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Connection: "keep-alive",
+      },
       signal,
     });
 
@@ -92,6 +117,32 @@ async function requestArticulations(links, signal, receivingId, courseId) {
   }
 
   return null;
+}
+
+async function processChunks(processingQueue, signal, receivingId, courseId) {
+  const concurrencyLimit = 29;
+
+  let linksChunk;
+
+  if (processingQueue.length === 0) return;
+
+  if (processingQueue.length < concurrencyLimit) {
+    linksChunk = processingQueue.splice(0, processingQueue.length - 1);
+  } else {
+    linksChunk = processingQueue.splice(0, concurrencyLimit);
+  }
+
+  try {
+    await requestArticulations(linksChunk, signal, receivingId, courseId);
+
+    await processChunks(processingQueue, signal);
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("aborted reqeust");
+    } else {
+      console.error("error processing chunk:", error);
+    }
+  }
 }
 
 export async function getArticulationData(links, receivingId, courseId) {
@@ -115,7 +166,7 @@ export async function getArticulationData(links, receivingId, courseId) {
   // changeSelectedClassTxt(formattedClass);
 
   try {
-    await requestArticulations(links, signal, receivingId, courseId);
+    await processChunks(links, signal, receivingId, courseId);
 
     if (!aborted) {
       organizeArticulations();

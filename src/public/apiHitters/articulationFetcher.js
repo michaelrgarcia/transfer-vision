@@ -76,7 +76,10 @@ async function processStream(stream, updateProgress) {
       try {
         const articulation = JSON.parse(jsonString);
 
-        createClassLists(articulation);
+        if (articulation.result) {
+          createClassLists(articulation);
+        }
+
         updateProgress(1);
       } catch (error) {
         console.error(`error parsing articulation: ${error}`);

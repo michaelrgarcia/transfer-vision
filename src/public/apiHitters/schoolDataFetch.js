@@ -25,8 +25,6 @@ async function fetchLowerDivs(receivingId, key) {
     const data = await response.json();
     const latestData = Object.values(data);
 
-    sessionStorage.setItem("selectedLowerDivs", JSON.stringify(data));
-
     lowerDivs = latestData;
   } catch (error) {
     console.log("error fetching lower divs:", error);

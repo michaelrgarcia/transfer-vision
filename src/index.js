@@ -124,8 +124,6 @@ submit.addEventListener("click", async (event) => {
     }
   }
 
-  console.log("hey");
-
   event.preventDefault();
 });
 

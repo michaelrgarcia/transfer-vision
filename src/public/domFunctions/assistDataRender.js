@@ -187,36 +187,55 @@ export function organizeArticulations() {
   }
 }
 
-export function createClassLists(articulationChunk) {
-  articulationChunk.forEach((articulation) => {
-    if (articulation) {
-      const collegeName = articulation[articulation.length - 2];
-      const agreementLink = articulation[articulation.length - 1];
+function renderItems(items, classListDiv) {
+  for (let i = 0; i < items.length; ) {
+    const subitem = items[i];
 
-      const courseLists = articulation.slice(0, -2);
+    if (Array.isArray(subitem)) {
+      renderItems(subitem, classListDiv);
+    } else if (typeof subitem === "string") {
+      if (subitem.toLowerCase() === "and") {
+        connector(subitem, classListDiv);
+      } else if (subitem.toLowerCase() === "or") {
+        conjunction(subitem, classListDiv);
+      }
+    } else if (subitem.courseNumber && subitem.courseTitle && subitem.prefix) {
+      const className = `${subitem.prefix} ${subitem.courseNumber} - ${subitem.courseTitle}`;
 
-      const classListDiv = classListMainDiv();
-      classListHeader(classListDiv, collegeName, agreementLink);
-
-      courseLists.forEach((item) => {
-        if (Array.isArray(item)) {
-          item.forEach((subitem) => {
-            if (typeof subitem === "object" && subitem !== null) {
-              const className = `${subitem.prefix} ${subitem.courseNumber} - ${subitem.courseTitle}`;
-
-              course(className, classListDiv);
-            } else if (typeof subitem === "string") {
-              connector(subitem, classListDiv);
-            }
-          });
-        } else if (typeof item === "object" && item !== null) {
-          const className = `${item.prefix} ${item.courseNumber} - ${item.courseTitle}`;
-
-          course(className, classListDiv);
-        } else if (typeof item === "string") {
-          conjunction(item, classListDiv);
-        }
-      });
+      course(className, classListDiv);
     }
-  });
+
+    i += 1;
+  }
+}
+
+export function createClassLists(articulation) {
+  if (articulation && articulation.result) {
+    const { result } = articulation;
+
+    const courseCache = [];
+    let collegeName = "";
+    let agreementLink = "";
+
+    for (let i = 0; i < result.length; ) {
+      const item = result[i];
+
+      if (item.ccName) {
+        collegeName = item.ccName;
+      } else if (item.agreementLink) {
+        agreementLink = item.agreementLink;
+      } else {
+        courseCache.push(item);
+      }
+
+      if (collegeName && agreementLink) {
+        const classListDiv = classListMainDiv();
+        classListHeader(classListDiv, collegeName, agreementLink);
+
+        renderItems(courseCache, classListDiv);
+      }
+
+      i += 1;
+    }
+  }
 }

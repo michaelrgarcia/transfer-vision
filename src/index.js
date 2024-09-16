@@ -120,7 +120,7 @@ submit.addEventListener("click", async (event) => {
 
     if (selectedClass) {
       changeSelectedClassTxt(selectedClass.textContent);
-      await getArticulationData(links, receivingId, courseId);
+      await getArticulationData(links, courseId);
     }
   }
 

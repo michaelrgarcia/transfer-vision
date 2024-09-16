@@ -96,17 +96,11 @@ async function processStream(stream, updateProgress) {
   return null;
 }
 
-async function requestArticulations(
-  links,
-  signal,
-  receivingId,
-  courseId,
-  updateProgress,
-) {
+async function requestArticulations(links, signal, courseId, updateProgress) {
   try {
     const linksList = JSON.stringify(links);
 
-    const endpoint = `${process.env.NEW_ARTICULATION_FETCHER}/?receivingId=${receivingId}&courseId=${courseId}`;
+    const endpoint = `${process.env.NEW_ARTICULATION_FETCHER}/?courseId=${courseId}`;
 
     const response = await fetch(endpoint, {
       body: linksList,
@@ -129,7 +123,6 @@ async function requestArticulations(
 async function processChunks(
   processingQueue,
   signal,
-  receivingId,
   courseId,
   updateProgress,
 ) {
@@ -146,21 +139,9 @@ async function processChunks(
   }
 
   try {
-    await requestArticulations(
-      linksChunk,
-      signal,
-      receivingId,
-      courseId,
-      updateProgress,
-    );
+    await requestArticulations(linksChunk, signal, courseId, updateProgress);
 
-    await processChunks(
-      processingQueue,
-      signal,
-      receivingId,
-      courseId,
-      updateProgress,
-    );
+    await processChunks(processingQueue, signal, courseId, updateProgress); // recursive call
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("aborted reqeust");
@@ -170,7 +151,7 @@ async function processChunks(
   }
 }
 
-export async function getArticulationData(links, receivingId, courseId) {
+export async function getArticulationData(links, courseId) {
   const processingQueue = links.slice();
   const abortButton = document.querySelector(".back");
 
@@ -197,13 +178,7 @@ export async function getArticulationData(links, receivingId, courseId) {
   updateProgressTracker(0, links.length);
 
   try {
-    await processChunks(
-      processingQueue,
-      signal,
-      receivingId,
-      courseId,
-      updateProgress,
-    );
+    await processChunks(processingQueue, signal, courseId, updateProgress);
 
     if (!aborted) {
       organizeArticulations();

@@ -180,6 +180,7 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
     }
 
     if (response.status === 204) {
+      console.log("restarting incomplete caching job...");
       return false;
     }
 

@@ -13,13 +13,12 @@ import {
   hideResults,
   showSplash,
   hideBackButton,
+  showDialog,
+  closeDialog,
 } from "../domFunctions/cssTransitions";
 
-import {
-  changeSelectedClassTxt,
-  updateProgressTracker,
-  resetResults,
-} from "../utils";
+import { updateProgressTracker, resetResults, updateRetries } from "../utils";
+import { processingPrompt } from "../domFunctions/elementPresets";
 
 function abortRequest(abortController) {
   abortController.abort();
@@ -151,12 +150,61 @@ async function processChunks(
   }
 }
 
+function createListFromDb(dbResponse, linksLength, updateProgress) {
+  const articulations = dbResponse;
+
+  for (let i = 0; i < articulations.length; ) {
+    const articulation = articulations[i];
+
+    createClassLists(articulation);
+
+    i += 1;
+  }
+
+  updateProgress(linksLength);
+  hideLoadingContainer();
+}
+
+async function getClassFromDb(courseId, linksLength, updateProgress) {
+  const courseGrabber = process.env.COURSE_GRABBER;
+
+  try {
+    const response = await fetch(`${courseGrabber}=${courseId}`);
+
+    if (response.status === 200) {
+      const articulations = await response.json();
+
+      createListFromDb(articulations, linksLength, updateProgress);
+
+      return true;
+    }
+
+    if (response.status === 204) {
+      return false;
+    }
+
+    if (response.status === 206) {
+      hideLoadingContainer();
+      processingPrompt();
+      showDialog();
+
+      return true;
+    }
+  } catch (err) {
+    console.error("error getting class from db", err);
+  }
+
+  return false;
+}
+
 export async function getArticulationData(links, courseId) {
   const processingQueue = links.slice();
   const abortButton = document.querySelector(".back");
 
   const abortController = new AbortController();
   const { signal } = abortController;
+
+  const linksLength = links.length;
 
   const cacheFinalizer = process.env.CACHE_COMPLETER;
 
@@ -174,38 +222,44 @@ export async function getArticulationData(links, courseId) {
   let totalProcessed = 0;
   const updateProgress = (processed) => {
     totalProcessed += processed;
-    updateProgressTracker(totalProcessed, links.length);
+    updateProgressTracker(totalProcessed, linksLength);
   };
 
-  updateProgressTracker(0, links.length);
+  updateProgressTracker(0, linksLength);
 
-  try {
-    await processChunks(processingQueue, signal, courseId, updateProgress);
+  const articulation = await getClassFromDb(
+    courseId,
+    linksLength,
+    updateProgress,
+  );
 
-    if (!aborted) {
-      organizeArticulations();
+  if (!articulation) {
+    try {
+      await processChunks(processingQueue, signal, courseId, updateProgress);
 
-      hideLoadingContainer();
+      if (!aborted) {
+        organizeArticulations();
 
-      await fetch(cacheFinalizer, {
-        body: JSON.stringify({
-          courseId,
-        }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+        hideLoadingContainer();
+
+        await fetch(cacheFinalizer, {
+          body: JSON.stringify({
+            courseId,
+          }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
+    } catch (error) {
+      if (error.name === "AbortError") {
+        console.log("requests aborted due to page unload");
+      } else {
+        console.error("error processing requests", error);
+      }
+    } finally {
+      window.removeEventListener("beforeunload", () => abortController.abort());
     }
-  } catch (error) {
-    if (error.name === "AbortError") {
-      console.log("requests aborted due to page unload");
-    } else {
-      console.error("error processing requests", error);
-    }
-  } finally {
-    window.removeEventListener("beforeunload", () => abortController.abort());
   }
-
-  return null;
 }

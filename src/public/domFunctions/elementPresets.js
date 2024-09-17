@@ -90,3 +90,10 @@ export function noArticulations(parent) {
 
   textElement.style.opacity = 1;
 }
+
+export function processingPrompt() {
+  const dialog = document.querySelector("dialog");
+  const dialogText = dialog.querySelector("p");
+
+  dialogText.textContent = "Data may be processing. Try again in 2 minutes.";
+}

@@ -16,8 +16,6 @@ import {
   renderFourYears,
   renderLowerDivs,
   renderMajorData,
-  getClassName,
-  getId,
 } from "./public/domFunctions/assistDataRender";
 
 import {
@@ -27,12 +25,7 @@ import {
   showRandomLoadingGif,
 } from "./public/domFunctions/cssTransitions";
 
-import {
-  deSelectAllClasses,
-  selectClassByIndex,
-  getSelectedClass,
-  changeSelectedClassTxt,
-} from "./public/utils";
+import { changeSelectedClassTxt } from "./public/utils";
 
 const selects = [
   document.getElementById("four-year"),
@@ -119,18 +112,9 @@ submit.addEventListener("click", async (event) => {
     hideSplash();
 
     if (selectedClass) {
-      // call initial DB searcher here...
-
-      // if class found, render the data (handle pending status)
-
-      // pending status will make the user wait until "complete" status
-
-      // if no class found (404)...
       changeSelectedClassTxt(selectedClass.textContent);
 
       await getArticulationData(links, courseId);
-
-      // invoke cache completer endpoint w/ array of lower div ids
     }
   }
 

@@ -130,6 +130,8 @@ submit.addEventListener("click", async (event) => {
 
       await getArticulationData(links, courseId);
 
+      console.log("h");
+
       // invoke cache completer endpoint w/ array of lower div ids
     }
   }

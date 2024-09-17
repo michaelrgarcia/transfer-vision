@@ -158,6 +158,8 @@ export async function getArticulationData(links, courseId) {
   const abortController = new AbortController();
   const { signal } = abortController;
 
+  const cacheFinalizer = process.env.CACHE_COMPLETER;
+
   let aborted = false;
 
   window.addEventListener("beforeunload", () => abortController.abort());
@@ -185,7 +187,15 @@ export async function getArticulationData(links, courseId) {
 
       hideLoadingContainer();
 
-      console.log("request finished");
+      await fetch(cacheFinalizer, {
+        body: JSON.stringify({
+          courseId,
+        }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   } catch (error) {
     if (error.name === "AbortError") {

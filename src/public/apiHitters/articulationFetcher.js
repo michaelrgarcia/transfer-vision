@@ -169,7 +169,7 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
   const courseGrabber = process.env.COURSE_GRABBER;
 
   try {
-    const response = await fetch(`${courseGrabber}=${courseId}`);
+    const response = await fetch(`${courseGrabber}/${courseId}`);
 
     if (response.status === 200) {
       const articulations = await response.json();

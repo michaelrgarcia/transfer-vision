@@ -27,8 +27,6 @@ import {
 
 import { changeSelectedClassTxt } from "./public/utils";
 
-import { checkForCids, hideCids, showCids } from "./public/apiHitters/cids";
-
 const selects = [
   document.getElementById("four-year"),
   document.getElementById("major"),
@@ -45,8 +43,6 @@ const dialog = document.querySelector("dialog");
 const closeDialog = document.querySelector(".close-dialog");
 
 const backButton = document.querySelector(".back");
-
-const cidsToggle = document.querySelector(".cids > input");
 
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
@@ -118,21 +114,7 @@ submit.addEventListener("click", async (event) => {
     if (selectedClass) {
       changeSelectedClassTxt(selectedClass.textContent);
 
-      const articulations = await getArticulationData(links, courseId);
-
-      if (articulations) {
-        cidsToggle.addEventListener("change", () => {
-          if (cidsToggle.checked) {
-            if (checkForCids(articulations)) {
-              showCids();
-            }
-
-            // articulations = await getCids();
-          } else {
-            hideCids();
-          }
-        });
-      }
+      await getArticulationData(links, courseId);
     }
   }
 

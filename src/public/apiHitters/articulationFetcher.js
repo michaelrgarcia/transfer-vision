@@ -12,28 +12,15 @@ import { getCommunityColleges } from "./schoolDataFetch";
 import {
   showResults,
   hideLoadingContainer,
-  hideResults,
-  showSplash,
-  hideBackButton,
   showDialog,
-  hideCidSlider,
   showCidSlider,
 } from "../domFunctions/cssTransitions";
 
-import { updateProgressTracker, resetResults } from "../utils";
+import { createProgressTracker, abortHandler } from "../utils";
+
 import { processingPrompt } from "../domFunctions/elementPresets";
-import { checkForCids, hideCids, showCids, toggleCids } from "./cids";
 
-function abortRequest(abortController) {
-  abortController.abort();
-
-  hideCidSlider();
-  hideResults();
-  hideBackButton();
-
-  showSplash();
-  resetResults();
-}
+import { cidToggleEventListener } from "./cids";
 
 export async function getArticulationParams(receivingId, majorKey) {
   const articulationParams = [];
@@ -246,31 +233,17 @@ async function finalizeSearch(courseId, articulations) {
 
 export async function getArticulationData(links, courseId) {
   const processingQueue = links.slice();
-  const abortButton = document.querySelector(".back");
 
   const abortController = new AbortController();
-  const { signal } = abortController;
+  const { signal, isAborted } = abortHandler(abortController);
 
-  let aborted = false;
-
-  abortButton.addEventListener("click", () => {
-    aborted = true;
-    abortRequest(abortController);
-  });
+  const updateProgress = createProgressTracker(links.length);
 
   let articulations;
-
-  let totalProcessed = 0;
-
-  const updateProgress = (processed) => {
-    totalProcessed += processed;
-    updateProgressTracker(totalProcessed, links.length);
-  };
 
   window.addEventListener("beforeunload", () => abortController.abort());
 
   showResults();
-
   updateProgress(0);
 
   try {
@@ -290,10 +263,17 @@ export async function getArticulationData(links, courseId) {
 
       hideLoadingContainer();
 
-      if (!aborted) {
+      if (!isAborted) {
         await finalizeSearch(courseId, articulations);
       }
     }
+
+    cidToggleEventListener(
+      courseId,
+      articulations,
+      links.length,
+      updateProgress,
+    );
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("requests aborted due to page unload");
@@ -303,6 +283,4 @@ export async function getArticulationData(links, courseId) {
   } finally {
     window.removeEventListener("beforeunload", () => abortController.abort());
   }
-
-  return articulations;
 }

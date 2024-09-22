@@ -2,12 +2,9 @@
 
 import { createListFromDb } from "./articulationFetcher";
 
-export async function getCids(
-  courseId,
-  articulations,
-  linksLength,
-  updateProgress,
-) {
+const cidsToggle = document.querySelector(".cids > input");
+
+async function appendCids(courseId, articulations) {
   const endpoint = `${process.env.CID_APPENDER}/${courseId}`;
 
   const response = await fetch(endpoint, {
@@ -22,31 +19,31 @@ export async function getCids(
 
   if (response.status === 200) {
     newArticulations = await response.json();
-    const articulationsDiv = document.querySelector(".articulations");
-
-    articulationsDiv.replaceChildren();
-    createListFromDb(newArticulations, linksLength, updateProgress);
   }
 
   return newArticulations;
 }
 
-export function checkForCids(articulations) {
+function checkForCids(articulations) {
   for (let i = 0; i < articulations.length; ) {
     const item = articulations[i];
 
-    if (item.result) {
-      checkForCids(item.result);
+    if (item.result && checkForCids(item.result)) {
+      return true;
     }
 
-    if (Array.isArray(item)) {
-      checkForCids(item);
+    if (Array.isArray(item) && checkForCids(item)) {
+      return true;
     }
 
-    if (item && item.prefix && item.courseNumber && item.courseTitle) {
-      if (item.cid) {
-        return true;
-      }
+    if (
+      item &&
+      item.prefix &&
+      item.courseNumber &&
+      item.courseTitle &&
+      item.cid
+    ) {
+      return true;
     }
 
     i += 1;
@@ -55,45 +52,55 @@ export function checkForCids(articulations) {
   return false;
 }
 
-export function showCids() {
-  console.log("hello i show cids");
+function showCids() {
+  console.log("i got cids");
 }
 
-export function hideCids() {
+function hideCids() {
   console.log("hello i hide cids");
 }
 
-export function cidToggleEventListener(
+async function toggleCids(
   courseId,
   articulations,
   linksLength,
   updateProgress,
 ) {
-  const cidsToggle = document.querySelector(".cids > input");
-  const savedArticulations = articulations;
+  let savedArticulations = articulations;
 
-  cidsToggle.addEventListener("change", async () => {
-    if (cidsToggle.checked) {
-      if (checkForCids(savedArticulations)) {
-        console.log("logic works");
-        console.log(savedArticulations);
-        // showCids();
-      } else {
-        /*
-        const newArticulations = await getCids(
-          courseId,
-          savedArticulations,
-          linksLength,
-          updateProgress,
-        );
-
-        if (newArticulations) {
-          savedArticulations = newArticulations;
-        }
-        */
-      }
+  if (cidsToggle.checked) {
+    const hasCids = checkForCids(savedArticulations);
+    if (hasCids) {
+      showCids();
     } else {
-      hideCids();
+      const newArticulations = await appendCids(courseId, savedArticulations);
+
+      const articulationsDiv = document.querySelector(".articulations");
+
+      articulationsDiv.replaceChildren();
+      createListFromDb(newArticulations, linksLength, updateProgress);
+
+      savedArticulations = newArticulations;
     }
-  });
+  } else {
+    hideCids();
+  }
+}
+
+export function addToggleListener(
+  courseId,
+  articulations,
+  linksLength,
+  updateProgress,
+) {
+  const handler = () =>
+    toggleCids(courseId, articulations, linksLength, updateProgress);
+
+  cidsToggle.addEventListener("change", handler);
+
+  return handler;
+}
+
+export function removeToggleListener(handler) {
+  cidsToggle.removeEventListener("change", handler);
 }

@@ -1,19 +1,13 @@
-import _ from "lodash";
+/* eslint-disable import/no-cycle */
+
 import waitForElementTransition from "wait-for-element-transition";
 
-export function conjoin(array, conjunction) {
-  const result = [];
-
-  array.forEach((item, index) => {
-    result.push(item);
-
-    if (index < array.length - 1) {
-      result.push(conjunction);
-    }
-  });
-
-  return result;
-}
+import {
+  hideBackButton,
+  hideCidSlider,
+  hideResults,
+  showSplash,
+} from "./domFunctions/cssTransitions";
 
 export async function getRandomLoadingGif(imgElement) {
   const img = imgElement;
@@ -38,17 +32,21 @@ export function updateProgressTracker(collegesProcessed, totalColleges) {
   progressTracker.textContent = `${collegesProcessed} out of ${totalColleges} colleges searched`;
 }
 
+export function createProgressTracker(linksLength) {
+  let totalProcessed = 0;
+
+  const updateProgress = (processed) => {
+    totalProcessed += processed;
+    updateProgressTracker(totalProcessed, linksLength);
+  };
+
+  return updateProgress;
+}
+
 export function changeSelectedClassTxt(classString) {
   const selectedClass = document.querySelector(".selected-class");
 
   selectedClass.textContent = `Articulations for: ${classString}`;
-}
-
-export function alphaSort(array1, array2) {
-  let arr = array1;
-  arr = _.orderBy(arr, array2, ["asc"]);
-
-  return arr;
 }
 
 export function resetResults() {
@@ -85,4 +83,27 @@ export function filterLowerDiv(objOrArray) {
   }
 
   return lowerDiv;
+}
+
+function abortRequest(abortController) {
+  abortController.abort();
+
+  hideCidSlider();
+  hideResults();
+  hideBackButton();
+
+  showSplash();
+  resetResults();
+}
+
+export function abortHandler(abortController) {
+  const abortButton = document.querySelector(".back");
+  let isAborted = false;
+
+  abortButton.addEventListener("click", () => {
+    isAborted = true;
+    abortRequest(abortController);
+  });
+
+  return { signal: abortController.signal, isAborted };
 }

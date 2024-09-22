@@ -8,6 +8,7 @@ import {
   conjunction,
   course,
   noArticulations,
+  cid,
 } from "./elementPresets";
 
 import {
@@ -202,7 +203,13 @@ function renderItems(items, classListDiv) {
     } else if (subitem.courseNumber && subitem.courseTitle && subitem.prefix) {
       const className = `${subitem.prefix} ${subitem.courseNumber} - ${subitem.courseTitle}`;
 
-      course(className, classListDiv);
+      const courseElement = course(className, classListDiv);
+
+      if (subitem.cid) {
+        const cidElement = cid(subitem.cid);
+
+        courseElement.appendChild(cidElement);
+      }
     }
 
     i += 1;

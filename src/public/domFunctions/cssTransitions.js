@@ -8,6 +8,9 @@ const img = document.querySelector("img.loading-gif");
 const results = document.querySelector(".results");
 const loadingContainer = document.querySelector(".loading-container");
 const backButton = document.querySelector(".back");
+const cidSlider = document.querySelector(".cid-section");
+
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 function showLoadingContainer() {
   loadingContainer.style.opacity = 1;
@@ -128,6 +131,14 @@ export function hideLoadingContainer() {
   });
 }
 
+export function hideCidSlider() {
+  cidSlider.style.opacity = 0;
+
+  waitForElementTransition(cidSlider).then(() => {
+    cidSlider.style.display = "none";
+  });
+}
+
 export function hideResults() {
   results.style.opacity = "0";
 
@@ -139,6 +150,17 @@ export function hideResults() {
 export function showSplash() {
   waitForElementTransition(results).then(() => {
     form.style.opacity = 1;
+  });
+
+  waitForElementTransition(form).then(() => {
     form.style.display = "flex";
   });
+}
+
+export function showCidSlider() {
+  waitForElementTransition(loadingContainer).then(() => {
+    cidSlider.style.opacity = 1;
+  });
+
+  cidSlider.style.display = "flex";
 }

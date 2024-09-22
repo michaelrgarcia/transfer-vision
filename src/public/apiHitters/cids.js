@@ -18,21 +18,41 @@ export async function getCids(
     },
   });
 
+  let newArticulations;
+
   if (response.status === 200) {
-    const modifiedArticulations = await response.json();
+    newArticulations = await response.json();
     const articulationsDiv = document.querySelector(".articulations");
 
     articulationsDiv.replaceChildren();
-    createListFromDb(modifiedArticulations, linksLength, updateProgress);
+    createListFromDb(newArticulations, linksLength, updateProgress);
   }
+
+  return newArticulations;
 }
 
 export function checkForCids(articulations) {
-  if (articulations) {
-    console.log("these look like articulations");
+  for (let i = 0; i < articulations.length; ) {
+    const item = articulations[i];
+
+    if (item.result) {
+      checkForCids(item.result);
+    }
+
+    if (Array.isArray(item)) {
+      checkForCids(item);
+    }
+
+    if (item && item.prefix && item.courseNumber && item.courseTitle) {
+      if (item.cid) {
+        return true;
+      }
+    }
+
+    i += 1;
   }
 
-  return true;
+  return false;
 }
 
 export function showCids() {
@@ -41,4 +61,39 @@ export function showCids() {
 
 export function hideCids() {
   console.log("hello i hide cids");
+}
+
+export function cidToggleEventListener(
+  courseId,
+  articulations,
+  linksLength,
+  updateProgress,
+) {
+  const cidsToggle = document.querySelector(".cids > input");
+  const savedArticulations = articulations;
+
+  cidsToggle.addEventListener("change", async () => {
+    if (cidsToggle.checked) {
+      if (checkForCids(savedArticulations)) {
+        console.log("logic works");
+        console.log(savedArticulations);
+        // showCids();
+      } else {
+        /*
+        const newArticulations = await getCids(
+          courseId,
+          savedArticulations,
+          linksLength,
+          updateProgress,
+        );
+
+        if (newArticulations) {
+          savedArticulations = newArticulations;
+        }
+        */
+      }
+    } else {
+      hideCids();
+    }
+  });
 }

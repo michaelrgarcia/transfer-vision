@@ -164,3 +164,40 @@ export function showCidSlider() {
 
   cidSlider.style.display = "flex";
 }
+
+export function disableCidSection() {
+  const cidSection = document.querySelector(".cid-section");
+
+  const label = cidSection.querySelector(".cids");
+  const toggle = cidSection.querySelector(".cids > input");
+
+  const children = label.querySelectorAll("*");
+
+  if (toggle) {
+    toggle.disabled = true;
+  }
+
+  children.forEach((node) => {
+    const element = node;
+
+    element.setAttribute("aria-disabled", "true");
+  });
+}
+
+export function enableCidSection() {
+  const cidSection = document.querySelector(".cid-section");
+
+  const label = cidSection.querySelector(".cids");
+  const toggle = cidSection.querySelector(".cids > input");
+
+  const children = label.querySelectorAll("*");
+
+  if (toggle) {
+    toggle.disabled = false;
+  }
+
+  children.forEach((node) => {
+    const element = node;
+    element.setAttribute("aria-disabled", "false");
+  });
+}

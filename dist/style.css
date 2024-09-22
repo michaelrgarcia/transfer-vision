@@ -381,6 +381,8 @@ button[aria-disabled="true"] {
   margin-bottom: 30px;
 
   color: silver;
+
+  transition: 0.7s;
 }
 
 .info-text {

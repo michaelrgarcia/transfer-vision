@@ -57,11 +57,13 @@ export function resetResults() {
   const progressTracker = document.querySelector(".progress-tracker");
   const selectedClass = document.querySelector(".selected-class");
   const articulations = document.querySelector(".articulations");
+  const cidInput = document.querySelector(".cids > input");
 
   waitForElementTransition(results).then(() => {
     articulations.replaceChildren();
     progressTracker.textContent = "";
     selectedClass.textContent = "";
+    cidInput.checked = false;
   });
 }
 

@@ -63,6 +63,8 @@ export function course(className, parent) {
 
   textElement.textContent = className;
   parent.appendChild(textElement);
+
+  return textElement;
 }
 
 export function connector(text, parent) {
@@ -96,4 +98,13 @@ export function processingPrompt() {
   const dialogText = dialog.querySelector("p");
 
   dialogText.textContent = "Data may be processing. Try again shortly.";
+}
+
+export function cid(cidText) {
+  const spanElement = document.createElement("span");
+
+  spanElement.classList.add("cid");
+  spanElement.textContent = `(${cidText})`;
+
+  return spanElement;
 }

@@ -25,7 +25,12 @@ import {
   showRandomLoadingGif,
 } from "./public/domFunctions/cssTransitions";
 
-import { changeSelectedClassTxt } from "./public/utils";
+import { addBackBtnListener, changeSelectedClassTxt } from "./public/utils";
+
+import {
+  addToggleListener,
+  removeToggleListener,
+} from "./public/apiHitters/cids";
 
 const selects = [
   document.getElementById("four-year"),
@@ -41,8 +46,6 @@ const submit = document.querySelector(".submit");
 
 const dialog = document.querySelector("dialog");
 const closeDialog = document.querySelector(".close-dialog");
-
-const backButton = document.querySelector(".back");
 
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
@@ -114,7 +117,21 @@ submit.addEventListener("click", async (event) => {
     if (selectedClass) {
       changeSelectedClassTxt(selectedClass.textContent);
 
-      await getArticulationData(links, courseId);
+      const articulationData = await getArticulationData(links, courseId);
+      const { articulations, updateProgress } = articulationData;
+
+      const toggleHandler = addToggleListener(
+        courseId,
+        articulations,
+        links.length,
+        updateProgress,
+      );
+
+      addBackBtnListener(
+        removeDisabledState,
+        removeToggleListener,
+        toggleHandler,
+      );
     }
   }
 
@@ -123,8 +140,4 @@ submit.addEventListener("click", async (event) => {
 
 closeDialog.addEventListener("click", () => {
   dialog.close();
-});
-
-backButton.addEventListener("click", () => {
-  removeDisabledState(submit.parentNode);
 });

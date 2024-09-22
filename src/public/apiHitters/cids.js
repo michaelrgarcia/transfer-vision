@@ -1,11 +1,17 @@
 /* eslint-disable import/no-cycle */
 
+import {
+  disableCidSection,
+  enableCidSection,
+} from "../domFunctions/cssTransitions";
 import { createListFromDb } from "./articulationFetcher";
 
 const cidsToggle = document.querySelector(".cids > input");
 
 async function appendCids(courseId, articulations) {
   const endpoint = `${process.env.CID_APPENDER}/${courseId}`;
+
+  disableCidSection();
 
   const response = await fetch(endpoint, {
     body: JSON.stringify(articulations),
@@ -19,6 +25,7 @@ async function appendCids(courseId, articulations) {
 
   if (response.status === 200) {
     newArticulations = await response.json();
+    enableCidSection();
   }
 
   return newArticulations;
@@ -53,20 +60,27 @@ function checkForCids(articulations) {
 }
 
 function showCids() {
-  console.log("i got cids");
+  const cidElements = document.querySelectorAll(".cid");
+
+  cidElements.forEach((element) => {
+    const cid = element;
+
+    cid.style.display = "inline";
+  });
 }
 
 function hideCids() {
-  console.log("hello i hide cids");
+  const cidElements = document.querySelectorAll(".cid");
+
+  cidElements.forEach((element) => {
+    const cid = element;
+
+    cid.style.display = "none";
+  });
 }
 
-async function toggleCids(
-  courseId,
-  articulations,
-  linksLength,
-  updateProgress,
-) {
-  let savedArticulations = articulations;
+async function toggleCids(courseId, state, linksLength, updateProgress) {
+  const savedArticulations = state.articulations;
 
   if (cidsToggle.checked) {
     const hasCids = checkForCids(savedArticulations);
@@ -80,11 +94,16 @@ async function toggleCids(
       articulationsDiv.replaceChildren();
       createListFromDb(newArticulations, linksLength, updateProgress);
 
-      savedArticulations = newArticulations;
+      // eslint-disable-next-line no-param-reassign
+      state.articulations = newArticulations;
+
+      showCids();
     }
   } else {
     hideCids();
   }
+
+  return savedArticulations;
 }
 
 export function addToggleListener(
@@ -93,8 +112,10 @@ export function addToggleListener(
   linksLength,
   updateProgress,
 ) {
-  const handler = () =>
-    toggleCids(courseId, articulations, linksLength, updateProgress);
+  const state = { articulations };
+
+  const handler = async () =>
+    toggleCids(courseId, state, linksLength, updateProgress);
 
   cidsToggle.addEventListener("change", handler);
 

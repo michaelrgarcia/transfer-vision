@@ -107,3 +107,28 @@ export function abortHandler(abortController) {
 
   return { signal: abortController.signal, isAborted };
 }
+
+function removeBackBtnListener(backHandler) {
+  const backButton = document.querySelector(".back");
+
+  backButton.removeEventListener("click", backHandler);
+}
+
+export function addBackBtnListener(
+  removeDisabledState,
+  removeToggleListener,
+  toggleHandler,
+) {
+  const backButton = document.querySelector(".back");
+  const submit = document.querySelector(".submit");
+
+  function backHandler() {
+    removeDisabledState(submit.parentNode);
+    removeToggleListener(toggleHandler);
+    removeBackBtnListener(backHandler);
+  }
+
+  backButton.addEventListener("click", backHandler);
+
+  return backHandler;
+}

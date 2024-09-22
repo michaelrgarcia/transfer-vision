@@ -14,17 +14,20 @@ import {
   showSplash,
   hideBackButton,
   showDialog,
-  closeDialog,
+  showCidSlider,
+  hideCidSlider,
 } from "../domFunctions/cssTransitions";
 
-import { updateProgressTracker, resetResults, updateRetries } from "../utils";
+import { updateProgressTracker, resetResults } from "../utils";
 import { processingPrompt } from "../domFunctions/elementPresets";
 
 function abortRequest(abortController) {
   abortController.abort();
 
+  hideCidSlider();
   hideResults();
   hideBackButton();
+
   showSplash();
   resetResults();
 }
@@ -88,10 +91,6 @@ async function processStream(stream, updateProgress) {
     }
   }
 
-  if (accumulatedData.length > 0) {
-    console.log(accumulatedData);
-  }
-
   return null;
 }
 
@@ -150,7 +149,7 @@ async function processChunks(
   }
 }
 
-function createListFromDb(dbResponse, linksLength, updateProgress) {
+export function createListFromDb(dbResponse, linksLength, updateProgress) {
   const articulations = dbResponse;
 
   for (let i = 0; i < articulations.length; ) {
@@ -263,4 +262,6 @@ export async function getArticulationData(links, courseId) {
       window.removeEventListener("beforeunload", () => abortController.abort());
     }
   }
+
+  showCidSlider();
 }

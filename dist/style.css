@@ -274,7 +274,7 @@ dialog > p {
   font-size: 1.2em;
 }
 
-:not(label)[aria-disabled="true"] {
+:not(.form-row > label)[aria-disabled="true"] {
   opacity: 0.2;
 
   cursor: not-allowed;
@@ -517,6 +517,17 @@ button[aria-disabled="true"] {
 
 .cids input:focus + .slider {
   box-shadow: 0 0 1px var(--main-text);
+}
+
+.cid {
+  display: none;
+
+  margin-left: 8px;
+
+  font-size: 0.9em;
+  font-weight: bold;
+
+  color: gray;
 }
 
 @font-face {

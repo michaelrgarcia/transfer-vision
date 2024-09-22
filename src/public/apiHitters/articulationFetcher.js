@@ -20,8 +20,6 @@ import { createProgressTracker, abortHandler } from "../utils";
 
 import { processingPrompt } from "../domFunctions/elementPresets";
 
-import { cidToggleEventListener } from "./cids";
-
 export async function getArticulationParams(receivingId, majorKey) {
   const articulationParams = [];
   const communityColleges = await getCommunityColleges();
@@ -267,13 +265,6 @@ export async function getArticulationData(links, courseId) {
         await finalizeSearch(courseId, articulations);
       }
     }
-
-    cidToggleEventListener(
-      courseId,
-      articulations,
-      links.length,
-      updateProgress,
-    );
   } catch (error) {
     if (error.name === "AbortError") {
       console.log("requests aborted due to page unload");
@@ -283,4 +274,6 @@ export async function getArticulationData(links, courseId) {
   } finally {
     window.removeEventListener("beforeunload", () => abortController.abort());
   }
+
+  return { articulations, updateProgress };
 }

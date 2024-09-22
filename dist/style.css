@@ -438,11 +438,17 @@ button[aria-disabled="true"] {
   justify-content: center;
   align-items: center;
 
+  position: relative;
+
+  opacity: 0;
+
   gap: 20px;
+
+  margin: -20px 0 25px 0;
 }
 
 .cid-info {
-  width: 30px;
+  width: 28px;
 
   filter: invert(58%) sepia(21%) saturate(0%) hue-rotate(143deg) brightness(83%)
     contrast(99%);
@@ -474,6 +480,8 @@ button[aria-disabled="true"] {
   position: absolute;
   cursor: pointer;
 
+  width: 70px;
+
   top: 0;
   right: 0;
   bottom: 0;
@@ -502,7 +510,7 @@ button[aria-disabled="true"] {
 }
 
 .cids input:checked + .slider:before {
-  transform: translateX(123%);
+  transform: translateX(36px);
 }
 
 .cids input:focus + .slider {

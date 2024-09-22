@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
 
 import {
@@ -14,12 +16,13 @@ import {
   showSplash,
   hideBackButton,
   showDialog,
-  showCidSlider,
   hideCidSlider,
+  showCidSlider,
 } from "../domFunctions/cssTransitions";
 
 import { updateProgressTracker, resetResults } from "../utils";
 import { processingPrompt } from "../domFunctions/elementPresets";
+import { checkForCids, hideCids, showCids, toggleCids } from "./cids";
 
 function abortRequest(abortController) {
   abortController.abort();
@@ -57,6 +60,7 @@ async function processStream(stream, updateProgress) {
   const reader = stream.getReader();
   const decoder = new TextDecoder("utf-8");
 
+  const streamArticulations = [];
   let accumulatedData = "";
 
   while (true) {
@@ -80,6 +84,7 @@ async function processStream(stream, updateProgress) {
 
         if (articulation.result) {
           createClassLists(articulation);
+          streamArticulations.push(articulation);
         }
 
         updateProgress(1);
@@ -91,10 +96,12 @@ async function processStream(stream, updateProgress) {
     }
   }
 
-  return null;
+  return streamArticulations;
 }
 
 async function requestArticulations(links, signal, courseId, updateProgress) {
+  let streamArticulations;
+
   try {
     const linksList = JSON.stringify(links);
 
@@ -110,12 +117,12 @@ async function requestArticulations(links, signal, courseId, updateProgress) {
       signal,
     });
 
-    await processStream(response.body, updateProgress);
+    streamArticulations = await processStream(response.body, updateProgress);
   } catch (error) {
     console.error(`error processing stream: ${error}`);
   }
 
-  return null;
+  return streamArticulations;
 }
 
 async function processChunks(
@@ -123,12 +130,13 @@ async function processChunks(
   signal,
   courseId,
   updateProgress,
+  assistArticulations = [],
 ) {
   const concurrencyLimit = 29;
 
   let linksChunk;
 
-  if (processingQueue.length === 0) return;
+  if (processingQueue.length === 0) return assistArticulations;
 
   if (processingQueue.length < concurrencyLimit) {
     linksChunk = processingQueue.splice(0, processingQueue.length - 1);
@@ -137,12 +145,25 @@ async function processChunks(
   }
 
   try {
-    await requestArticulations(linksChunk, signal, courseId, updateProgress);
+    const streamArticulations = await requestArticulations(
+      linksChunk,
+      signal,
+      courseId,
+      updateProgress,
+    );
 
-    await processChunks(processingQueue, signal, courseId, updateProgress); // recursive call
+    assistArticulations.push(...streamArticulations);
+
+    return await processChunks(
+      processingQueue,
+      signal,
+      courseId,
+      updateProgress,
+      assistArticulations,
+    ); // recursive call
   } catch (error) {
     if (error.name === "AbortError") {
-      console.log("aborted reqeust");
+      console.log("aborted request");
     } else {
       console.error("error processing chunk:", error);
     }
@@ -162,6 +183,7 @@ export function createListFromDb(dbResponse, linksLength, updateProgress) {
 
   updateProgress(linksLength);
   hideLoadingContainer();
+  showCidSlider();
 }
 
 async function getClassFromDb(courseId, linksLength, updateProgress) {
@@ -175,7 +197,7 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
 
       createListFromDb(articulations, linksLength, updateProgress);
 
-      return true;
+      return articulations;
     }
 
     if (response.status === 204) {
@@ -184,7 +206,7 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
     }
 
     if (response.status === 206) {
-      hideLoadingContainer();
+      hideLoadingContainer(); // redirect function here instead?
       processingPrompt();
       showDialog();
 
@@ -197,6 +219,31 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
   return false;
 }
 
+async function finalizeSearch(courseId, articulations) {
+  const cacheFinalizer = process.env.CACHE_COMPLETER;
+
+  if (articulations) {
+    organizeArticulations();
+
+    try {
+      await fetch(cacheFinalizer, {
+        body: JSON.stringify({
+          courseId,
+        }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      showCidSlider();
+    } catch (err) {
+      console.error(`error finalizing cache job: ${err}`);
+      // redirect user back to home page and show error box "there was an error finalizing cache job."
+    }
+  }
+}
+
 export async function getArticulationData(links, courseId) {
   const processingQueue = links.slice();
   const abortButton = document.querySelector(".back");
@@ -204,64 +251,58 @@ export async function getArticulationData(links, courseId) {
   const abortController = new AbortController();
   const { signal } = abortController;
 
-  const linksLength = links.length;
-
-  const cacheFinalizer = process.env.CACHE_COMPLETER;
-
   let aborted = false;
-
-  window.addEventListener("beforeunload", () => abortController.abort());
 
   abortButton.addEventListener("click", () => {
     aborted = true;
     abortRequest(abortController);
   });
 
-  showResults();
+  let articulations;
 
   let totalProcessed = 0;
+
   const updateProgress = (processed) => {
     totalProcessed += processed;
-    updateProgressTracker(totalProcessed, linksLength);
+    updateProgressTracker(totalProcessed, links.length);
   };
 
-  updateProgressTracker(0, linksLength);
+  window.addEventListener("beforeunload", () => abortController.abort());
 
-  const articulation = await getClassFromDb(
-    courseId,
-    linksLength,
-    updateProgress,
-  );
+  showResults();
 
-  if (!articulation) {
-    try {
-      await processChunks(processingQueue, signal, courseId, updateProgress);
+  updateProgress(0);
+
+  try {
+    articulations = await getClassFromDb(
+      courseId,
+      links.length,
+      updateProgress,
+    );
+
+    if (!articulations) {
+      articulations = await processChunks(
+        processingQueue,
+        signal,
+        courseId,
+        updateProgress,
+      );
+
+      hideLoadingContainer();
 
       if (!aborted) {
-        organizeArticulations();
-
-        hideLoadingContainer();
-
-        await fetch(cacheFinalizer, {
-          body: JSON.stringify({
-            courseId,
-          }),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        await finalizeSearch(courseId, articulations);
       }
-    } catch (error) {
-      if (error.name === "AbortError") {
-        console.log("requests aborted due to page unload");
-      } else {
-        console.error("error processing requests", error);
-      }
-    } finally {
-      window.removeEventListener("beforeunload", () => abortController.abort());
     }
+  } catch (error) {
+    if (error.name === "AbortError") {
+      console.log("requests aborted due to page unload");
+    } else {
+      console.error("error processing requests", error);
+    }
+  } finally {
+    window.removeEventListener("beforeunload", () => abortController.abort());
   }
 
-  showCidSlider();
+  return articulations;
 }

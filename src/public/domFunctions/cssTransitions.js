@@ -36,6 +36,11 @@ export function showDialog() {
 }
 
 export function closeDialog() {
+  const secondLine = dialog.querySelector(".cid-second-line");
+
+  if (secondLine) dialog.removeChild(secondLine);
+
+  dialog.style.height = "100px";
   dialog.style.opacity = 0;
   dialog.close();
 }

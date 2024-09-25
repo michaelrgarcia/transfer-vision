@@ -16,9 +16,12 @@ import {
   showCidSlider,
 } from "../domFunctions/cssTransitions";
 
-import { createProgressTracker, abortHandler } from "../utils";
+import { createProgressTracker, abortHandler, redirect } from "../utils";
 
-import { processingPrompt } from "../domFunctions/elementPresets";
+import {
+  cacheFinalizeError,
+  processingPrompt,
+} from "../domFunctions/elementPresets";
 
 export async function getArticulationParams(receivingId, majorKey) {
   const articulationParams = [];
@@ -191,7 +194,7 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
     }
 
     if (response.status === 206) {
-      hideLoadingContainer(); // redirect function here instead?
+      hideLoadingContainer();
       processingPrompt();
       showDialog();
 
@@ -224,7 +227,7 @@ async function finalizeSearch(courseId, articulations) {
       showCidSlider();
     } catch (err) {
       console.error(`error finalizing cache job: ${err}`);
-      // redirect user back to home page and show error box "there was an error finalizing cache job."
+      cacheFinalizeError();
     }
   }
 }

@@ -108,3 +108,32 @@ export function cid(cidText) {
 
   return spanElement;
 }
+
+export function cidPrompt() {
+  const dialog = document.querySelector("dialog");
+  const dialogText = dialog.querySelector("p");
+
+  dialogText.textContent =
+    "C-IDs (course identification numbers) make it easy to identify equivalent courses across California Community Colleges.";
+
+  const secondLineDiv = document.createElement("div");
+  secondLineDiv.classList.add("cid-second-line");
+
+  const line2 = document.createElement("p");
+  line2.textContent =
+    "Some C-IDs may not be visible due to inconsistencies in data. All available data can be found on the ";
+
+  const cidLink = document.createElement("a");
+
+  cidLink.textContent = "C-ID website.";
+  cidLink.href = "https://c-id.net";
+  cidLink.target = "_blank";
+
+  line2.appendChild(cidLink);
+
+  secondLineDiv.appendChild(line2);
+
+  dialog.appendChild(secondLineDiv);
+
+  dialog.style.height = "250px";
+}

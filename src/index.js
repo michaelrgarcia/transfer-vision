@@ -22,7 +22,9 @@ import {
   applyDisabledState,
   hideSplash,
   removeDisabledState,
+  showDialog,
   showRandomLoadingGif,
+  closeDialog,
 } from "./public/domFunctions/cssTransitions";
 
 import { addBackBtnListener, changeSelectedClassTxt } from "./public/utils";
@@ -31,6 +33,7 @@ import {
   addToggleListener,
   removeToggleListener,
 } from "./public/apiHitters/cids";
+import { cidPrompt } from "./public/domFunctions/elementPresets";
 
 const selects = [
   document.getElementById("four-year"),
@@ -45,7 +48,9 @@ const classList = selects[2];
 const submit = document.querySelector(".submit");
 
 const dialog = document.querySelector("dialog");
-const closeDialog = document.querySelector(".close-dialog");
+const closeDialogBtn = document.querySelector(".close-dialog");
+
+const cidInfo = document.querySelector(".cid-info");
 
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length; ) {
@@ -134,6 +139,11 @@ submit.addEventListener("click", async (event) => {
   event.preventDefault();
 });
 
-closeDialog.addEventListener("click", () => {
-  dialog.close();
+closeDialogBtn.addEventListener("click", () => {
+  closeDialog();
+});
+
+cidInfo.addEventListener("click", () => {
+  cidPrompt();
+  showDialog();
 });

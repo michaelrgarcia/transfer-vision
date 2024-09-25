@@ -19,7 +19,7 @@ async function fetchLowerDivs(receivingId, key) {
   let lowerDivs;
 
   try {
-    const endpoint = `${schoolDataFetcher}/74/6/${receivingId}/${key}/lower-divs`;
+    const endpoint = `${schoolDataFetcher}/lower-divs/74/6/${receivingId}/${key}`;
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -39,7 +39,7 @@ export async function getCommunityColleges() {
   try {
     const endpoint = `${schoolDataFetcher}/community-colleges`;
 
-    const latestData = await fetchSchoolData(endpoint, "communityColleges");
+    const latestData = await fetchSchoolData(endpoint);
 
     communityColleges = latestData;
   } catch (error) {
@@ -69,7 +69,8 @@ export async function getMajorData(receivingId) {
   let majorData;
 
   try {
-    const endpoint = `${schoolDataFetcher}/major-data/${receivingId}/74`;
+    const year = 74;
+    const endpoint = `${schoolDataFetcher}/major-data/${receivingId}/${year}`;
 
     const response = await fetch(endpoint);
     const data = await response.json();

@@ -34,7 +34,8 @@ header,
 }
 
 main,
-dialog > p {
+dialog > p,
+.cid-second-line {
   font-family: "Segoe UI", Verdana, sans-serif;
 }
 
@@ -221,15 +222,14 @@ select > option {
 
 dialog {
   top: 0;
-  bottom: calc(100% - 500px);
+  bottom: calc(100% - 90%);
   position: absolute;
 
   width: 80%;
   max-width: 300px;
   height: 100px;
 
-  margin: auto;
-  margin-top: px;
+  margin: auto auto;
   padding: 20px;
   border: 5px solid silver;
 
@@ -454,6 +454,8 @@ button[aria-disabled="true"] {
 
   filter: invert(58%) sepia(21%) saturate(0%) hue-rotate(143deg) brightness(83%)
     contrast(99%);
+
+  cursor: pointer;
 }
 
 .cids {
@@ -528,6 +530,13 @@ button[aria-disabled="true"] {
   font-weight: bold;
 
   color: gray;
+}
+
+.cid-second-line {
+  margin-top: 30px;
+
+  font-size: 0.95em;
+  font-style: italic;
 }
 
 @font-face {

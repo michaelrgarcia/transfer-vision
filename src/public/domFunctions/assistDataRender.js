@@ -188,9 +188,39 @@ export function organizeArticulations() {
   }
 }
 
+function sortClassData(items) {
+  items.sort((a, b) => {
+    if (typeof a === "string") {
+      return 0;
+    }
+
+    if (typeof b === "string") {
+      return 0;
+    }
+
+    if (a.prefix && b.prefix) {
+      const prefixComparison = a.prefix.localeCompare(b.prefix);
+      if (prefixComparison !== 0) return prefixComparison;
+    }
+
+    if (a.courseNumber && b.courseNumber) {
+      const courseNumberComparison = a.courseNumber.localeCompare(
+        b.courseNumber,
+      );
+      if (courseNumberComparison !== 0) return courseNumberComparison;
+    }
+
+    return 0;
+  });
+
+  return items;
+}
+
 function renderItems(items, classListDiv) {
-  for (let i = 0; i < items.length; ) {
-    const subitem = items[i];
+  const sortedItems = sortClassData(items);
+
+  for (let i = 0; i < sortedItems.length; ) {
+    const subitem = sortedItems[i];
 
     if (Array.isArray(subitem)) {
       renderItems(subitem, classListDiv);

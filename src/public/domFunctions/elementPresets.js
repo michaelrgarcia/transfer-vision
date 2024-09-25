@@ -100,6 +100,13 @@ export function processingPrompt() {
   dialogText.textContent = "Data may be processing. Try again shortly.";
 }
 
+export function cacheFinalizeError() {
+  const dialog = document.querySelector("dialog");
+  const dialogText = dialog.querySelector("p");
+
+  dialogText.textContent = "Failed to complete search. Try again shortly.";
+}
+
 export function cid(cidText) {
   const spanElement = document.createElement("span");
 

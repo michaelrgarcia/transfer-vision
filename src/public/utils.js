@@ -114,16 +114,10 @@ function removeBackBtnListener(backHandler) {
   backButton.removeEventListener("click", backHandler);
 }
 
-export function addBackBtnListener(
-  removeDisabledState,
-  removeToggleListener,
-  toggleHandler,
-) {
+export function addBackBtnListener(removeToggleListener, toggleHandler) {
   const backButton = document.querySelector(".back");
-  const submit = document.querySelector(".submit");
 
   function backHandler() {
-    removeDisabledState(submit.parentNode);
     removeToggleListener(toggleHandler);
     removeBackBtnListener(backHandler);
   }

@@ -47,7 +47,7 @@ const classList = selects[2];
 
 const submit = document.querySelector(".submit");
 
-const dialog = document.querySelector("dialog");
+const backButton = document.querySelector(".back");
 const closeDialogBtn = document.querySelector(".close-dialog");
 
 const cidInfo = document.querySelector(".cid-info");
@@ -128,11 +128,7 @@ submit.addEventListener("click", async (event) => {
         updateProgress,
       );
 
-      addBackBtnListener(
-        removeDisabledState,
-        removeToggleListener,
-        toggleHandler,
-      );
+      addBackBtnListener(removeToggleListener, toggleHandler);
     }
   }
 
@@ -146,4 +142,8 @@ closeDialogBtn.addEventListener("click", () => {
 cidInfo.addEventListener("click", () => {
   cidPrompt();
   showDialog();
+});
+
+backButton.addEventListener("click", () => {
+  removeDisabledState(submit.parentNode);
 });

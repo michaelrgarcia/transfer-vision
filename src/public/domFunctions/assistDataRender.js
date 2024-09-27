@@ -151,7 +151,7 @@ export async function renderLowerDivs(classList, receivingId, key) {
   select.replaceChildren();
   select.appendChild(placeholder);
 
-  lowerDivs[0].forEach((lowerDiv, classIndex) => {
+  lowerDivs.forEach((lowerDiv, classIndex) => {
     const className = getClassName(lowerDiv, classIndex);
     const id = getId(lowerDiv);
     const option = lowerDivOption(className, classIndex, id);

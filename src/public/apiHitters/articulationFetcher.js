@@ -164,7 +164,9 @@ export function createListFromDb(dbResponse, linksLength, updateProgress) {
   for (let i = 0; i < articulations.length; ) {
     const articulation = articulations[i];
 
-    createClassLists(articulation);
+    if (articulation) {
+      createClassLists(articulation);
+    }
 
     i += 1;
   }

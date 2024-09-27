@@ -257,19 +257,21 @@ export function createClassLists(articulation) {
     for (let i = 0; i < result.length; ) {
       const item = result[i];
 
-      if (item.ccName) {
-        collegeName = item.ccName;
-      } else if (item.agreementLink) {
-        agreementLink = item.agreementLink;
-      } else {
-        courseCache.push(item);
-      }
+      if (item) {
+        if (item.ccName) {
+          collegeName = item.ccName;
+        } else if (item.agreementLink) {
+          agreementLink = item.agreementLink;
+        } else {
+          courseCache.push(item);
+        }
 
-      if (collegeName && agreementLink) {
-        const classListDiv = classListMainDiv();
-        classListHeader(classListDiv, collegeName, agreementLink);
+        if (collegeName && agreementLink) {
+          const classListDiv = classListMainDiv();
+          classListHeader(classListDiv, collegeName, agreementLink);
 
-        renderItems(courseCache, classListDiv);
+          renderItems(courseCache, classListDiv);
+        }
       }
 
       i += 1;

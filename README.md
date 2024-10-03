@@ -52,7 +52,7 @@ I will likely get around to writing the frontend in a JavaScript framework such 
 
 ![image](https://github.com/user-attachments/assets/2fa8edac-8567-4fd3-b12e-c3a4f5ca7b1e)
 
-**Use TransferVision to find a course that transfers to these two schools, while having every other school in mind.**
+**Use TransferVision to find a course that transfers to these two schools, while having any other schools in mind.**
 
 *UC Berkeley*
 

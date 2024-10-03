@@ -125,7 +125,7 @@ If this course wasn't asynchronous, I would have been able commute a short dista
 
 ![6d3dbe5f7e24ab1de3420f0c21c89ce5](https://github.com/user-attachments/assets/e6d4baa5-3f9c-48f3-a9c2-ee50d9504ddf)
 
-**Similar courses are listed on CVC, but according to ASSIST.org, none of these courses truly articulate to PHILOS 12A.**
+**Similar courses are listed on CVC, but according to ASSIST.org, none of the courses listed articulate to PHILOS 12A.**
 **Here is the ASSIST.org agreement for Saddleback College.**
 
 ![image](https://github.com/user-attachments/assets/66fcd555-768d-4d47-80c6-b30d91b3f2c2)

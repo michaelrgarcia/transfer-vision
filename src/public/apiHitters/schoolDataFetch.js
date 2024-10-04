@@ -15,11 +15,11 @@ async function fetchSchoolData(url) {
   return schoolData;
 }
 
-async function fetchLowerDivs(receivingId, key) {
+async function fetchLowerDivs(receivingId, key, year) {
   let lowerDivs;
 
   try {
-    const endpoint = `${schoolDataFetcher}/lower-divs/74/6/${receivingId}/${key}`;
+    const endpoint = `${schoolDataFetcher}/lower-divs/${year}/6/${receivingId}/${key}`;
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -65,11 +65,10 @@ export async function getFourYears() {
   return fourYears;
 }
 
-export async function getMajorData(receivingId) {
+export async function getMajorData(receivingId, year) {
   let majorData;
 
   try {
-    const year = 74;
     const endpoint = `${schoolDataFetcher}/major-data/${receivingId}/${year}`;
 
     const response = await fetch(endpoint);
@@ -84,11 +83,11 @@ export async function getMajorData(receivingId) {
   return majorData;
 }
 
-export async function getLowerDivs(receivingId, key) {
+export async function getLowerDivs(receivingId, key, year) {
   let lowerDivs;
 
   try {
-    const latestData = await fetchLowerDivs(receivingId, key);
+    const latestData = await fetchLowerDivs(receivingId, key, year);
 
     lowerDivs = latestData;
   } catch (error) {

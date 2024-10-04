@@ -125,16 +125,19 @@ classList.addEventListener("change", () => {
 });
 
 submit.addEventListener("click", async (event) => {
+  const selectedYear = yearList.options[yearList.selectedIndex];
   const selectedSchool = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedSchool.dataset.sending;
 
   const selectedMajor = majorList.options[majorList.selectedIndex];
   const majorKey = selectedMajor.dataset.key;
 
+  const year = selectedYear.value;
+
   applyDisabledState(submit.parentNode);
 
   if (classList.value) {
-    const links = await getArticulationParams(receivingId, majorKey);
+    const links = await getArticulationParams(receivingId, majorKey, year);
 
     const selectedClass = classList.options[classList.selectedIndex];
     const courseId = selectedClass.dataset.id;
@@ -144,7 +147,7 @@ submit.addEventListener("click", async (event) => {
     if (selectedClass) {
       changeSelectedClassTxt(selectedClass.textContent);
 
-      const articulationData = await getArticulationData(links, courseId);
+      const articulationData = await getArticulationData(links, courseId, year);
       const { articulations, updateProgress } = articulationData;
 
       const toggleHandler = addToggleListener(

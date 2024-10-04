@@ -142,6 +142,8 @@ submit.addEventListener("click", async (event) => {
     const selectedClass = classList.options[classList.selectedIndex];
     const courseId = selectedClass.dataset.id;
 
+    const fullCourseId = `${courseId}_${year}`;
+
     hideSplash();
 
     if (selectedClass) {
@@ -151,7 +153,7 @@ submit.addEventListener("click", async (event) => {
       const { articulations, updateProgress } = articulationData;
 
       const toggleHandler = addToggleListener(
-        courseId,
+        fullCourseId,
         articulations,
         links.length,
         updateProgress,

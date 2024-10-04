@@ -39,11 +39,13 @@ const selects = [
   document.getElementById("four-year"),
   document.getElementById("major"),
   document.getElementById("class"),
+  document.getElementById("academic-year"),
 ];
 
 const schoolList = selects[0];
 const majorList = selects[1];
 const classList = selects[2];
+const yearList = selects[3];
 
 const submit = document.querySelector(".submit");
 
@@ -53,7 +55,7 @@ const closeDialogBtn = document.querySelector(".close-dialog");
 const cidInfo = document.querySelector(".cid-info");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  for (let i = 1; i < selects.length; ) {
+  for (let i = 1; i < selects.length - 1; ) {
     if (selects[i].parentNode) {
       applyDisabledState(selects[i].parentNode);
       i += 1;
@@ -67,11 +69,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   await showRandomLoadingGif();
 });
 
-schoolList.addEventListener("input", () => {
+yearList.addEventListener("input", () => {
+  const selectedYear = yearList.options[yearList.selectedIndex];
   const selectedOption = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedOption.dataset.sending;
 
-  renderMajorData(majorList, receivingId);
+  const year = selectedYear.value;
+
+  majorList.replaceChildren();
+  classList.replaceChildren();
+
+  if (selectedOption) {
+    renderMajorData(majorList, receivingId, year);
+  }
+
+  applyDisabledState(majorList.parentNode);
+  applyDisabledState(classList.parentNode);
+  applyDisabledState(submit.parentNode);
+});
+
+schoolList.addEventListener("input", () => {
+  const selectedYear = yearList.options[yearList.selectedIndex];
+  const selectedOption = schoolList.options[schoolList.selectedIndex];
+  const receivingId = selectedOption.dataset.sending;
+
+  const year = selectedYear.value;
+
+  renderMajorData(majorList, receivingId, year);
 
   majorList.replaceChildren();
   classList.replaceChildren();
@@ -81,15 +105,17 @@ schoolList.addEventListener("input", () => {
 });
 
 majorList.addEventListener("input", () => {
+  const selectedYear = yearList.options[yearList.selectedIndex];
   const selectedSchool = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedSchool.dataset.sending;
 
   const selectedMajor = majorList.options[majorList.selectedIndex];
+  const year = selectedYear.value;
   const { key } = selectedMajor.dataset;
 
   classList.replaceChildren();
 
-  renderLowerDivs(classList, receivingId, key);
+  renderLowerDivs(classList, receivingId, key, year);
 
   applyDisabledState(submit.parentNode);
 });

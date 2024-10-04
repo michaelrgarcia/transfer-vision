@@ -16,18 +16,17 @@ import {
   showCidSlider,
 } from "../domFunctions/cssTransitions";
 
-import { createProgressTracker, abortHandler, redirect } from "../utils";
+import { createProgressTracker, abortHandler } from "../utils";
 
 import {
   cacheFinalizeError,
   processingPrompt,
 } from "../domFunctions/elementPresets";
 
-export async function getArticulationParams(receivingId, majorKey) {
+export async function getArticulationParams(receivingId, majorKey, year) {
   const articulationParams = [];
   const communityColleges = await getCommunityColleges();
 
-  const year = 74;
   const receiving = receivingId;
   const key = majorKey;
 
@@ -87,13 +86,19 @@ async function processStream(stream, updateProgress) {
   return streamArticulations;
 }
 
-async function requestArticulations(links, signal, courseId, updateProgress) {
+async function requestArticulations(
+  links,
+  signal,
+  courseId,
+  year,
+  updateProgress,
+) {
   let streamArticulations;
 
   try {
     const linksList = JSON.stringify(links);
 
-    const endpoint = `${process.env.NEW_ARTICULATION_FETCHER}/?courseId=${courseId}`;
+    const endpoint = `${process.env.NEW_ARTICULATION_FETCHER}/?courseId=${courseId}&year=${year}`;
 
     const response = await fetch(endpoint, {
       body: linksList,
@@ -118,6 +123,7 @@ async function processChunks(
   signal,
   courseId,
   updateProgress,
+  year,
   assistArticulations = [],
 ) {
   const concurrencyLimit = 29;
@@ -137,6 +143,7 @@ async function processChunks(
       linksChunk,
       signal,
       courseId,
+      year,
       updateProgress,
     );
 
@@ -147,6 +154,7 @@ async function processChunks(
       signal,
       courseId,
       updateProgress,
+      year,
       assistArticulations,
     ); // recursive call
   } catch (error) {
@@ -176,11 +184,11 @@ export function createListFromDb(dbResponse, linksLength, updateProgress) {
   showCidSlider();
 }
 
-async function getClassFromDb(courseId, linksLength, updateProgress) {
+async function getClassFromDb(fullCourseId, linksLength, updateProgress) {
   const courseGrabber = process.env.COURSE_GRABBER;
 
   try {
-    const response = await fetch(`${courseGrabber}/${courseId}`);
+    const response = await fetch(`${courseGrabber}/${fullCourseId}`);
 
     if (response.status === 200) {
       const articulations = await response.json();
@@ -209,7 +217,7 @@ async function getClassFromDb(courseId, linksLength, updateProgress) {
   return false;
 }
 
-async function finalizeSearch(courseId, articulations) {
+async function finalizeSearch(fullCourseId, articulations) {
   const cacheFinalizer = process.env.CACHE_COMPLETER;
 
   if (articulations) {
@@ -218,7 +226,7 @@ async function finalizeSearch(courseId, articulations) {
     try {
       await fetch(cacheFinalizer, {
         body: JSON.stringify({
-          courseId,
+          fullCourseId,
         }),
         method: "POST",
         headers: {
@@ -234,7 +242,8 @@ async function finalizeSearch(courseId, articulations) {
   }
 }
 
-export async function getArticulationData(links, courseId) {
+export async function getArticulationData(links, courseId, year) {
+  const fullCourseId = `${courseId}_${year}`;
   const processingQueue = links.slice();
 
   const abortController = new AbortController();
@@ -251,7 +260,7 @@ export async function getArticulationData(links, courseId) {
 
   try {
     articulations = await getClassFromDb(
-      courseId,
+      fullCourseId,
       links.length,
       updateProgress,
     );
@@ -262,12 +271,13 @@ export async function getArticulationData(links, courseId) {
         signal,
         courseId,
         updateProgress,
+        year,
       );
 
       hideLoadingContainer();
 
       if (!isAborted) {
-        await finalizeSearch(courseId, articulations);
+        await finalizeSearch(fullCourseId, articulations);
       }
     }
   } catch (error) {

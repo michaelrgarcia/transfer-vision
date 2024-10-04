@@ -52,13 +52,13 @@ export async function renderFourYears(schoolList) {
   stopLoading(formRow, loadingText);
 }
 
-export async function renderMajorData(majorList, receivingId) {
+export async function renderMajorData(majorList, receivingId, year) {
   const formRow = majorList.parentElement;
   const loadingText = formRow.querySelector(".loading");
 
   startLoading(formRow, loadingText);
 
-  const majorData = await getMajorData(receivingId);
+  const majorData = await getMajorData(receivingId, year);
 
   const select = majorList;
   const placeholder = defaultOption("major");
@@ -137,13 +137,13 @@ export function getId(objOrArray) {
   return id;
 }
 
-export async function renderLowerDivs(classList, receivingId, key) {
+export async function renderLowerDivs(classList, receivingId, key, year) {
   const formRow = classList.parentNode;
   const loadingText = formRow.querySelector(".loading");
 
   startLoading(formRow, loadingText);
 
-  const lowerDivs = await getLowerDivs(receivingId, key);
+  const lowerDivs = await getLowerDivs(receivingId, key, year);
 
   const select = classList;
   const placeholder = defaultOption("class");

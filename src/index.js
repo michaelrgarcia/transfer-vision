@@ -43,9 +43,20 @@ const selects = [
 ];
 
 const schoolList = selects[0];
+const selectedSchool = schoolList.options[schoolList.selectedIndex];
+const receivingId = selectedSchool.dataset.sending;
+
 const majorList = selects[1];
+const selectedMajor = majorList.options[majorList.selectedIndex];
+const majorKey = selectedMajor.dataset.key;
+
 const classList = selects[2];
+const selectedClass = classList.options[classList.selectedIndex];
+const courseId = selectedClass.dataset.id;
+
 const yearList = selects[3];
+const selectedYear = yearList.options[yearList.selectedIndex];
+const year = selectedYear.value;
 
 const submit = document.querySelector(".submit");
 
@@ -70,16 +81,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 yearList.addEventListener("input", () => {
-  const selectedYear = yearList.options[yearList.selectedIndex];
-  const selectedOption = schoolList.options[schoolList.selectedIndex];
-  const receivingId = selectedOption.dataset.sending;
-
-  const year = selectedYear.value;
-
   majorList.replaceChildren();
   classList.replaceChildren();
 
-  if (selectedOption) {
+  if (selectedSchool.value) {
     renderMajorData(majorList, receivingId, year);
   }
 
@@ -89,12 +94,6 @@ yearList.addEventListener("input", () => {
 });
 
 schoolList.addEventListener("input", () => {
-  const selectedYear = yearList.options[yearList.selectedIndex];
-  const selectedOption = schoolList.options[schoolList.selectedIndex];
-  const receivingId = selectedOption.dataset.sending;
-
-  const year = selectedYear.value;
-
   renderMajorData(majorList, receivingId, year);
 
   majorList.replaceChildren();
@@ -105,17 +104,9 @@ schoolList.addEventListener("input", () => {
 });
 
 majorList.addEventListener("input", () => {
-  const selectedYear = yearList.options[yearList.selectedIndex];
-  const selectedSchool = schoolList.options[schoolList.selectedIndex];
-  const receivingId = selectedSchool.dataset.sending;
-
-  const selectedMajor = majorList.options[majorList.selectedIndex];
-  const year = selectedYear.value;
-  const { key } = selectedMajor.dataset;
-
   classList.replaceChildren();
 
-  renderLowerDivs(classList, receivingId, key, year);
+  renderLowerDivs(classList, receivingId, majorKey, year);
 
   applyDisabledState(submit.parentNode);
 });
@@ -125,22 +116,10 @@ classList.addEventListener("change", () => {
 });
 
 submit.addEventListener("click", async (event) => {
-  const selectedYear = yearList.options[yearList.selectedIndex];
-  const selectedSchool = schoolList.options[schoolList.selectedIndex];
-  const receivingId = selectedSchool.dataset.sending;
-
-  const selectedMajor = majorList.options[majorList.selectedIndex];
-  const majorKey = selectedMajor.dataset.key;
-
-  const year = selectedYear.value;
-
   applyDisabledState(submit.parentNode);
 
   if (classList.value) {
     const links = await getArticulationParams(receivingId, majorKey, year);
-
-    const selectedClass = classList.options[classList.selectedIndex];
-    const courseId = selectedClass.dataset.id;
 
     const fullCourseId = `${courseId}_${year}`;
 

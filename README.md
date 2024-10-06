@@ -26,9 +26,9 @@ Inspired by https://github.com/jacobtbigham/ccc_transfers.
 
 **Database**: Amazon DynamoDB
 
-I will likely get around to rewriting the frontend in a JavaScript framework such as React or Vue.
+For more information regarding the technical details of TransferVision, see the [documentation](https://github.com/michaelrgarcia/transfervision-docs).
 
-For more information regarding the technical details of TransferVision, see the [documentation](https://github.com/michaelrgarcia/transfervision-docs)
+I will likely get around to rewriting the frontend in a JavaScript framework such as React or Vue.
 
 ## Use Cases
 

@@ -1,11 +1,28 @@
 const schoolDataFetcher = process.env.SCHOOL_DATA_FETCHER;
 
-async function fetchSchoolData(url) {
-  let schoolData;
+interface School {
+  id: number;
+  name: string;
+}
+
+interface LowerDiv {
+  prefix: string;
+  courseNumber: number;
+  courseTitle: string;
+  courseId?: number; // series courses do not have a course ID
+}
+
+interface Major {
+  major: string;
+  key: string;
+}
+
+async function fetchSchoolData(url: string): Promise<School[]> {
+  let schoolData: School[];
 
   try {
     const response = await fetch(url);
-    const data = await response.json();
+    const data: Promise<object> = await response.json();
 
     schoolData = Object.values(data);
   } catch (error) {
@@ -15,17 +32,20 @@ async function fetchSchoolData(url) {
   return schoolData;
 }
 
-async function fetchLowerDivs(receivingId, key, year) {
-  let lowerDivs;
+async function fetchLowerDivs(
+  receivingId: number,
+  key: string,
+  year: number,
+): Promise<LowerDiv[][]> {
+  let lowerDivs: LowerDiv[][]; // series add dimensions
 
   try {
-    const endpoint = `${schoolDataFetcher}/lower-divs/${year}/6/${receivingId}/${key}`;
+    const endpoint = `${schoolDataFetcher}/lower-divs/${year}/6/${receivingId}/${key}`; // 6 is a placeholder community college
 
     const response = await fetch(endpoint);
-    const data = await response.json();
-    const latestData = Object.values(data);
+    const data: Promise<object> = await response.json();
 
-    lowerDivs = latestData;
+    lowerDivs = Object.values(data);
   } catch (error) {
     console.log("error fetching lower divs:", error);
   }
@@ -33,13 +53,13 @@ async function fetchLowerDivs(receivingId, key, year) {
   return lowerDivs;
 }
 
-export async function getCommunityColleges() {
-  let communityColleges;
+export async function getCommunityColleges(): Promise<School[]> {
+  let communityColleges: School[];
 
   try {
     const endpoint = `${schoolDataFetcher}/community-colleges`;
 
-    const latestData = await fetchSchoolData(endpoint);
+    const latestData: School[] = await fetchSchoolData(endpoint);
 
     communityColleges = latestData;
   } catch (error) {
@@ -49,13 +69,13 @@ export async function getCommunityColleges() {
   return communityColleges;
 }
 
-export async function getFourYears() {
-  let fourYears;
+export async function getFourYears(): Promise<School[]> {
+  let fourYears: School[];
 
   try {
     const endpoint = `${schoolDataFetcher}/four-years`;
 
-    const latestData = await fetchSchoolData(endpoint, "fourYears");
+    const latestData: School[] = await fetchSchoolData(endpoint);
 
     fourYears = latestData;
   } catch (error) {
@@ -65,17 +85,19 @@ export async function getFourYears() {
   return fourYears;
 }
 
-export async function getMajorData(receivingId, year) {
-  let majorData;
+export async function getMajorData(
+  receivingId: number,
+  year: number,
+): Promise<Major[]> {
+  let majorData: Major[];
 
   try {
     const endpoint = `${schoolDataFetcher}/major-data/${receivingId}/${year}`;
 
     const response = await fetch(endpoint);
-    const data = await response.json();
-    const dataArray = Object.values(data);
+    const data: Promise<object> = await response.json();
 
-    majorData = dataArray;
+    majorData = Object.values(data);
   } catch (error) {
     console.error(`Error fetching majors for ${receivingId}:`, error);
   }
@@ -83,8 +105,12 @@ export async function getMajorData(receivingId, year) {
   return majorData;
 }
 
-export async function getLowerDivs(receivingId, key, year) {
-  let lowerDivs;
+export async function getLowerDivs(
+  receivingId: number,
+  key: string,
+  year: number,
+): Promise<LowerDiv[][]> {
+  let lowerDivs: LowerDiv[][];
 
   try {
     const latestData = await fetchLowerDivs(receivingId, key, year);

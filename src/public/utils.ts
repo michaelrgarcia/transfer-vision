@@ -8,6 +8,14 @@ import {
   hideResults,
   showSplash,
 } from "./domFunctions/cssTransitions";
+import {
+  FilteredSeries,
+  isLowerDiv,
+  isSeriesIdObject,
+  isSeriesObject,
+  LowerDiv,
+  UnfilteredSeries,
+} from "../interfaces/assistData";
 
 interface GifData {
   data: {
@@ -88,18 +96,18 @@ export function resetResults(): void {
   });
 }
 
-export function filterLowerDiv(lowerDiv: (string | object)[]) {
-  for (let i = 0; i < lowerDiv.length; ) {
-    const item = lowerDiv[i];
+export function filterSeries(series: UnfilteredSeries) {
+  for (let i = 0; i < series.length; ) {
+    const item = series[i];
 
-    if (typeof item === "object" && "seriesId" in item) {
-      lowerDiv.splice(i, 1);
+    if (isSeriesIdObject(item)) {
+      series.splice(i, 1);
     }
 
     i += 1;
   }
 
-  return lowerDiv;
+  return series;
 }
 
 function abortRequest(abortController: AbortController) {

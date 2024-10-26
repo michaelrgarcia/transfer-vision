@@ -35,27 +35,21 @@ import {
 } from "./public/apiHitters/cids";
 import { cidPrompt } from "./public/domFunctions/elementPresets";
 
-const selects = [
-  document.getElementById("four-year"),
-  document.getElementById("major"),
-  document.getElementById("class"),
-  document.getElementById("academic-year"),
-];
+const schoolList = document.getElementById("four-year") as HTMLSelectElement;
+const majorList = document.getElementById("major") as HTMLSelectElement;
+const classList = document.getElementById("class") as HTMLSelectElement;
+const yearList = document.getElementById("academic-year") as HTMLSelectElement;
 
-const schoolList = selects[0];
+const selects = document.querySelectorAll<HTMLElement>("select");
 
-const majorList = selects[1];
+const submit = document.querySelector(".submit") as HTMLButtonElement;
 
-const classList = selects[2];
+const backButton = document.querySelector(".back") as HTMLImageElement;
+const closeDialogBtn = document.querySelector(
+  ".close-dialog",
+) as HTMLImageElement;
 
-const yearList = selects[3];
-
-const submit = document.querySelector(".submit");
-
-const backButton = document.querySelector(".back");
-const closeDialogBtn = document.querySelector(".close-dialog");
-
-const cidInfo = document.querySelector(".cid-info");
+const cidInfo = document.querySelector(".cid-info") as HTMLImageElement;
 
 document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 1; i < selects.length - 1; ) {

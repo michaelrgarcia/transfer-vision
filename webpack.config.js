@@ -12,6 +12,10 @@ module.exports = {
     assetModuleFilename: "svgs/[name].[ext]",
     assetModuleFilename: "fonts/[name].[ext]",
   },
+  devtool: "source-map",
+  resolve: {
+    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+  },
   plugins: [new Dotenv()],
   module: {
     rules: [
@@ -26,6 +30,15 @@ module.exports = {
       {
         test: /\.(mp3)$/i,
         type: "asset/resource",
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+      },
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      {
+        test: /\.js$/,
+        loader: "source-map-loader",
       },
     ],
   },

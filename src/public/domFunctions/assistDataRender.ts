@@ -24,27 +24,34 @@ import {
   getMajorData,
 } from "../apiHitters/schoolDataFetch";
 
-import { filterLowerDiv } from "../utils";
+import { filterSeries } from "../utils";
 
-export async function renderFourYears(schoolList: HTMLSelectElement) {
-  const formRow = schoolList.parentNode;
-  const loadingText = formRow.querySelector(".loading");
+import {
+  FilteredSeries,
+  isLowerDiv,
+  LowerDiv,
+  UnfilteredSeries,
+} from "../../interfaces/assistData";
+
+export async function renderFourYears(
+  schoolList: HTMLSelectElement,
+): Promise<void> {
+  const formRow = schoolList.parentNode as HTMLDivElement;
+  const loadingText = formRow.querySelector(".loading") as HTMLParagraphElement;
 
   showDialog();
   startLoading(formRow, loadingText);
 
   const fourYears = await getFourYears();
-
-  const select = schoolList;
   const placeholder = defaultOption("school");
 
-  select.appendChild(placeholder);
+  schoolList.appendChild(placeholder);
 
   fourYears.forEach((school) => {
     if (school.id < 200) {
       const option = selectOption(school.name, school.id, "sending");
 
-      select.appendChild(option);
+      schoolList.appendChild(option);
     }
   });
 
@@ -52,47 +59,48 @@ export async function renderFourYears(schoolList: HTMLSelectElement) {
   stopLoading(formRow, loadingText);
 }
 
-export async function renderMajorData(majorList, receivingId, year) {
-  const formRow = majorList.parentElement;
-  const loadingText = formRow.querySelector(".loading");
+export async function renderMajorData(
+  majorList: HTMLSelectElement,
+  receivingId: number,
+  year: number,
+): Promise<void> {
+  const formRow = majorList.parentElement as HTMLDivElement;
+  const loadingText = formRow.querySelector(".loading") as HTMLParagraphElement;
 
   startLoading(formRow, loadingText);
 
   const majorData = await getMajorData(receivingId, year);
-
-  const select = majorList;
   const placeholder = defaultOption("major");
 
-  select.replaceChildren();
-  select.appendChild(placeholder);
+  majorList.replaceChildren();
+  majorList.appendChild(placeholder);
 
-  majorData.forEach((obj) => {
-    const option = selectOption(obj.major, obj.key, "key");
+  majorData.forEach((majorObj) => {
+    const option = selectOption(majorObj.major, majorObj.key, "key");
 
-    select.appendChild(option);
+    majorList.appendChild(option);
   });
 
   stopLoading(formRow, loadingText);
 }
 
-function getSeriesString(seriesArray) {
+function getSeriesString(seriesArray: UnfilteredSeries) {
   const seriesArrayCopy = seriesArray.slice();
-  const filtered = filterLowerDiv(seriesArrayCopy);
+  const filtered = filterSeries(seriesArrayCopy); // filters out SeriesIdObject
 
   let seriesString = "";
 
-  filtered.forEach((lowerDiv, index) => {
-    let courseConnector;
-    const seriesCourse = lowerDiv;
+  filtered.forEach((item, index) => {
+    let courseConnector: string;
 
-    if (typeof seriesCourse === "object") {
-      const { prefix, courseNumber } = seriesCourse;
+    if (isLowerDiv(item)) {
+      const { prefix, courseNumber } = item;
 
       const className = `${prefix} ${courseNumber}`;
 
       seriesString += className;
-    } else if (typeof seriesCourse === "string") {
-      courseConnector = seriesCourse.toLowerCase();
+    } else if (typeof item === "string") {
+      courseConnector = item.toLowerCase();
 
       seriesString += courseConnector;
     }
@@ -105,10 +113,10 @@ function getSeriesString(seriesArray) {
   return seriesString;
 }
 
-export function getClassName(objOrArray) {
+export function getClassName(objOrArray: LowerDiv | UnfilteredSeries) {
   let formattedClass = "";
 
-  if (typeof objOrArray === "object" && !Array.isArray(objOrArray)) {
+  if (isLowerDiv(objOrArray)) {
     formattedClass = `${objOrArray.prefix} ${objOrArray.courseNumber} - ${objOrArray.courseTitle}`;
   } else if (Array.isArray(objOrArray)) {
     formattedClass = getSeriesString(objOrArray);

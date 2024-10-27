@@ -27,8 +27,11 @@ import {
 import { filterSeries } from "../utils";
 
 import {
-  FilteredSeries,
+  Articulations,
+  CourseChain,
   isLowerDiv,
+  isSeriesIdObject,
+  isUnfilteredSeries,
   LowerDiv,
   UnfilteredSeries,
 } from "../../interfaces/assistData";
@@ -125,27 +128,30 @@ export function getClassName(objOrArray: LowerDiv | UnfilteredSeries) {
   return formattedClass;
 }
 
-export function getId(objOrArray) {
-  let id;
+export function getId(objOrArray: LowerDiv | UnfilteredSeries) {
+  let id: number | string;
 
-  if (typeof objOrArray === "object" && !Array.isArray(objOrArray)) {
+  if (isLowerDiv(objOrArray)) {
     id = objOrArray.courseId;
-  } else if (Array.isArray(objOrArray)) {
-    for (let i = 0; i < objOrArray.length; ) {
+  } else if (isUnfilteredSeries(objOrArray)) {
+    for (let i = 0; i < objOrArray.length; i += 1) {
       const item = objOrArray[i];
 
-      if (item.seriesId) {
+      if (isSeriesIdObject(item)) {
         id = item.seriesId;
       }
-
-      i += 1;
     }
   }
 
   return id;
 }
 
-export async function renderLowerDivs(classList, receivingId, key, year) {
+export async function renderLowerDivs(
+  classList: HTMLSelectElement,
+  receivingId: number,
+  key: string,
+  year: number,
+): Promise<void> {
   const formRow = classList.parentNode;
   const loadingText = formRow.querySelector(".loading");
 
@@ -153,26 +159,27 @@ export async function renderLowerDivs(classList, receivingId, key, year) {
 
   const lowerDivs = await getLowerDivs(receivingId, key, year);
 
-  const select = classList;
   const placeholder = defaultOption("class");
 
-  select.replaceChildren();
-  select.appendChild(placeholder);
+  classList.replaceChildren();
+  classList.appendChild(placeholder);
 
   lowerDivs.forEach((lowerDiv, classIndex) => {
-    const className = getClassName(lowerDiv, classIndex);
+    const className = getClassName(lowerDiv);
     const id = getId(lowerDiv);
     const option = lowerDivOption(className, classIndex, id);
 
-    select.appendChild(option);
+    classList.appendChild(option);
   });
 
   stopLoading(formRow, loadingText);
 }
 
-export function organizeArticulations() {
-  const articulationsDiv = document.querySelector(".articulations");
-  const classLists = document.querySelectorAll(".class-list");
+export function organizeArticulations(): void {
+  const articulationsDiv = document.querySelector(
+    ".articulations",
+  ) as HTMLDivElement;
+  const classLists = document.querySelectorAll<HTMLDivElement>(".class-list");
 
   const listArray = Array.from(classLists);
 
@@ -196,8 +203,8 @@ export function organizeArticulations() {
   }
 }
 
-function sortClassData(items) {
-  items.sort((a, b) => {
+function sortClassData(classData: CourseChain) {
+  classData.sort((a, b) => {
     if (typeof a === "string") {
       return 0;
     }
@@ -221,10 +228,10 @@ function sortClassData(items) {
     return 0;
   });
 
-  return items;
+  return classData;
 }
 
-function renderItems(items, classListDiv) {
+function renderItems(items: CourseChain, classListDiv: HTMLDivElement) {
   const sortedItems = sortClassData(items);
 
   for (let i = 0; i < sortedItems.length; ) {

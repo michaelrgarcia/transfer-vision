@@ -27,14 +27,19 @@ import {
 import { filterSeries } from "../utils";
 
 import {
-  Articulations,
-  CourseChain,
+  FullArticulation,
+  LowerDiv,
+  UnfilteredSeries,
+  Articulation,
+} from "../../interfaces/assistData";
+
+import {
+  isArticulation,
+  isSeries,
   isLowerDiv,
   isSeriesIdObject,
   isUnfilteredSeries,
-  LowerDiv,
-  UnfilteredSeries,
-} from "../../interfaces/assistData";
+} from "../../interfaces/assistDataCheckers";
 
 export async function renderFourYears(
   schoolList: HTMLSelectElement,
@@ -203,7 +208,7 @@ export function organizeArticulations(): void {
   }
 }
 
-function sortClassData(classData: CourseChain) {
+function sortClassData(classData: (Articulation | string)[]) {
   classData.sort((a, b) => {
     if (typeof a === "string") {
       return 0;
@@ -213,15 +218,17 @@ function sortClassData(classData: CourseChain) {
       return 0;
     }
 
-    if (a.prefix && b.prefix) {
+    if ("prefix" in a && "prefix" in b) {
       const prefixComparison = a.prefix.localeCompare(b.prefix);
+
       if (prefixComparison !== 0) return prefixComparison;
     }
 
-    if (a.courseNumber && b.courseNumber) {
+    if ("courseNumber" in a && "courseNumber" in b) {
       const courseNumberComparison = a.courseNumber.localeCompare(
         b.courseNumber,
       );
+
       if (courseNumberComparison !== 0) return courseNumberComparison;
     }
 
@@ -231,13 +238,16 @@ function sortClassData(classData: CourseChain) {
   return classData;
 }
 
-function renderItems(items: CourseChain, classListDiv: HTMLDivElement) {
+function renderItems(
+  items: (Articulation | string)[],
+  classListDiv: HTMLDivElement,
+): void {
   const sortedItems = sortClassData(items);
 
   for (let i = 0; i < sortedItems.length; ) {
     const subitem = sortedItems[i];
 
-    if (Array.isArray(subitem)) {
+    if (isSeries(subitem)) {
       renderItems(subitem, classListDiv);
     } else if (typeof subitem === "string") {
       if (subitem.toLowerCase() === "and") {
@@ -245,7 +255,7 @@ function renderItems(items: CourseChain, classListDiv: HTMLDivElement) {
       } else if (subitem.toLowerCase() === "or") {
         conjunction(subitem, classListDiv);
       }
-    } else if (subitem.courseNumber && subitem.courseTitle && subitem.prefix) {
+    } else if (isLowerDiv(subitem)) {
       const className = `${subitem.prefix} ${subitem.courseNumber} - ${subitem.courseTitle}`;
 
       const courseElement = course(className, classListDiv);
@@ -261,11 +271,13 @@ function renderItems(items: CourseChain, classListDiv: HTMLDivElement) {
   }
 }
 
-export function createClassLists(articulation) {
+export function createClassLists(articulation: {
+  result: FullArticulation;
+}): void {
   if (articulation && articulation.result) {
     const { result } = articulation;
 
-    const courseCache = [];
+    const courseCache: (Articulation | string)[] = [];
     let collegeName = "";
     let agreementLink = "";
 
@@ -273,11 +285,11 @@ export function createClassLists(articulation) {
       const item = result[i];
 
       if (item) {
-        if (item.ccName) {
+        if (typeof item == "object" && "ccName" in item) {
           collegeName = item.ccName;
-        } else if (item.agreementLink) {
+        } else if (typeof item == "object" && "agreementLink" in item) {
           agreementLink = item.agreementLink;
-        } else {
+        } else if (typeof item === "string" || isArticulation(item)) {
           courseCache.push(item);
         }
 

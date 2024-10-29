@@ -52,7 +52,7 @@ const closeDialogBtn = document.querySelector(
 const cidInfo = document.querySelector(".cid-info") as HTMLImageElement;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  for (let i = 1; i < selects.length - 1; ) {
+  for (let i = 2; i < selects.length; ) {
     if (selects[i].parentNode) {
       applyDisabledState(selects[i].parentNode);
       i += 1;

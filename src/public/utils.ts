@@ -53,7 +53,7 @@ export function updateProgressTracker(
 export function createProgressTracker(linksLength: number) {
   let totalProcessed = 0;
 
-  const updateProgress = (processed: number) => {
+  const updateProgress = (processed: number): void => {
     totalProcessed += processed;
     updateProgressTracker(totalProcessed, linksLength);
   };

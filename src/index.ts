@@ -77,7 +77,7 @@ yearList.addEventListener("input", () => {
   classList.replaceChildren();
 
   if (selectedSchool.value) {
-    renderMajorData(majorList, receivingId, year);
+    renderMajorData(majorList, Number(receivingId), Number(year));
   }
 
   applyDisabledState(majorList.parentNode);
@@ -92,7 +92,7 @@ schoolList.addEventListener("input", () => {
   const selectedSchool = schoolList.options[schoolList.selectedIndex];
   const receivingId = selectedSchool.dataset.sending;
 
-  renderMajorData(majorList, receivingId, year);
+  renderMajorData(majorList, Number(receivingId), Number(year));
 
   majorList.replaceChildren();
   classList.replaceChildren();
@@ -113,7 +113,7 @@ majorList.addEventListener("input", () => {
 
   classList.replaceChildren();
 
-  renderLowerDivs(classList, receivingId, majorKey, year);
+  renderLowerDivs(classList, Number(receivingId), majorKey, Number(year));
 
   applyDisabledState(submit.parentNode);
 });

@@ -1,3 +1,5 @@
+import { LowerDiv, UnfilteredSeries } from "../../interfaces/assistData";
+
 const schoolDataFetcher = process.env.SCHOOL_DATA_FETCHER;
 
 interface School {
@@ -5,17 +7,12 @@ interface School {
   name: string;
 }
 
-interface LowerDiv {
-  prefix: string;
-  courseNumber: number;
-  courseTitle: string;
-  courseId?: number; // series courses do not have a course ID
-}
-
 interface Major {
   major: string;
   key: string;
 }
+
+type RawLowerDivs = (LowerDiv | UnfilteredSeries)[];
 
 async function fetchSchoolData(url: string): Promise<School[]> {
   let schoolData: School[];
@@ -36,8 +33,8 @@ async function fetchLowerDivs(
   receivingId: number,
   key: string,
   year: number,
-): Promise<LowerDiv[][]> {
-  let lowerDivs: LowerDiv[][]; // series add dimensions
+): Promise<RawLowerDivs> {
+  let lowerDivs: RawLowerDivs; // series add dimensions
 
   try {
     const endpoint = `${schoolDataFetcher}/lower-divs/${year}/6/${receivingId}/${key}`; // 6 is a placeholder community college
@@ -109,11 +106,15 @@ export async function getLowerDivs(
   receivingId: number,
   key: string,
   year: number,
-): Promise<LowerDiv[][]> {
-  let lowerDivs: LowerDiv[][];
+): Promise<RawLowerDivs> {
+  let lowerDivs: RawLowerDivs;
 
   try {
-    const latestData = await fetchLowerDivs(receivingId, key, year);
+    const latestData: RawLowerDivs = await fetchLowerDivs(
+      receivingId,
+      key,
+      year,
+    );
 
     lowerDivs = latestData;
   } catch (error) {

@@ -8,14 +8,9 @@ import {
   hideResults,
   showSplash,
 } from "./domFunctions/cssTransitions";
-import {
-  FilteredSeries,
-  isLowerDiv,
-  isSeriesIdObject,
-  isSeriesObject,
-  LowerDiv,
-  UnfilteredSeries,
-} from "../interfaces/assistData";
+
+import { UnfilteredSeries } from "../interfaces/assistData";
+import { isSeriesIdObject } from "../interfaces/assistDataCheckers";
 
 interface GifData {
   data: {

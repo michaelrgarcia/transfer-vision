@@ -1,7 +1,5 @@
 import {
-  agreementLinkObject,
   Articulation,
-  ccNameObject,
   LowerDiv,
   SeriesIdObject,
   UnfilteredSeries,
@@ -11,9 +9,11 @@ import {
 export function isLowerDiv(item: any): item is LowerDiv {
   if (
     typeof item.prefix === "string" &&
-    typeof item.courseNumber === "number" &&
+    typeof item.courseNumber === "string" &&
     typeof item.courseTitle === "string" &&
-    (typeof item.courseId === "undefined" || typeof item.courseId === "number")
+    (typeof item.courseId === "undefined" ||
+      typeof item.courseId === "number") &&
+    (typeof item.cid === "undefined" || typeof item.cid === "string")
   ) {
     return true;
   } else {
@@ -22,7 +22,7 @@ export function isLowerDiv(item: any): item is LowerDiv {
 }
 
 export function isSeriesIdObject(item: any): item is SeriesIdObject {
-  if (typeof item.seriesId === "number") {
+  if (typeof item.seriesId === "string") {
     return true;
   } else {
     return false;
@@ -32,7 +32,7 @@ export function isSeriesIdObject(item: any): item is SeriesIdObject {
 function isUnfilteredSeriesItem(
   item: any,
 ): item is LowerDiv | string | SeriesIdObject {
-  if (item === "string" || isLowerDiv(item) || isSeriesIdObject(item)) {
+  if (typeof item === "string" || isLowerDiv(item) || isSeriesIdObject(item)) {
     return true;
   } else {
     return false;

@@ -126,7 +126,7 @@ export function getClassName(objOrArray: LowerDiv | UnfilteredSeries) {
 
   if (isLowerDiv(objOrArray)) {
     formattedClass = `${objOrArray.prefix} ${objOrArray.courseNumber} - ${objOrArray.courseTitle}`;
-  } else if (Array.isArray(objOrArray)) {
+  } else if (isUnfilteredSeries(objOrArray)) {
     formattedClass = getSeriesString(objOrArray);
   }
 

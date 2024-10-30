@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
 
@@ -22,19 +21,28 @@ import {
   cacheFinalizeError,
   processingPrompt,
 } from "../domFunctions/elementPresets";
+import { FullArticulation } from "../../interfaces/assistData";
 
-export async function getArticulationParams(receivingId, majorKey, year) {
-  const articulationParams = [];
+interface ArticulationParams {
+  link: string;
+  agreementLink: string;
+}
+
+type ApiArticulations = { result: FullArticulation }[];
+
+export async function getArticulationParams(
+  receivingId: number,
+  majorKey: string,
+  year: number,
+) {
+  const articulationParams: ArticulationParams[] = [];
   const communityColleges = await getCommunityColleges();
-
-  const receiving = receivingId;
-  const key = majorKey;
 
   communityColleges.forEach((college) => {
     if (college.id) {
       const sending = college.id;
-      const link = `${process.env.ASSIST_API_PARAMS}=${year}/${sending}/to/${receiving}/Major/${key}`;
-      const agreementLink = `${process.env.ASSIST_AGREEMENT_PARAMS}=${year}&institution=${sending}&agreement=${receiving}&agreementType=to&view=agreement&viewBy=major&viewSendingAgreements=false&viewByKey=${year}/${sending}/to/${receiving}/Major/${key}`;
+      const link = `${process.env.ASSIST_API_PARAMS}=${year}/${sending}/to/${receivingId}/Major/${majorKey}`;
+      const agreementLink = `${process.env.ASSIST_AGREEMENT_PARAMS}=${year}&institution=${sending}&agreement=${receivingId}&agreementType=to&view=agreement&viewBy=major&viewSendingAgreements=false&viewByKey=${year}/${sending}/to/${receivingId}/Major/${majorKey}`;
 
       articulationParams.push({ link, agreementLink });
     }
@@ -43,11 +51,14 @@ export async function getArticulationParams(receivingId, majorKey, year) {
   return articulationParams;
 }
 
-async function processStream(stream, updateProgress) {
+async function processStream(
+  stream: ReadableStream,
+  updateProgress: (processed: number) => void,
+) {
   const reader = stream.getReader();
   const decoder = new TextDecoder("utf-8");
 
-  const streamArticulations = [];
+  const streamArticulations: ApiArticulations = [];
   let accumulatedData = "";
 
   while (true) {
@@ -67,7 +78,8 @@ async function processStream(stream, updateProgress) {
       accumulatedData = accumulatedData.slice(end + 1);
 
       try {
-        const articulation = JSON.parse(jsonString);
+        const articulation: { result: FullArticulation } =
+          JSON.parse(jsonString);
 
         if (articulation.result) {
           createClassLists(articulation);
@@ -75,7 +87,7 @@ async function processStream(stream, updateProgress) {
         }
 
         updateProgress(1);
-      } catch (error) {
+      } catch (error: any) {
         console.error(`error parsing articulation: ${error}`);
       }
 
@@ -87,13 +99,13 @@ async function processStream(stream, updateProgress) {
 }
 
 async function requestArticulations(
-  links,
-  signal,
-  courseId,
-  year,
-  updateProgress,
+  links: ArticulationParams[],
+  signal: AbortSignal,
+  courseId: string,
+  year: number,
+  updateProgress: (processed: number) => void,
 ) {
-  let streamArticulations;
+  let streamArticulations: ApiArticulations;
 
   try {
     const linksList = JSON.stringify(links);
@@ -111,7 +123,7 @@ async function requestArticulations(
     });
 
     streamArticulations = await processStream(response.body, updateProgress);
-  } catch (error) {
+  } catch (error: any) {
     console.error(`error processing stream: ${error}`);
   }
 
@@ -119,16 +131,16 @@ async function requestArticulations(
 }
 
 async function processChunks(
-  processingQueue,
-  signal,
-  courseId,
-  updateProgress,
-  year,
-  assistArticulations = [],
+  processingQueue: ArticulationParams[],
+  signal: AbortSignal,
+  courseId: string,
+  updateProgress: (processed: number) => void,
+  year: number,
+  assistArticulations: ApiArticulations = [],
 ) {
   const concurrencyLimit = 29;
 
-  let linksChunk;
+  let linksChunk: ArticulationParams[];
 
   if (processingQueue.length === 0) return assistArticulations;
 
@@ -157,7 +169,7 @@ async function processChunks(
       year,
       assistArticulations,
     ); // recursive call
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === "AbortError") {
       console.log("aborted request");
     } else {
@@ -166,9 +178,11 @@ async function processChunks(
   }
 }
 
-export function createListFromDb(dbResponse, linksLength, updateProgress) {
-  const articulations = dbResponse;
-
+export function createListFromDb(
+  articulations: ApiArticulations,
+  linksLength: number,
+  updateProgress: (processed: number) => void,
+): void {
   for (let i = 0; i < articulations.length; ) {
     const articulation = articulations[i];
 
@@ -184,14 +198,18 @@ export function createListFromDb(dbResponse, linksLength, updateProgress) {
   showCidSlider();
 }
 
-async function getClassFromDb(fullCourseId, linksLength, updateProgress) {
+async function getClassFromDb(
+  fullCourseId: string,
+  linksLength: number,
+  updateProgress: (processed: number) => void,
+): Promise<ApiArticulations | boolean> {
   const courseGrabber = process.env.COURSE_GRABBER;
 
   try {
     const response = await fetch(`${courseGrabber}/${fullCourseId}`);
 
     if (response.status === 200) {
-      const articulations = await response.json();
+      const articulations: ApiArticulations = await response.json();
 
       createListFromDb(articulations, linksLength, updateProgress);
 
@@ -210,14 +228,17 @@ async function getClassFromDb(fullCourseId, linksLength, updateProgress) {
 
       return true;
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error("error getting class from db", err);
   }
 
   return false;
 }
 
-async function finalizeSearch(fullCourseId, articulations) {
+async function finalizeSearch(
+  fullCourseId: string,
+  articulations: ApiArticulations,
+): Promise<void> {
   const cacheFinalizer = process.env.CACHE_COMPLETER;
 
   if (articulations) {
@@ -235,14 +256,18 @@ async function finalizeSearch(fullCourseId, articulations) {
       });
 
       showCidSlider();
-    } catch (err) {
+    } catch (err: any) {
       console.error(`error finalizing cache job: ${err}`);
       cacheFinalizeError();
     }
   }
 }
 
-export async function getArticulationData(links, courseId, year) {
+export async function getArticulationData(
+  links: ArticulationParams[],
+  courseId: string,
+  year: number,
+) {
   const fullCourseId = `${courseId}_${year}`;
   const processingQueue = links.slice();
 
@@ -251,7 +276,7 @@ export async function getArticulationData(links, courseId, year) {
 
   const updateProgress = createProgressTracker(links.length);
 
-  let articulations;
+  let articulations: ApiArticulations | boolean;
 
   window.addEventListener("beforeunload", () => abortController.abort());
 
@@ -280,7 +305,7 @@ export async function getArticulationData(links, courseId, year) {
         await finalizeSearch(fullCourseId, articulations);
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === "AbortError") {
       console.log("requests aborted due to page unload");
     } else {

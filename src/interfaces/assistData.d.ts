@@ -29,3 +29,5 @@ export type FullArticulation = (
   | ccNameObject
   | agreementLinkObject
 )[];
+
+export type ApiArticulations = { result: FullArticulation }[];

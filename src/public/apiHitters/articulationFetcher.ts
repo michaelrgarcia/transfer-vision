@@ -28,7 +28,7 @@ interface ArticulationParams {
   agreementLink: string;
 }
 
-type ApiArticulations = { result: FullArticulation }[];
+import { ApiArticulations } from "../../interfaces/assistData";
 
 export async function getArticulationParams(
   receivingId: number,

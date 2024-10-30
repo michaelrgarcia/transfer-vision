@@ -138,7 +138,11 @@ submit.addEventListener("click", async (event) => {
   applyDisabledState(submit.parentNode);
 
   if (classList.value) {
-    const links = await getArticulationParams(receivingId, majorKey, year);
+    const links = await getArticulationParams(
+      Number(receivingId),
+      majorKey,
+      Number(year),
+    );
 
     const fullCourseId = `${courseId}_${year}`;
 
@@ -147,7 +151,11 @@ submit.addEventListener("click", async (event) => {
     if (selectedClass) {
       changeSelectedClassTxt(selectedClass.textContent);
 
-      const articulationData = await getArticulationData(links, courseId, year);
+      const articulationData = await getArticulationData(
+        links,
+        courseId,
+        Number(year),
+      );
       const { articulations, updateProgress } = articulationData;
 
       const toggleHandler = addToggleListener(

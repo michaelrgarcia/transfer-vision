@@ -1,14 +1,15 @@
-/* eslint-disable import/no-cycle */
-
 import {
   disableCidSection,
   enableCidSection,
 } from "../domFunctions/cssTransitions";
+
 import { createListFromDb } from "./articulationFetcher";
+
+import { ApiArticulations } from "../../interfaces/assistData";
 
 const cidsToggle = document.querySelector(".cids > input");
 
-async function appendCids(courseId, articulations) {
+async function appendCids(courseId: string, articulations: ApiArticulations) {
   const endpoint = `${process.env.CID_APPENDER}/${courseId}`;
 
   disableCidSection();

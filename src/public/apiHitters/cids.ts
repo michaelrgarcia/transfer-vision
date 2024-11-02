@@ -5,11 +5,20 @@ import {
 
 import { createListFromDb } from "./articulationFetcher";
 
-import { ApiArticulations } from "../../interfaces/assistData";
+import {
+  ApiArticulations,
+  FullArticulation,
+  Series,
+} from "../../interfaces/assistData";
 
-const cidsToggle = document.querySelector(".cids > input");
+import { isLowerDiv, isSeries } from "../../interfaces/assistDataCheckers";
 
-async function appendCids(courseId: string, articulations: ApiArticulations) {
+const cidsToggle = document.querySelector(".cids > input") as HTMLInputElement;
+
+async function appendCids(
+  courseId: string,
+  articulations: ApiArticulations,
+): Promise<ApiArticulations> {
   const endpoint = `${process.env.CID_APPENDER}/${courseId}`;
 
   disableCidSection();
@@ -22,7 +31,7 @@ async function appendCids(courseId: string, articulations: ApiArticulations) {
     },
   });
 
-  let newArticulations;
+  let newArticulations: ApiArticulations;
 
   if (response.status === 200) {
     newArticulations = await response.json();
@@ -32,70 +41,74 @@ async function appendCids(courseId: string, articulations: ApiArticulations) {
   return newArticulations;
 }
 
-function checkForCids(articulations) {
-  for (let i = 0; i < articulations.length; ) {
+function checkForCids(
+  articulations: ApiArticulations | FullArticulation | Series,
+): boolean {
+  for (let i = 0; i < articulations.length; i += 1) {
     const item = articulations[i];
-
-    if (item.result && checkForCids(item.result)) {
-      return true;
-    }
-
-    if (Array.isArray(item) && checkForCids(item)) {
-      return true;
-    }
 
     if (
       item &&
-      item.prefix &&
-      item.courseNumber &&
-      item.courseTitle &&
-      item.cid
+      typeof item === "object" &&
+      "result" in item &&
+      Array.isArray(item.result)
     ) {
+      if (checkForCids(item.result)) {
+        return true;
+      }
+    }
+
+    if (item && isSeries(item) && checkForCids(item)) {
       return true;
     }
 
-    i += 1;
+    if (item && isLowerDiv(item) && item.cid) {
+      return true;
+    }
   }
 
   return false;
 }
 
-function showCids() {
-  const cidElements = document.querySelectorAll(".cid");
+function showCids(): void {
+  const cidElements = document.querySelectorAll<HTMLSpanElement>(".cid");
 
   cidElements.forEach((element) => {
-    const cid = element;
-
-    cid.style.display = "inline";
+    element.style.display = "inline";
   });
 }
 
-function hideCids() {
-  const cidElements = document.querySelectorAll(".cid");
+function hideCids(): void {
+  const cidElements = document.querySelectorAll<HTMLSpanElement>(".cid");
 
   cidElements.forEach((element) => {
-    const cid = element;
-
-    cid.style.display = "none";
+    element.style.display = "none";
   });
 }
 
-async function toggleCids(courseId, state, linksLength, updateProgress) {
+async function toggleCids(
+  courseId: string,
+  state: { articulations: ApiArticulations },
+  linksLength: number,
+  updateProgress: (processed: number) => void,
+): Promise<ApiArticulations> {
   const savedArticulations = state.articulations;
 
   if (cidsToggle.checked) {
     const hasCids = checkForCids(savedArticulations);
+
     if (hasCids) {
       showCids();
     } else {
       const newArticulations = await appendCids(courseId, savedArticulations);
 
-      const articulationsDiv = document.querySelector(".articulations");
+      const articulationsDiv = document.querySelector(
+        ".articulations",
+      ) as HTMLDivElement;
 
       articulationsDiv.replaceChildren();
       createListFromDb(newArticulations, linksLength, updateProgress);
 
-      // eslint-disable-next-line no-param-reassign
       state.articulations = newArticulations;
 
       showCids();
@@ -108,11 +121,11 @@ async function toggleCids(courseId, state, linksLength, updateProgress) {
 }
 
 export function addToggleListener(
-  courseId,
-  articulations,
-  linksLength,
-  updateProgress,
-) {
+  courseId: string,
+  articulations: ApiArticulations,
+  linksLength: number,
+  updateProgress: (processed: number) => void,
+): () => Promise<ApiArticulations> {
   const state = { articulations };
 
   const handler = async () =>
@@ -123,6 +136,6 @@ export function addToggleListener(
   return handler;
 }
 
-export function removeToggleListener(handler) {
+export function removeToggleListener(handler: () => void): void {
   cidsToggle.removeEventListener("change", handler);
 }

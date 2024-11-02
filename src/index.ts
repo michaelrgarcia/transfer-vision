@@ -33,6 +33,7 @@ import {
   addToggleListener,
   removeToggleListener,
 } from "./public/apiHitters/cids";
+
 import { cidPrompt } from "./public/domFunctions/elementPresets";
 
 const schoolList = document.getElementById("four-year") as HTMLSelectElement;
@@ -156,16 +157,19 @@ submit.addEventListener("click", async (event) => {
         courseId,
         Number(year),
       );
+
       const { articulations, updateProgress } = articulationData;
 
-      const toggleHandler = addToggleListener(
-        fullCourseId,
-        articulations,
-        links.length,
-        updateProgress,
-      );
+      if (Array.isArray(articulations)) {
+        const toggleHandler = addToggleListener(
+          fullCourseId,
+          articulations,
+          links.length,
+          updateProgress,
+        );
 
-      addBackBtnListener(removeToggleListener, toggleHandler);
+        addBackBtnListener(removeToggleListener, toggleHandler);
+      }
     }
   }
 
